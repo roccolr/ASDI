@@ -1,0 +1,81 @@
+# ---------------------------------------------------------------
+# LaTeX - file temporanei / ausiliari
+# ---------------------------------------------------------------
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+*.lb
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+*.fdb_latexmk
+*.synctex
+*.synctex(busy)
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+*.xdv
+*.dvi
+*.nav
+*.snm
+*.vrb
+*.idx
+*.ilg
+*.ind
+*.glo
+*.gls
+*.glg
+*.acn
+*.acr
+*.alg
+*.ist
+*.loa
+*.lol
+*.xdy
+*.maf
+*.mtc
+*.mtc[0-9]*
+*.slf[0-9]*
+*.slt[0-9]*
+*.stc[0-9]*
+*.thm
+*.brf
+*.auxlock
+*.listing
+*.pyg
+_minted*/
+*.figlist
+*.makefile
+*.nlo
+*.nls
+*.nlg
+*.tdo
+*.upa
+*.upb
+*.bak
+*.sav
+*.tmp
+*~
+
+# ---------------------------------------------------------------
+# PDF
+# ---------------------------------------------------------------
+*.pdf
+
+# ---------------------------------------------------------------
+# Claude Code
+# ---------------------------------------------------------------
+.claude/
+CLAUDE.md
+CLAUDE.local.md
