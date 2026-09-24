@@ -1,0 +1,83 @@
+% ========================================================================================
+% CAPITOLO 8 - PROVA D'ESAME DEL 19 DICEMBRE 2024
+% ========================================================================================
+\chapter{Prova d'esame del 19 dicembre 2024}
+
+% ----------------------------------------------------------------------------------------
+\section{Esercizio 12}
+% ----------------------------------------------------------------------------------------
+
+\begin{traccia}
+	Un sistema è composto da 2 nodi, A e B. A include una ROM (progettata come macchina
+	sequenziale con READ sincrono) di 8 locazioni da 4 bit, mentre B include un sommatore
+	parallelo in grado di effettuare la somma di 2 stringhe di 4 bit ciascuna e un registro R
+	di 4 bit. Il sistema opera come segue: all'arrivo di un segnale di start, A inizia a
+	prelevare gli elementi ROM[i] dalla propria memoria e li invia, uno alla volta, a B
+	mediante handshaking. B somma progressivamente le stringhe ricevute utilizzando il
+	sommatore e alla fine inserisce il risultato nel registro R.
+	\begin{enumerate}[nosep]
+		\item Si disegni l'architettura complessiva del sistema tramite un diagramma a blocchi,
+		      identificando parte operativa e parte di controllo di ciascun nodo. Ogni nodo deve
+		      essere progettato seguendo un approccio strutturale, individuando tutti i
+		      componenti, le loro interfacce e le loro interconnessioni.
+		\item Si progettino le unità di controllo di A e B evidenziando gli stati, gli ingressi
+		      e le uscite negli automi risultanti. È obbligatorio specificare la tempificazione
+		      che si intende dare alle macchine (fronte attivo del clock, tempificazione dei
+		      segnali di READ/WRITE su registri e memorie).
+		\item Si progetti il sommatore secondo un'architettura di tipo carry look ahead.
+		\item Si fornisca l'implementazione in VHDL dell'intero sistema e si proceda alla
+		      simulazione nel caso in cui il clock del sistema A e del sistema B siano diversi
+		      (A più lento e A più veloce).
+	\end{enumerate}
+\end{traccia}
+
+\subsection{Architettura del sistema}
+\todo{Diagramma a blocchi con parte operativa e parte di controllo di A e di B.}
+
+\begin{attenzione}[Overflow del registro R]
+	La somma di 8 valori da 4 bit può arrivare a $8 \times 15 = 120$, che non è
+	rappresentabile su 4 bit. \todo{Dichiarare come è trattato: somma modulo 16 ed eventuale flag di overflow.}
+\end{attenzione}
+
+\subsection{Unità di controllo}
+\todo{Automi di A e B con tempificazione esplicita: fronte attivo, READ della ROM, WRITE di R.}
+
+\subsection{Sommatore carry look-ahead}
+
+Per ogni bit si definiscono i segnali di \emph{generate} e \emph{propagate}
+\begin{equation}
+	G_i = a_i\, b_i, \qquad P_i = a_i \oplus b_i,
+\end{equation}
+da cui tutti i riporti si calcolano in parallelo a partire da $c_0$:
+\begin{align}
+	c_1 &= G_0 + P_0 c_0 \\
+	c_2 &= G_1 + P_1 G_0 + P_1 P_0 c_0 \\
+	c_3 &= G_2 + P_2 G_1 + P_2 P_1 G_0 + P_2 P_1 P_0 c_0 \\
+	c_4 &= G_3 + P_3 G_2 + P_3 P_2 G_1 + P_3 P_2 P_1 G_0 + P_3 P_2 P_1 P_0 c_0
+\end{align}
+e la somma è $s_i = P_i \oplus c_i$.
+
+\todo{Schema a porte, codice strutturale, testbench esaustivo.}
+
+\subsection{Implementazione e simulazione}
+\todo{Codice del sistema; simulazioni con $T_A > T_B$ e $T_A < T_B$; sincronizzazione di \sig{req} e \sig{ack}.}
+
+\screenshot[0.95\linewidth]{es12_sim_a_lento.png}{Simulazione con il clock di A più lento di quello di B.}{fig:es12-lento}
+
+\screenshot[0.95\linewidth]{es12_sim_a_veloce.png}{Simulazione con il clock di A più veloce di quello di B.}{fig:es12-veloce}
+
+\subsection{Timing analysis}
+\todo{Confronto del percorso critico fra RCA e CLA.}
+
+\begin{table}[H]
+	\centering\small
+	\caption{Confronto fra sommatore ripple-carry e carry look-ahead (valori da Vivado).}
+	\label{tab:rca-cla}
+	\begin{tabular}{@{}lcccc@{}}
+		\toprule
+		\textbf{Architettura} & \textbf{LUT} & \textbf{Livelli di logica} & \textbf{Ritardo [\si{\nano\second}]} & \textbf{WNS [\si{\nano\second}]} \\ \midrule
+		Ripple-carry     & \todo{} & & & \\
+		Carry look-ahead & & & & \\
+		\bottomrule
+	\end{tabular}
+\end{table}

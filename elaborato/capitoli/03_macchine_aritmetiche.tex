@@ -1,0 +1,99 @@
+% ========================================================================================
+% CAPITOLO 3 - MACCHINE ARITMETICHE
+% ========================================================================================
+\chapter{Macchine aritmetiche}
+
+% ----------------------------------------------------------------------------------------
+\section{Esercizio 7: Moltiplicatore di Booth}
+% ----------------------------------------------------------------------------------------
+
+\subsection{Esercizio 7.1}
+
+\begin{traccia}
+	Progettare, implementare in VHDL e simulare una macchina moltiplicatore di Booth in grado
+	di effettuare il prodotto di 2 stringhe A e B da 8 bit ciascuna.
+\end{traccia}
+
+\progetto
+
+L'algoritmo di Booth (radix-2) moltiplica due interi in complemento a 2 esaminando a ogni
+passo la coppia di bit $(Q_0, Q_{-1})$ del moltiplicatore (Algoritmo~\ref{alg:booth}).
+
+\begin{algorithm}[H]
+	\caption{Moltiplicazione di Booth radix-2 su $n$ bit.}
+	\label{alg:booth}
+	\KwIn{moltiplicando $M$ e moltiplicatore $Q$, in complemento a 2 su $n$ bit}
+	\KwOut{prodotto $P$ su $2n$ bit}
+	$A \leftarrow 0$;\quad $Q_{-1} \leftarrow 0$;\quad $count \leftarrow n$\;
+	\While{$count > 0$}{
+		\uIf{$Q_0 Q_{-1} = 10$}{
+			$A \leftarrow A - M$\;
+		}
+		\ElseIf{$Q_0 Q_{-1} = 01$}{
+			$A \leftarrow A + M$\;
+		}
+		shift aritmetico a destra di $(A, Q, Q_{-1})$\;
+		$count \leftarrow count - 1$\;
+	}
+	$P \leftarrow (A, Q)$\;
+\end{algorithm}
+
+\begin{attenzione}[Il caso $M = -128$]
+	Con $A$ su 8 bit, l'operazione $A - M$ con $M = -128$ esce dal range rappresentabile.
+	\todo{Mostrare come è gestito: accumulatore su $n+1$ bit oppure dimostrazione che il caso non si presenta.}
+\end{attenzione}
+
+\todo{Esempio svolto a mano, schema PO/PC, ASM chart dell'unità di controllo.}
+
+\implementazione
+\todo{Codice di parte operativa e unità di controllo.}
+
+\simulazione
+\todo{Testbench esaustivo sulle 65\,536 coppie, confronto con \texttt{signed(A) * signed(B)}.}
+
+\timinganalysis
+\todo{Percorso critico attraverso il sommatore/sottrattore, frequenza massima.}
+
+\subsection{Esercizio 7.2}
+
+\begin{traccia}
+	Sintetizzare il moltiplicatore implementato al punto 7.1 su FPGA e testarlo mediante
+	l'utilizzo dei dispositivi di input/output (switch, bottoni, led, display) presenti sulla
+	board di sviluppo in dotazione. La modalità di utilizzo degli stessi è a completa
+	discrezione degli studenti.
+\end{traccia}
+
+\sintesiboard
+\todo{Operandi sugli switch, start su pulsante, prodotto sul display.}
+
+% ----------------------------------------------------------------------------------------
+\section{Esercizio 7BIS: Divisore Non-Restoring (solo 9 CFU)}
+% ----------------------------------------------------------------------------------------
+
+\subsection{Esercizio 7BIS.1}
+
+\begin{traccia}
+	Progettare, implementare in VHDL e simulare una macchina divisore\linebreak[0] (modalità non-restoring)
+	in grado di effettuare la divisione intera fra due stringhe A e B di 4 bit ciascuna.
+\end{traccia}
+
+\progetto
+\todo{Algoritmo non-restoring, correzione finale del resto, divisione per zero.}
+
+\implementazione
+\todo{Codice.}
+
+\simulazione
+\todo{Testbench esaustivo confrontato con \texttt{/} e \texttt{mod}.}
+
+\subsection{Esercizio 7BIS.2}
+
+\begin{traccia}
+	Sintetizzare il divisore implementato al punto 7BIS.1 su FPGA e testarlo mediante
+	l'utilizzo dei dispositivi di input/output (switch, bottoni, led, display) presenti sulla
+	board di sviluppo in dotazione. La modalità di utilizzo degli stessi è a completa
+	discrezione degli studenti.
+\end{traccia}
+
+\sintesiboard
+\todo{Top-level, vincoli, prova su scheda.}

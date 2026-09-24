@@ -1,6 +1,6 @@
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % % LaTeX Template
-% % Version 1.0
+% % Version 2.0 - Elaborato ASDI
 % %
 % % This template originates from:
 % % http://www.LaTeXTemplates.com
@@ -8,76 +8,70 @@
 % % Authors:
 % % Rocco Lo Russo (https://github.com/roccolr)
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Indice dei comandi e degli ambienti definiti qui (esempi d'uso in capitoli/):
+%
+%   INTESTAZIONE     \corso, \docente, \annoaccademico, \studente{Nome}{Matricola}
+%   BOZZA            \todo{...}            (nascosto con \bozzafalse in main.tex)
+%   CODICE           \begin{vhdl}[opzioni] ... \end{vhdl}
+%                    \begin{xdc}[opzioni]  ... \end{xdc}
+%                    \begin{tcl}[opzioni]  ... \end{tcl}
+%                    \vhdlfile[opzioni]{percorso}{didascalia}{etichetta}
+%                    \xdcfile[opzioni]{percorso}{didascalia}{etichetta}
+%                    \sig{nome}   \ent{nome}   (segnali ed entity nel testo)
+%   RIQUADRI         traccia, scelta, osservazione, attenzione, risultato
+%                    (+ commandline, file, question, warn, info della v1.0)
+%   INTERFACCE       \begin{porte} \porta{nome}{dir}{larghezza}{descrizione} \end{porte}
+%   FIGURE           \screenshot[larghezza]{file}{didascalia}{etichetta}
+%   SCHEMI TIKZ      stili: blocco, mux, reg, fsmstate, seg, bus, ctrl
+%   SEZIONI STANDARD \progetto \implementazione \simulazione \sintesiboard \timinganalysis
+%
+%----------------------------------------------------------------------------------------
 
 
 %----------------------------------------------------------------------------------------
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
+\usepackage[utf8]{inputenc} % Required for inputting international characters
+\usepackage[T1]{fontenc} % Output font encoding for international characters
+\usepackage[italian]{babel}
+
 \usepackage{amsmath,amsfonts,stmaryrd,amssymb} % Math packages
 
 \usepackage[ddmmyyyy]{datetime}
 \usepackage{enumerate} % Custom item numbers for enumerations
+\usepackage{enumitem}
 
-\usepackage[ruled]{algorithm2e} % Algorithms
+\usepackage[ruled,linesnumbered,italiano]{algorithm2e} % Algorithms (parole chiave in italiano)
+
+\usepackage{xcolor}
+\usepackage{graphicx}
+\graphicspath{{figure/}{figure/screenshot/}{../pics/}}
+
+\usepackage{booktabs}  % Tabelle professionali (\toprule, \midrule, \bottomrule)
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup{font=small, labelfont=bf, format=hang}
+
+\usepackage[per-mode=symbol]{siunitx} % Unità di misura: \SI{10}{\nano\second}, \SI{100}{\mega\hertz}
+\sisetup{output-decimal-marker={,}}
 
 \usepackage[framemethod=tikz]{mdframed} % Allows defining custom boxed/framed environments
 
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, automata, shapes.geometric, shapes.misc, calc, fit, backgrounds}
+
 \usepackage{listings} % File listings, with syntax highlighting
+
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+
 \usepackage[hidelinks]{hyperref}
-
-\lstset{
-  language=C,
-  basicstyle=\ttfamily\small\color{black},
-  numbers=left,
-  numberstyle=\small\color{gray},
-  stepnumber=1,
-  numbersep=4pt,
-  frame=single,
-  rulecolor=\color{black},
-  framesep=5pt,
-  xleftmargin=20pt,
-  framexleftmargin=15pt,
-  breaklines=true,
-  showstringspaces=false,
-  keywordstyle=\color{purple}\bfseries,          % parole chiave (if, else, int, return...)
-  commentstyle=\color{teal}\itshape,           % commenti
-  stringstyle=\color{orange},                   % stringhe
-  identifierstyle=\color{black},                % identificatori normali
-  emph={size_t, uint32_t, uint64_t, TAS, RTE},            % tipi aggiuntivi
-  emphstyle=\color{blue}\bfseries,            % stile tipi aggiuntivi
-  morekeywords={uint8_t, uint16_t, uint32_t, uint64_t, int8_t, int16_t, int32_t, int64_t, bool, true, false}, % tipi e parole chiave extra
-  morecomment=[l]{//},                           % commenti con //
-  morecomment=[s]{/*}{*/},                       % commenti multilinea
-}
-
-\lstdefinelanguage{RISCAsm}{
-  morekeywords={
-    ADDQ, SUM, ANDI, MOVE,MOVEA, MOVEM, DC, DS, sra, 
-    lw, sw, li, la, mv, 
-    BEQ, BNE, JMP, CMP, jalr, ret, 
-    NOP, lui, RTE, RTS, 
-    ecall, ebreak, ORG, EQU, JSR, CLR, TAS 
-  },
-  sensitive=true,
-  morecomment=[l]{\*},
-  morestring=[b]",
-  basicstyle=\ttfamily\small\color{black},
-  keywordstyle=\color{purple}\bfseries,
-  commentstyle=\color{teal}\itshape,
-  stringstyle=\color{orange},
-  numbers=left,
-  numberstyle=\small\color{gray},
-  stepnumber=1,
-  numbersep=4pt,
-  frame=single,
-  rulecolor=\color{black},
-  framesep=5pt,
-  xleftmargin=20pt,
-  framexleftmargin=15pt,
-  showstringspaces=false,
-  breaklines=true,
-}
 
 %----------------------------------------------------------------------------------------
 %	DOCUMENT MARGINS
@@ -101,17 +95,336 @@
 %	FONTS
 %----------------------------------------------------------------------------------------
 
-\usepackage[utf8]{inputenc} % Required for inputting international characters
-\usepackage[T1]{fontenc} % Output font encoding for international characters
-
 \usepackage{XCharter} % Use the XCharter fonts
-\usepackage{enumitem}
-\usepackage{xcolor}
-\usepackage{tikz} 
-\usetikzlibrary{positioning}
+\usepackage[varqu,varl,scaled=0.95]{inconsolata} % Monospazio con grassetto per il codice
+\usepackage[scaled=0.9]{helvet}  % Sans-serif per titoli e riquadri (XCharter non ne ha uno)
 
-% pseudocode environment %
+%----------------------------------------------------------------------------------------
+%	COLORI
+%----------------------------------------------------------------------------------------
 
+\definecolor{codebg}{gray}{0.97}
+\definecolor{accento}{HTML}{1F4E79}     % blu scuro: titoli, scelte progettuali
+\definecolor{osservcol}{HTML}{2E7D32}   % verde: osservazioni
+\definecolor{attcol}{HTML}{C62828}      % rosso: attenzione
+\definecolor{riscol}{HTML}{6A1B9A}      % viola: risultati
+\definecolor{traccol}{gray}{0.45}       % grigio: testo della traccia
+
+%----------------------------------------------------------------------------------------
+%	DATI DEL DOCUMENTO
+%----------------------------------------------------------------------------------------
+
+\newcommand{\corso}[1]{\def\thecorso{#1}}
+\newcommand{\docente}[1]{\def\thedocente{#1}}
+\newcommand{\annoaccademico}[1]{\def\theannoaccademico{#1}}
+\def\thestudenti{}
+% \studente{Nome Cognome}{Matricola}: può essere ripetuto per ogni componente del gruppo
+\newcommand{\studente}[2]{\expandafter\def\expandafter\thestudenti\expandafter{\thestudenti #1 & \texttt{#2} \\}}
+
+%----------------------------------------------------------------------------------------
+%	MODALITÀ BOZZA
+%----------------------------------------------------------------------------------------
+
+% \todo{testo} evidenzia in rosso le parti ancora da scrivere.
+% Con \bozzafalse in main.tex i \todo scompaiono dalla versione finale.
+\newif\ifbozza
+\bozzatrue
+\newcommand{\todo}[1]{\ifbozza{\color{attcol}\sffamily\small[\textbf{TODO:} #1]}\fi}
+
+%----------------------------------------------------------------------------------------
+%	TITOLI, INTESTAZIONI
+%----------------------------------------------------------------------------------------
+
+\titleformat{\chapter}[display]
+	{\normalfont\sffamily\color{accento}}
+	{\large\MakeUppercase{\chaptertitlename}~\thechapter}
+	{0.3em}
+	{\Huge\bfseries}
+	[\vspace{0.4em}{\color{accento}\titlerule[1pt]}]
+\titlespacing*{\chapter}{0pt}{-1.5cm}{1.2cm}
+
+\titleformat{\section}{\normalfont\Large\bfseries\sffamily\color{accento}}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\normalfont\large\bfseries\sffamily}{\thesubsection}{0.8em}{}
+\titleformat{\subsubsection}{\normalfont\normalsize\bfseries\sffamily\color{black!75}}{}{0em}{}
+
+\setcounter{secnumdepth}{2}  % numerati fino a \subsection (Esercizio 1.1)
+\setcounter{tocdepth}{2}
+
+% Sezioni standard richieste dal template dell'elaborato (non numerate, non nell'indice)
+\newcommand{\progetto}{\subsubsection*{Progetto e architettura}}
+\newcommand{\implementazione}{\subsubsection*{Implementazione}}
+\newcommand{\simulazione}{\subsubsection*{Simulazione}}
+\newcommand{\sintesiboard}{\subsubsection*{Sintesi su board di sviluppo}}
+\newcommand{\timinganalysis}{\subsubsection*{Timing analysis}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\fancyhead[L]{\small\sffamily\color{black!60}\leftmark}
+\fancyhead[R]{\small\sffamily\color{black!60}\rightmark}
+\fancyfoot[C]{\small\sffamily\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\small\sffamily\thepage}\renewcommand{\headrulewidth}{0pt}}
+
+%----------------------------------------------------------------------------------------
+%	LISTINGS: STILI DI BASE
+%----------------------------------------------------------------------------------------
+
+\renewcommand{\lstlistingname}{Listato}
+\renewcommand{\lstlistlistingname}{Elenco dei listati}
+
+% Caratteri accentati nei listati (listings non gestisce UTF-8 da solo)
+\lstset{
+  literate=
+    {à}{{\`a}}1 {è}{{\`e}}1 {é}{{\'e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+    {À}{{\`A}}1 {È}{{\`E}}1 {É}{{\'E}}1 {Ì}{{\`I}}1 {Ò}{{\`O}}1 {Ù}{{\`U}}1
+    {→}{{$\rightarrow$}}1 {←}{{$\leftarrow$}}1,
+}
+
+\lstdefinestyle{base}{
+  basicstyle=\ttfamily\small\color{black},
+  numbers=left,
+  numberstyle=\scriptsize\color{gray},
+  stepnumber=1,
+  numbersep=6pt,
+  frame=single,
+  rulecolor=\color{black!30},
+  backgroundcolor=\color{codebg},
+  framesep=5pt,
+  xleftmargin=20pt,
+  framexleftmargin=15pt,
+  breaklines=true,
+  postbreak=\mbox{\textcolor{gray}{$\hookrightarrow$}\space},
+  showstringspaces=false,
+  tabsize=4,
+  columns=flexible,
+  keepspaces=true,
+  captionpos=t,
+  abovecaptionskip=4pt,
+  keywordstyle=\color{purple}\bfseries,
+  commentstyle=\color{teal},
+  stringstyle=\color{orange},
+  identifierstyle=\color{black},
+  emphstyle=\color{blue}\bfseries,
+}
+
+% Stile C (quello originale della v1.0)
+\lstdefinestyle{c}{
+  style=base,
+  language=C,
+  emph={size_t, uint32_t, uint64_t, TAS, RTE},
+  morekeywords={uint8_t, uint16_t, uint32_t, uint64_t, int8_t, int16_t, int32_t, int64_t, bool, true, false},
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+}
+\lstset{style=c}
+
+\lstdefinelanguage{RISCAsm}{
+  morekeywords={
+    ADDQ, SUM, ANDI, MOVE,MOVEA, MOVEM, DC, DS, sra,
+    lw, sw, li, la, mv,
+    BEQ, BNE, JMP, CMP, jalr, ret,
+    NOP, lui, RTE, RTS,
+    ecall, ebreak, ORG, EQU, JSR, CLR, TAS
+  },
+  sensitive=true,
+  morecomment=[l]{\*},
+  morestring=[b]",
+}
+
+%----------------------------------------------------------------------------------------
+%	LISTINGS: VHDL, XDC, TCL
+%----------------------------------------------------------------------------------------
+
+\lstdefinestyle{vhdl}{
+  style=base,
+  language=VHDL,
+  sensitive=false,
+  morekeywords={
+    rising_edge, falling_edge, others, generate, generic, map, port,
+    downto, to, when, else, elsif, select, with, case, is, of, range,
+    wait, until, for, loop, report, severity, assert, note, warning, error, failure
+  },
+  % tipi e funzioni di libreria in blu
+  emph={
+    std_logic, std_logic_vector, std_ulogic, std_ulogic_vector,
+    unsigned, signed, integer, natural, positive, boolean, bit, bit_vector,
+    time, string, character,
+    to_unsigned, to_signed, to_integer, resize, shift_left, shift_right,
+    rotate_left, rotate_right, std_logic_1164, numeric_std, ieee, work
+  },
+  emphstyle=\color{blue}\bfseries,
+}
+
+\lstdefinestyle{xdc}{
+  style=base,
+  language=tcl,
+  morekeywords={set_property, get_ports, get_cells, get_nets, create_clock, current_design,
+    create_generated_clock, set_input_delay, set_output_delay, set_false_path},
+  emph={PACKAGE_PIN, IOSTANDARD, LVCMOS33, LVCMOS18, CONFIG_VOLTAGE, CFGBVS, VCCO},
+  emphstyle=\color{blue}\bfseries,
+  morecomment=[l]{\#},
+}
+
+\lstdefinestyle{tcl}{
+  style=base,
+  language=tcl,
+  morekeywords={read_vhdl, read_xdc, synth_design, opt_design, place_design, route_design,
+    write_bitstream, report_timing_summary, report_utilization, report_timing,
+    open_hw_manager, connect_hw_server, open_hw_target, program_hw_devices},
+}
+
+% Ambienti per il codice scritto direttamente nel .tex
+\lstnewenvironment{vhdl}[1][]{\lstset{style=vhdl,#1}}{}
+\lstnewenvironment{xdc}[1][]{\lstset{style=xdc,#1}}{}
+\lstnewenvironment{tcl}[1][]{\lstset{style=tcl,#1}}{}
+
+% Cartella in cui si trovano i sorgenti da includere (relativa a main.tex)
+\newcommand{\codedir}{codice}
+
+% Inclusione di sorgenti da file: il codice nell'elaborato resta allineato a quello simulato.
+%   \vhdlfile[firstline=10, lastline=30]{es1/mux16.vhd}{Mux 16:1 strutturale}{lst:mux16}
+\newcommand{\vhdlfile}[4][]{\lstinputlisting[style=vhdl, caption={#3}, label={#4}, #1]{\codedir/#2}}
+\newcommand{\xdcfile}[4][]{\lstinputlisting[style=xdc, caption={#3}, label={#4}, #1]{\codedir/#2}}
+
+% Nomi di segnali, porte ed entity nel testo
+\newcommand{\sig}[1]{\texttt{#1}}
+\newcommand{\ent}[1]{\texttt{\textbf{#1}}}
+
+%----------------------------------------------------------------------------------------
+%	RIQUADRI DELL'ELABORATO
+%----------------------------------------------------------------------------------------
+
+% Stile comune: barra verticale colorata a sinistra, sfondo tenue, titolo in grassetto.
+\newcommand{\definisciriquadro}[3]{% #1 = nome stile, #2 = colore, #3 = sfondo (% di colore)
+	\mdfdefinestyle{#1}{
+		topline=false, bottomline=false, rightline=false,
+		linewidth=3pt, linecolor=#2,
+		backgroundcolor=#2!#3!white,
+		innerleftmargin=10pt, innerrightmargin=10pt,
+		innertopmargin=7pt, innerbottommargin=7pt,
+		leftmargin=0pt, rightmargin=0pt,
+		skipabove=\medskipamount, skipbelow=\medskipamount,
+		startcode={\setlength{\parindent}{0pt}\setlength{\parskip}{0.4em}},
+	}%
+}
+
+\definisciriquadro{stile-traccia}{traccol}{6}
+\definisciriquadro{stile-scelta}{accento}{6}
+\definisciriquadro{stile-osservazione}{osservcol}{6}
+\definisciriquadro{stile-attenzione}{attcol}{6}
+\definisciriquadro{stile-risultato}{riscol}{5}
+
+% Usage: \begin{traccia} testo ufficiale dell'esercizio \end{traccia}
+\newenvironment{traccia}
+	{\begin{mdframed}[style=stile-traccia]\noindent{\sffamily\bfseries\color{traccol}Traccia}\par\smallskip\itshape}
+	{\end{mdframed}}
+
+% Scelte progettuali numerate per capitolo, citabili con \ref
+% Usage: \begin{scelta}[Titolo breve]\label{sc:...} ... \end{scelta}
+\newcounter{scelta}[chapter]
+\renewcommand{\thescelta}{\thechapter.\arabic{scelta}}
+\newenvironment{scelta}[1][]
+	{\refstepcounter{scelta}\begin{mdframed}[style=stile-scelta]%
+	 \noindent{\sffamily\bfseries\color{accento}Scelta progettuale \thescelta\if\relax\detokenize{#1}\relax\else\ --- #1\fi}\par\smallskip}
+	{\end{mdframed}}
+
+% Variante non numerata: \begin{scelta*}[Titolo] ... \end{scelta*}
+\newenvironment{scelta*}[1][]
+	{\begin{mdframed}[style=stile-scelta]%
+	 \noindent{\sffamily\bfseries\color{accento}Scelta progettuale\if\relax\detokenize{#1}\relax\else\ --- #1\fi}\par\smallskip}
+	{\end{mdframed}}
+
+% Usage: \begin{osservazione}[titolo opzionale] ... \end{osservazione}
+\newenvironment{osservazione}[1][Osservazione]
+	{\begin{mdframed}[style=stile-osservazione]\noindent{\sffamily\bfseries\color{osservcol}#1}\par\smallskip}
+	{\end{mdframed}}
+
+% Usage: \begin{attenzione}[titolo opzionale] ... \end{attenzione}
+\newenvironment{attenzione}[1][Attenzione]
+	{\begin{mdframed}[style=stile-attenzione]\noindent{\sffamily\bfseries\color{attcol}#1}\par\smallskip}
+	{\end{mdframed}}
+
+% Esito di una simulazione / prova su board
+% Usage: \begin{risultato}[titolo opzionale] ... \end{risultato}
+\newenvironment{risultato}[1][Risultato]
+	{\begin{mdframed}[style=stile-risultato]\noindent{\sffamily\bfseries\color{riscol}#1}\par\smallskip}
+	{\end{mdframed}}
+
+%----------------------------------------------------------------------------------------
+%	TABELLA DELLE PORTE (interfaccia di una entity)
+%----------------------------------------------------------------------------------------
+
+% Usage:
+% \begin{porte}[Interfaccia di \ent{mux16}]
+%   \porta{d}{in}{16}{dati in ingresso}
+% \end{porte}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newenvironment{porte}[1][]
+	{\begin{table}[H]\centering\small
+	 \if\relax\detokenize{#1}\relax\else\caption{#1}\fi
+	 \begin{tabular}{@{}l c c >{\raggedright\arraybackslash}p{0.58\linewidth}@{}}\toprule
+	 \textbf{Porta} & \textbf{Direzione} & \textbf{Bit} & \textbf{Descrizione} \\ \midrule}
+	{\bottomrule\end{tabular}\end{table}}
+\newcommand{\porta}[4]{\texttt{#1} & \texttt{#2} & #3 & #4 \\}
+
+%----------------------------------------------------------------------------------------
+%	SCREENSHOT E IMMAGINI
+%----------------------------------------------------------------------------------------
+
+% Inserisce un'immagine se il file esiste, altrimenti un segnaposto con il nome del file
+% atteso: il documento compila anche prima di aver fatto gli screenshot.
+% Usage: \screenshot[0.9\linewidth]{sim_mux16.png}{Simulazione del mux 16:1}{fig:sim-mux16}
+\newcommand{\screenshot}[4][\linewidth]{%
+	\begin{figure}[H]\centering
+	\IfFileExists{figure/screenshot/#2}{%
+		\fbox{\includegraphics[width=#1]{figure/screenshot/#2}}%
+	}{%
+		\begin{tikzpicture}
+			\node[draw=black!40, dashed, fill=black!3, minimum width=#1, minimum height=4.5cm,
+			      align=center, font=\sffamily\small\color{black!55}]
+			     {Screenshot da inserire\\[2pt]\texttt{figure/screenshot/\detokenize{#2}}};
+		\end{tikzpicture}%
+	}
+	\caption{#3}\label{#4}
+	\end{figure}}
+
+%----------------------------------------------------------------------------------------
+%	STILI TIKZ PER SCHEMI A BLOCCHI, FSM E DIAGRAMMI TEMPORALI
+%----------------------------------------------------------------------------------------
+
+\tikzset{
+	>={Stealth[length=2mm]},
+	% blocco generico (componente)
+	blocco/.style={draw, thick, rectangle, fill=accento!5, minimum width=2cm, minimum height=1cm,
+	               align=center, font=\sffamily\small},
+	% multiplexer (trapezio)
+	mux/.style={draw, thick, trapezium, trapezium angle=70, shape border rotate=270,
+	            fill=accento!5, minimum width=1.6cm, minimum height=0.8cm, font=\sffamily\scriptsize,
+	            inner sep=1pt},
+	% registro
+	reg/.style={draw, thick, rectangle, fill=osservcol!8, minimum width=1.4cm, minimum height=0.8cm,
+	            font=\sffamily\small},
+	% unità di controllo
+	ctrl/.style={draw, thick, rounded corners=4pt, fill=attcol!6, minimum width=2.4cm, minimum height=1cm,
+	             align=center, font=\sffamily\small},
+	% stato di una FSM
+	fsmstate/.style={state, thick, fill=accento!5, minimum size=1.2cm, font=\sffamily\small, align=center},
+	% bus (più bit)
+	bus/.style={->, very thick},
+	% segnale di controllo
+	seg/.style={->, thin},
+	% barretta con larghezza del bus:  \draw[bus] (a) -- node[larghezza=8]{/} (b);
+	larghezza/.style={inner sep=0pt, font=\small,
+	                  label={[font=\scriptsize, inner sep=1pt]above:#1}},
+	% diagrammi temporali
+	onda/.style={thick, accento},
+	grigliatempo/.style={black!15, thin},
+}
+
+% Numero cerchiato per le fasi di un protocollo, utilizzabile anche nelle didascalie: \fase{1}
+\DeclareRobustCommand{\fase}[1]{\tikz[baseline=(c.base)]\node[circle, draw, inner sep=0.6pt, font=\scriptsize\sffamily](c){#1};}
 
 %----------------------------------------------------------------------------------------
 %	COMMAND LINE ENVIRONMENT
@@ -121,7 +434,7 @@
 % \begin{commandline}
 %	\begin{verbatim}
 %		$ ls
-%		
+%
 %		Applications	Desktop	...
 %	\end{verbatim}
 % \end{commandline}
@@ -174,13 +487,18 @@
     },
 }
 
-% Comando per tab a 4 spazi all’interno dell’ambiente file
+% Comando per tab a 4 spazi all’interno dell’ambiente file.
+% Il tab attivo va definito in un gruppo con il catcode già cambiato, altrimenti
+% \def^^I verrebbe letto come \def seguito da uno spazio.
+\begingroup
+\catcode`\^^I=\active
+\gdef\attivatab{\catcode`\^^I=\active\def^^I{\hspace*{4ex}}}
+\endgroup
+
 \newenvironment{file}[1][File]{%
     \medskip
     \newcommand{\mdfilename}{#1}
-    % Rende il carattere tab attivo e lo definisce come 4 spazi
-    \catcode`\^^I=\active
-    \def^^I{\hspace*{4ex}}%
+    \attivatab
     \begin{mdframed}[style=file]
 }{%
     \end{mdframed}
@@ -203,7 +521,7 @@
 	nobreak,
 	singleextra={%
 		\draw(P-|O)node[xshift=1em,anchor=west,fill=white,draw,rounded corners=5pt]{%
-		Question \theQuestion\questionTitle};
+		Domanda \theQuestion\questionTitle};
 	},
 }
 
@@ -243,7 +561,7 @@
 }
 
 % Define a custom environment for warning text
-\newenvironment{warn}[1][Warning:]{ % Set the default warning to "Warning:"
+\newenvironment{warn}[1][Attenzione:]{
 	\medskip
 	\begin{mdframed}[style=warning]
 		\noindent{\textbf{#1}}
@@ -272,7 +590,7 @@
 }
 
 % Define a custom environment for information
-\newenvironment{info}[1][Info:]{ % Set the default title to "Info:"
+\newenvironment{info}[1][Info:]{
 	\medskip
 	\begin{mdframed}[style=info]
 		\noindent{\textbf{#1}}
