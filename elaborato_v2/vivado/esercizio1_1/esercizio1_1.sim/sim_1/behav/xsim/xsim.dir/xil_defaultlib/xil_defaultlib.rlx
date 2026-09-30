@@ -1,0 +1,7 @@
+0.7
+2020.2
+May  7 2023
+15:24:31
+C:/work/asdi_lab/sim/mux_16_1_tb.vhd,1790441148,vhdl,,,,mux_16_1_tb,,,,,,,,
+C:/work/asdi_lab/src/mux_16_1.vhd,1790439772,vhdl,C:/work/asdi_lab/sim/mux_16_1_tb.vhd,,,mux_16_1,,,,,,,,
+C:/work/asdi_lab/src/mux_4_1.vhd,1790441217,vhdl,C:/work/asdi_lab/src/mux_16_1.vhd,,,mux_4_1,,,,,,,,

@@ -1,0 +1,573 @@
+Rc files read:
+  NONE
+Latexmk: This is Latexmk, John Collins, 27 Dec. 2024. Version 4.86a.
+Force everything to be remade.
+Latexmk: applying rule 'pdflatex'...
+Rule 'pdflatex':  Reasons for rerun
+Category 'other':
+  Rerun of 'pdflatex' forced or previously required:
+    Reason or flag: 'go_mode'
+
+------------
+Run number 1 of rule 'pdflatex'
+------------
+------------
+Running 'pdflatex  -interaction=nonstopmode -file-line-error -recorder --jobname="elaborato" -output-directory="/c/Users/Flexo Rodriguez/Desktop/ASDI/elaborato_v2/out"  "main.tex"'
+------------
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex.fmt)
+ restricted \write18 enabled.
+entering extended mode
+(main.tex
+LaTeX2e <2025-11-01>
+L3 programming layer <2025-12-24>
+
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/base\report.c
+ls
+Document Class: report 2025/01/22 v1.4n Standard LaTeX document class
+
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/base\size11.c
+lo)) (structure.tex
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/base\inputenc
+.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.
+sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/babel\babel
+.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/babel\txtba
+bel.def)
+*************************************
+* Local config file bblopts.cfg used
+*
+
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/arabi\bblopts
+.cfg)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/babel/local
+e/it\babel-italian.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/babel-italian
+\italian.ldf))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etoo
+lbox.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsma
+th.sty
+For additional information on amsmath, use the `?' option.
+
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amste
+xt.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsge
+n.sty))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbs
+y.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsop
+n.sty))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amsf
+onts.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/stmaryrd\stma
+ryrd.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amss
+ymb.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/datetime\date
+time.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/fmtcount\fmtc
+ount.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/base\ifthen.s
+ty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/xkeyval\xkeyv
+al.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/xkeyval\xke
+yval.tex
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/xkeyval\xkv
+utils.tex
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/xkeyval\key
+val.tex))))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/fmtcount\fcpr
+efix.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/fmtcount\fcnu
+mparser.sty))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/fmtcount\fc-i
+talian.def
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/itnumpar\itnu
+mpar.sty)))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/datetime\date
+time-defaults.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/datetime\dt-i
+talian.def))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/tools\enumera
+te.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/enumitem\enum
+item.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/algorithm2e\a
+lgorithm2e.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/ifoddpage\ifo
+ddpage.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/tools\xspace.
+sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/relsize\relsi
+ze.sty))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/xcolor\xcolor
+.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\
+color.cfg)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\
+pdftex.def)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/graphics\math
+color.ltx))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/graphics\grap
+hicx.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/graphics\grap
+hics.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig
+.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\
+graphics.cfg)))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/booktabs\book
+tabs.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/tools\tabular
+x.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/tools\array.s
+ty))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/multirow\mult
+irow.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/float\float.s
+ty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/caption\capti
+on.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/caption\capti
+on3.sty))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/caption\subca
+ption.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/siunitx\siuni
+tx.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/translations\
+translations.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pdftexcmds\
+pdftexcmds.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/infwarerr\i
+nfwarerr.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/iftex\iftex
+.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/ltxcmds\ltx
+cmds.sty))))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/mdframed\mdfr
+amed.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvo
+ptions.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/kvsetkeys\kvs
+etkeys.sty))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/l3packages/xp
+arse\xparse.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/l3kernel\expl
+3.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3b
+ackend-pdftex.def)))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/zref\zref-abs
+page.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/zref\zref-bas
+e.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/kvdefinekey
+s\kvdefinekeys.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/etexcmds\et
+excmds.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/auxhook\auxho
+ok.sty)))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/needspace\nee
+dspace.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/pgf/frontendl
+ayer\tikz.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclaye
+r\pgf.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities
+\pgfrcs.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utiliti
+es\pgfutil-common.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utiliti
+es\pgfutil-latex.def)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utiliti
+es\pgfrcs.code.tex
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf\pgf.rev
+ision.tex)))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclaye
+r\pgfcore.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/pgf/systemlay
+er\pgfsys.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systeml
+ayer\pgfsys.code.tex
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utiliti
+es\pgfkeys.code.tex
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utiliti
+es\pgfkeyslibraryfiltered.code.tex))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systeml
+ayer\pgf.cfg)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systeml
+ayer\pgfsys-pdftex.def
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systeml
+ayer\pgfsys-common-pdf.def)))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systeml
+ayer\pgfsyssoftpath.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systeml
+ayer\pgfsysprotocol.code.tex))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basicla
+yer\pgfcore.code.tex
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pg
+fmath.code.tex
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pg
+fmathutil.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pg
+fmathparser.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pg
+fmathfunctions.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pg
+fmathfunctions.basic.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pg
+fmathfunctions.trigonometric.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pg
+fmathfunctions.random.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pg
+fmathfunctions.comparison.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pg
+fmathfunctions.base.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pg
+fmathfunctions.round.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pg
+fmathfunctions.misc.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pg
+fmathfunctions.integerarithmetics.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pg
+fmathcalc.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pg
+fmathfloat.code.tex))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pg
+fint.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basicla
+yer\pgfcorepoints.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basicla
+yer\pgfcorepathconstruct.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basicla
+yer\pgfcorepathusage.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basicla
+yer\pgfcorescopes.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basicla
+yer\pgfcoregraphicstate.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basicla
+yer\pgfcoretransformations.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basicla
+yer\pgfcorequick.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basicla
+yer\pgfcoreobjects.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basicla
+yer\pgfcorepathprocessing.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basicla
+yer\pgfcorearrows.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basicla
+yer\pgfcoreshade.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basicla
+yer\pgfcoreimage.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basicla
+yer\pgfcoreexternal.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basicla
+yer\pgfcorelayers.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basicla
+yer\pgfcoretransparency.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basicla
+yer\pgfcorepatterns.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basicla
+yer\pgfcorerdf.code.tex)))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules
+\pgfmoduleshapes.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules
+\pgfmoduleplot.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibi
+lity\pgfcomp-version-0-65.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibi
+lity\pgfcomp-version-1-18.sty))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities
+\pgffor.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities
+\pgfkeys.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utiliti
+es\pgfkeys.code.tex))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/pgf/math\pgfm
+ath.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pg
+fmath.code.tex))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utiliti
+es\pgffor.code.tex))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/fronten
+dlayer/tikz\tikz.code.tex
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/librari
+es\pgflibraryplothandlers.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules
+\pgfmodulematrix.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/fronten
+dlayer/tikz/libraries\tikzlibrarytopaths.code.tex)))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/mdframed\md-f
+rame-1.mdf))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/fronten
+dlayer/tikz/libraries\tikzlibrarypositioning.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/librari
+es\pgflibraryarrows.meta.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/fronten
+dlayer/tikz/libraries\tikzlibraryautomata.code.tex
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/fronten
+dlayer/tikz/libraries\tikzlibraryshapes.multipart.code.tex
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/librari
+es/shapes\pgflibraryshapes.multipart.code.tex)))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/fronten
+dlayer/tikz/libraries\tikzlibraryshapes.geometric.code.tex
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/librari
+es/shapes\pgflibraryshapes.geometric.code.tex))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/fronten
+dlayer/tikz/libraries\tikzlibraryshapes.misc.code.tex
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/librari
+es/shapes\pgflibraryshapes.misc.code.tex))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/fronten
+dlayer/tikz/libraries\tikzlibrarycalc.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/fronten
+dlayer/tikz/libraries\tikzlibraryfit.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pgf/fronten
+dlayer/tikz/libraries\tikzlibrarybackgrounds.code.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/listings\list
+ings.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstp
+atch.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstm
+isc.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/listings\list
+ings.cfg))
+==> First Aid for listings.sty no longer applied!
+    Expected:
+        2024/09/23 1.10c (Carsten Heinz)
+    but found:
+        2025/11/14 1.11b (Carsten Heinz)
+    so I'm assuming it got fixed.
+
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/fancyhdr\fanc
+yhdr.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/titlesec\titl
+esec.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hype
+rref.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/pdfescape\p
+dfescape.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/hycolor\hycol
+or.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\name
+ref.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/refcount\refc
+ount.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/gettitlestr
+ing\gettitlestring.sty))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/stringenc\s
+tringenc.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\pd1e
+nc.def)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/intcalc\int
+calc.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\puen
+c.def)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/bitset\bits
+et.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/bigintcalc\
+bigintcalc.sty)))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hpdf
+tex.def
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/rerunfilechec
+k\rerunfilecheck.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/base\atveryen
+d-ltx.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/uniquecount
+er\uniquecounter.sty)))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geom
+etry.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifvte
+x.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geom
+etry.cfg))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/xcharter\XCha
+rter.sty
+`XCharter' v1.25, 2023/07/21 Text macros for XCharter, an extension of Charter 
+(msharpe)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/base\textcomp
+.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/xstring\xstri
+ng.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/generic/xstring\xst
+ring.tex))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/carlisle\scal
+efnt.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.
+sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/fontaxes\font
+axes.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/figureversion
+s\figureversions.sty)))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/inconsolata\i
+nconsolata.sty
+`inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe))
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\helvet
+.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstl
+ang1.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstm
+isc.sty)) (elaborato-macro.tex)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/xcharter\t1xc
+harter-tlf.fd)
+(C:/Users\Flexo Rodriguez\Desktop\ASDI\elaborato_v2\out\elaborato.aux)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\s
+upp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\
+epstopdf-base.sty
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epst
+opdf-sys.cfg))
+(C:/Users\Flexo Rodriguez\Desktop\ASDI\elaborato_v2\out\elaborato.out)
+(C:/Users\Flexo Rodriguez\Desktop\ASDI\elaborato_v2\out\elaborato.out)
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/upquote\upquo
+te.sty)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\t1phv.
+fd)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa
+.fd)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb
+.fd)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/stmaryrd\ustm
+ry.fd)
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/inconsolata\t
+1zi4.fd) [1{C:/Users/Flexo Rodriguez/AppData/Local/MiKTeX/fonts/map/pdftex/pdft
+ex.map}{C:/Users/Flexo Rodriguez/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/
+base/8r.enc}{C:/Users/Flexo Rodriguez/AppData/Local/Programs/MiKTeX/fonts/enc/d
+vips/inconsolata/i4-t1-5.enc} <./logo_unina.png>]
+(C:/Users\Flexo Rodriguez\Desktop\ASDI\elaborato_v2\out\elaborato.toc) [1{C:/Us
+ers/Flexo Rodriguez/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/xcharter/xch_
+rydp4l.enc}] (capitoli/01-multiplexer/capitolo.tex
+Capitolo 1.
+(capitoli/01-multiplexer/esercizio1-1.tex
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/listings\lstl
+ang1.sty) (codice/esercizio1-1/mux_4_1.vhd) [1]
+(codice/esercizio1-1/mux_16_1.vhd)) (capitoli/01-multiplexer/esercizio1-2.tex
+[2 <./figure/esercizio1-1/simulazione.png>]
+(codice/esercizio1-2/interconn16_4.vhd) [3])
+(capitoli/01-multiplexer/esercizio1-3.tex)) (capitoli/02-rom-m/capitolo.tex
+[4 <./figure/esercizio1-2/simulazione.png>]
+Capitolo 2.
+(capitoli/02-rom-m/esercizio2-1.tex (codice/esercizio2-1/rom16_8.vhd [5])
+(codice/esercizio2-1/systemm.vhd) (codice/esercizio2-1/systems.vhd [6])
+(codice/esercizio2-1/systems_tb.vhd [7])) (capitoli/02-rom-m/esercizio2-2.tex))
+ (capitoli/03-riconoscitore-sequenza/capitolo.tex [8 <./figure/esercizio2-1/sim
+ulazione.png>]
+Capitolo 3.
+(capitoli/03-riconoscitore-sequenza/esercizio3-1.tex
+
+LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
+(Font)              using `T1/zi4/m/n' instead on input line 4.
+
+[9 <./figure/esercizio3-1/stati.png>] (codice/esercizio3-1/fsm_sequence.vhd
+[10]) [11] (codice/esercizio3-1/fsm_sequence_tb.vhd [12]))
+(capitoli/03-riconoscitore-sequenza/esercizio3-2.tex))
+(capitoli/04-shift-register/capitolo.tex [13 <./figure/esercizio3-1/simulazione
+.png>]
+Capitolo 4.
+(capitoli/04-shift-register/esercizio4-1.tex
+(codice/esercizio4-1/shift_register.vhd [14]) [15] (codice/esercizio4-1/dff.vhd
+ [16 <./figure/esercizio4-1/rtl.png>]) (codice/esercizio4-1/mux_2_1.vhd
+[17]) [18] (codice/esercizio4-1/shift_register.vhd) [19]
+(codice/esercizio4-1/shift_register_tb.vhd [20]) [21]))
+(capitoli/05-cronometro/capitolo.tex [22 <./figure/esercizio4-1/simulazione.png
+>]
+Capitolo 5.
+(capitoli/05-cronometro/esercizio5-1.tex
+Overfull \hbox (10.8842pt too wide) in paragraph at lines 22--23
+[]\T1/XCharter-TLF/m/n/10.95 L'implementazione di-ver-ge dal-la so-lu-zio-ne pr
+o-po-sta in più pun-ti. Non esi-sto-no un \T1/zi4/m/n/10.95 clock_divider
+[23 <./figure/esercizio5-1/schema.png>] (codice/esercizio5-1/counter_mod.vhd
+[24]) (codice/esercizio5-1/cronometro.vhd [25])
+(codice/esercizio5-1/cronometro_tb.vhd [26]) [27]
+Overfull \hbox (13.73558pt too wide) in paragraph at lines 62--63
+[]\T1/XCharter-TLF/m/n/10.95 La si-mu-la-zio-ne mo-stra i ri-por-ti secondi-min
+uti-ore cor-ret-ti nei tre pas-sag-gi (00:00:59, 00:59:59,
+) (capitoli/05-cronometro/esercizio5-2.tex)) (capitoli/06-po-pc/capitolo.tex
+[28 <./figure/esercizio5-1/simulazione.png>]
+Capitolo 6.
+(capitoli/06-po-pc/esercizio6-1.tex (codice/esercizio6-1/rom.vhd [29]) [30]
+(codice/esercizio6-1/onecount.vhd) (codice/esercizio6-1/mem.vhd [31])
+(codice/esercizio6-1/control_unit.vhd [32] [33])
+(codice/esercizio6-1/sistema.vhd [34])
+(C:\Users\Flexo Rodriguez\AppData\Local\Programs\MiKTeX\tex/latex/xcharter\ts1x
+charter-tlf.fd) (codice/esercizio6-1/sistema_tb.vhd [35{C:/Users/Flexo Rodrigue
+z/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/xcharter/xch1_co4ru4.enc}])
+[36 <./figure/esercizio6-1/simulazione.png>])
+(capitoli/06-po-pc/esercizio6-2.tex) (capitoli/06-po-pc/esercizio6-3.tex))
+(capitoli/07-moltiplicatore-booth/capitolo.tex [37]
+Capitolo 7.
+(capitoli/07-moltiplicatore-booth/esercizio7-1.tex [38 <./figure/esercizio7-1/s
+chema.png>] (codice/esercizio7-1/full_adder.vhd [39])
+(codice/esercizio7-1/rca.vhd) (codice/esercizio7-1/add_sub.vhd [40])
+(codice/esercizio7-1/booth_po.vhd [41]) [42] (codice/esercizio7-1/booth_cu.vhd
+[43]) (codice/esercizio7-1/booth.vhd [44]) (codice/esercizio7-1/booth_tb.vhd
+[45]) [46 <./figure/esercizio7-1/simulazione.png>])
+(capitoli/07-moltiplicatore-booth/esercizio7-2.tex))
+(capitoli/08-handshaking/capitolo.tex [47]
+Capitolo 8.
+(capitoli/08-handshaking/esercizio8-1.tex [48 <./figure/esercizio8-1/architettu
+ra.png (PNG copy)>]
+Overfull \hbox (30.00569pt too wide) in paragraph at lines 37--38
+\T1/XCharter-TLF/m/n/10.95 trol-lo si chia-ma-no \T1/zi4/m/it/10.95 cu_A \T1/XC
+harter-TLF/m/n/10.95 e \T1/zi4/m/it/10.95 cu_B\T1/XCharter-TLF/m/n/10.95 , con 
+por-te \T1/zi4/m/it/10.95 clk\T1/XCharter-TLF/m/n/10.95 , \T1/zi4/m/it/10.95 co
+unt_en \T1/XCharter-TLF/m/n/10.95 e \T1/zi4/m/it/10.95 count_rst \T1/XCharter-T
+LF/m/n/10.95 al po-sto di \T1/zi4/m/it/10.95 clock\T1/XCharter-TLF/m/n/10.95 , 
+\T1/zi4/m/it/10.95 counter_enable
+[49 <./figure/esercizio8-1/fsm-a.png (PNG copy)> <./figure/esercizio8-1/fsm-b.p
+ng (PNG copy)>] (codice/esercizio8-1/register_m.vhd)
+(codice/esercizio8-1/adder.vhd [50]) (codice/esercizio8-1/rom_8_8.vhd [51])
+(codice/esercizio8-1/cu_a.vhd [52]) [53] (codice/esercizio8-1/cu_b.vhd [54])
+(codice/esercizio8-1/system_a.vhd [55]) (codice/esercizio8-1/system_b.vhd
+[56]) (codice/esercizio8-1/handshaking_tb.vhd [57] [58])))
+(capitoli/09-processore/capitolo.tex [59 <./figure/esercizio8-1/simulazione.png
+>]
+Capitolo 9.
+(capitoli/09-processore/esercizio9-1.tex))
+(capitoli/10-interfaccia-seriale/capitolo.tex [60]
+Capitolo 10.
+(capitoli/10-interfaccia-seriale/esercizio10-1.tex))
+(capitoli/11-switch-multistadio/capitolo.tex [61]
+Capitolo 11.
+(capitoli/11-switch-multistadio/esercizio11-1.tex))
+(capitoli/12-prova-esame/capitolo.tex [62]
+Capitolo 12.
+(capitoli/12-prova-esame/esercizio12-1.tex)) [63]
+(C:/Users\Flexo Rodriguez\Desktop\ASDI\elaborato_v2\out\elaborato.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+ )
+(see the transcript file for additional information)<C:/Users/Flexo Rodriguez/A
+ppData/Local/Programs/MiKTeX/fonts/type1/public/inconsolata/Inconsolata-zi4b.pf
+b><C:/Users/Flexo Rodriguez/AppData/Local/Programs/MiKTeX/fonts/type1/public/in
+consolata/Inconsolata-zi4r.pfb><C:/Users/Flexo Rodriguez/AppData/Local/Programs
+/MiKTeX/fonts/type1/public/xcharter/XCharter-Bold.pfb><C:/Users/Flexo Rodriguez
+/AppData/Local/Programs/MiKTeX/fonts/type1/public/xcharter/XCharter-Italic.pfb>
+<C:/Users/Flexo Rodriguez/AppData/Local/Programs/MiKTeX/fonts/type1/public/xcha
+rter/XCharter-Roman.pfb><C:/Users/Flexo Rodriguez/AppData/Local/Programs/MiKTeX
+/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Flexo Rodriguez/AppData/Lo
+cal/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Flexo Ro
+driguez/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><
+C:/Users/Flexo Rodriguez/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfo
+nts/cm/cmsy10.pfb><C:/Users/Flexo Rodriguez/AppData/Local/Programs/MiKTeX/fonts
+/type1/urw/helvetic/uhvb8a.pfb><C:/Users/Flexo Rodriguez/AppData/Local/Programs
+/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb>
+Output written on "C:/Users\Flexo Rodriguez\Desktop\ASDI\elaborato_v2\out\elabo
+rato.pdf" (65 pages, 2207559 bytes).
+Transcript written on "C:/Users\Flexo Rodriguez\Desktop\ASDI\elaborato_v2\out\e
+laborato.log".
+Latexmk: Getting log file '/c/Users/Flexo Rodriguez/Desktop/ASDI/elaborato_v2/out/elaborato.log'
+Latexmk: Examining '/c/Users/Flexo Rodriguez/Desktop/ASDI/elaborato_v2/out/elaborato.fls'
+Latexmk: ============== Inequiv cwd_fls cwd 'C:/Users/Flexo Rodriguez/Desktop/ASDI/elaborato_v2/latex' '/c/Users/Flexo Rodriguez/Desktop/ASDI/elaborato_v2/latex'
+Latexmk: Examining '/c/Users/Flexo Rodriguez/Desktop/ASDI/elaborato_v2/out/elaborato.log'
+Latexmk: Log file says output to 'C:/Users/Flexo Rodriguez/Desktop/ASDI/elaborato_v2/out/elaborato.pdf'
+Latexmk: All targets (/c/Users/Flexo Rodriguez/Desktop/ASDI/elaborato_v2/out/elaborato.pdf) are up-to-date
+

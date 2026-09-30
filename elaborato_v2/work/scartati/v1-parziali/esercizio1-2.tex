@@ -1,0 +1,43 @@
+\esSezione{Rete di interconnessione 16:4}\label{sec:esercizio1-2}
+
+\begin{traccia}
+Progettare, implementare in VHDL e testare mediante simulazione una rete di interconnessione con 16 ingressi e 4 uscite, ottenuta collegando in cascata un multiplexer 16:1 e un demultiplexer 1:4. Una prima selezione a 4 bit sceglie l'ingresso da propagare; una seconda selezione a 2 bit sceglie l'uscita su cui renderlo disponibile.
+\end{traccia}
+
+\progetto
+
+La rete comprende due componenti: il multiplexer \texttt{mux\_16\_1}, che seleziona uno dei 16 ingressi mediante il segnale \texttt{s\_i} a 4 bit, e il demultiplexer \texttt{demux\_1\_4}, che porta il bit selezionato su una delle 4 uscite in base al segnale \texttt{s\_o} a 2 bit. Il bit intermedio passa attraverso il segnale interno \texttt{q}, di un solo bit. Il multiplexer 16:1 è già stato presentato nell'esercizio~1.1, insieme al multiplexer 4:1 su cui è costruito, ed è qui riutilizzato senza modifiche.
+
+\todo{Schema a blocchi della rete (MUX 16:1 seguito da DEMUX 1:4): non presente tra i materiali del progetto.}
+% TODO: schema a blocchi assente tra le immagini del progetto.
+
+\implementazione
+
+Per il multiplexer 16:1 e per il multiplexer 4:1 si rimanda ai listati~\ref{lst:esercizio1-1:mux-16-1} e~\ref{lst:esercizio1-1:mux-4-1} dell'esercizio~1.1.
+
+Il demultiplexer \texttt{demux\_1\_4} non è disponibile tra i sorgenti del progetto, quindi la sua architettura non viene descritta. Dall'istanza nel top module si ricava solo l'interfaccia: la porta \texttt{a} riceve il bit da distribuire, la porta \texttt{s} è la selezione a 2 bit e la porta \texttt{y} è il vettore delle 4 uscite.
+
+\todo{Sorgente \texttt{demux\_1\_4.vhd} mancante (la cartella \texttt{vivado/sim} non esiste): aggiungere listato e descrizione.}
+% TODO: sorgente demux_1_4.vhd mancante; aggiungere listato e descrizione dell'architettura.
+
+Il top module \texttt{interconn16\_4} ha come ingressi il vettore \texttt{x} di 16 bit, la selezione \texttt{s\_i} di 4 bit e la selezione \texttt{s\_o} di 2 bit, e come uscita il vettore \texttt{y} di 4 bit. L'architettura è di tipo structural: il segnale interno \texttt{q}, inizializzato a \texttt{'0'}, collega l'uscita del multiplexer, istanziato con il port mapping \texttt{a => x}, \texttt{s => s\_i}, \texttt{y => q}, all'ingresso \texttt{a} del demultiplexer, il cui port mapping è \texttt{a => q}, \texttt{s => s\_o}, \texttt{y => y}. Il codice è riportato di seguito.
+
+\vhdlfile{esercizio1-2/interconn16_4.vhd}{Implementazione della rete di interconnessione 16:4}{lst:esercizio1-2:interconn16-4}
+
+\simulazione
+
+I testbench \texttt{interconn16\_4\_tb} e \texttt{mux\_16\_1\_tb}, citati dal file di progetto, non sono disponibili: non è quindi possibile riportarne il listato né descrivere gli stimoli generati.
+
+\todo{Testbench \texttt{interconn16\_4\_tb.vhd} e \texttt{mux\_16\_1\_tb.vhd} mancanti (cartella \texttt{vivado/sim} assente): aggiungere listato e commento.}
+% TODO: testbench interconn16_4_tb.vhd e mux_16_1_tb.vhd mancanti; aggiungere listato e commento.
+
+Il risultato della simulazione è mostrato in figura~\ref{fig:esercizio1-2:simulazione}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\linewidth]{figure/esercizio1-2/simulazione}
+  \caption{Simulazione della rete di interconnessione 16:4}
+  \label{fig:esercizio1-2:simulazione}
+\end{figure}
+
+L'ingresso \texttt{input[0:15]} vale 0x54C6 ($0101\,0100\,1100\,0110_2$) per tutta la durata mostrata. Il segnale \texttt{ctrl\_out}, che corrisponde alla selezione dell'uscita, assume i valori $0_{10}$, $1_{10}$, $2_{10}$ e $3_{10}$ a intervalli di \SI{10}{ns} a partire da \SI{10}{ns}, e in ciascun intervallo l'uscita \texttt{output[0:3]} ha attivo il solo bit selezionato: 0x8 ($1000_2$) con \texttt{ctrl\_out} pari a $0_{10}$, 0x4 ($0100_2$) con $1_{10}$, 0x2 ($0010_2$) con $2_{10}$ e 0x1 ($0001_2$) con $3_{10}$. Nel primo intervallo, fino a \SI{10}{ns}, l'uscita vale 0x0. Nella figura non è visibile la selezione dell'ingresso del multiplexer, per cui non si indica quale bit di \texttt{input} venga propagato.

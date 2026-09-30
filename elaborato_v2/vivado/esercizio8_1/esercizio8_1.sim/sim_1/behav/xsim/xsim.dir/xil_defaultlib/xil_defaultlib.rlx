@@ -1,0 +1,14 @@
+0.7
+2020.2
+May  7 2023
+15:24:31
+C:/work/asdi_lab/esercizio8_1/esercizio8_1.srcs/sim_1/new/handshaking_tb.vhd,1790677545,vhdl,,,,handshaking_tb,,,,,,,,
+C:/work/asdi_lab/esercizio8_1/esercizio8_1.srcs/sources_1/new/adder.vhd,1790629329,vhdl,C:/work/asdi_lab/esercizio8_1/esercizio8_1.srcs/sources_1/new/system_B.vhd,,,adder,,,,,,,,
+C:/work/asdi_lab/esercizio8_1/esercizio8_1.srcs/sources_1/new/cu_A.vhd,1790632171,vhdl,C:/work/asdi_lab/esercizio8_1/esercizio8_1.srcs/sources_1/new/system_A.vhd,,,cu_a,,,,,,,,
+C:/work/asdi_lab/esercizio8_1/esercizio8_1.srcs/sources_1/new/cu_B.vhd,1790633769,vhdl,C:/work/asdi_lab/esercizio8_1/esercizio8_1.srcs/sources_1/new/system_B.vhd,,,cu_b,,,,,,,,
+C:/work/asdi_lab/esercizio8_1/esercizio8_1.srcs/sources_1/new/register_M.vhd,1790629145,vhdl,C:/work/asdi_lab/esercizio8_1/esercizio8_1.srcs/sources_1/new/system_B.vhd,,,register_m,,,,,,,,
+C:/work/asdi_lab/esercizio8_1/esercizio8_1.srcs/sources_1/new/rom_8_8.vhd,1790676414,vhdl,C:/work/asdi_lab/esercizio8_1/esercizio8_1.srcs/sources_1/new/system_A.vhd,,,rom_8_8,,,,,,,,
+C:/work/asdi_lab/esercizio8_1/esercizio8_1.srcs/sources_1/new/system_A.vhd,1790676390,vhdl,C:/work/asdi_lab/esercizio8_1/esercizio8_1.srcs/sim_1/new/handshaking_tb.vhd,,,system_a,,,,,,,,
+C:/work/asdi_lab/esercizio8_1/esercizio8_1.srcs/sources_1/new/system_B.vhd,1790675971,vhdl,C:/work/asdi_lab/esercizio8_1/esercizio8_1.srcs/sim_1/new/handshaking_tb.vhd,,,system_b,,,,,,,,
+C:/work/asdi_lab/src/counter_mod.vhd,1790549116,vhdl,C:/work/asdi_lab/esercizio8_1/esercizio8_1.srcs/sources_1/new/system_A.vhd;C:/work/asdi_lab/esercizio8_1/esercizio8_1.srcs/sources_1/new/system_B.vhd,,,counter_mod,,,,,,,,
+C:/work/asdi_lab/src/mem.vhd,1790677981,vhdl,C:/work/asdi_lab/esercizio8_1/esercizio8_1.srcs/sources_1/new/system_B.vhd,,,mem,,,,,,,,

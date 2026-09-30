@@ -1,0 +1,12 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../esercizio6_1.srcs/sources_1/new/control_unit.vhd" \
+"../../../../../src/counter_mod.vhd" \
+"../../../../../src/mem.vhd" \
+"../../../../../src/onecount.vhd" \
+"../../../../../src/rom.vhd" \
+"../../../../esercizio6_1.srcs/sources_1/new/sistema.vhd" \
+"../../../../esercizio6_1.srcs/sim_1/new/sistema_tb.vhd" \
+
+# Do not sort compile order
+nosort

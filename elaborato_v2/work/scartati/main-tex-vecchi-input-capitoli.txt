@@ -1,0 +1,21 @@
+
+% ----------------------------------------------------------------------------------------
+% CAPITOLI
+% ----------------------------------------------------------------------------------------
+% \input{capitoli/00_introduzione}
+% \input{capitoli/01_reti_combinatorie}
+% \input{capitoli/02_reti_sequenziali}
+% \input{capitoli/03_macchine_aritmetiche}
+% \input{capitoli/04_handshaking}
+% \input{capitoli/05_processore}
+% \input{capitoli/06_interfaccia_seriale}
+% \input{capitoli/07_switch_multistadio}
+% \input{capitoli/08_prova_esame}
+
+% ----------------------------------------------------------------------------------------
+% APPENDICE: componenti elementari riusati in più esercizi
+% ----------------------------------------------------------------------------------------
+\appendix
+% \input{capitoli/appendice}
+
+\end{document}

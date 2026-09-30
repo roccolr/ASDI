@@ -1,0 +1,13 @@
+# compile vhdl design source files
+vhdl xil_defaultlib  \
+"../../../../../src/full_adder.vhd" \
+"../../../../../src/rca.vhd" \
+"../../../../../src/add_sub.vhd" \
+"../../../../../src/counter_mod.vhd" \
+"../../../../esercizio7_1.srcs/sources_1/new/booth_po.vhd" \
+"../../../../esercizio7_1.srcs/sources_1/new/booth_cu.vhd" \
+"../../../../esercizio7_1.srcs/sources_1/new/booth.vhd" \
+"../../../../esercizio7_1.srcs/sim_1/new/booth_tb.vhd" \
+
+# Do not sort compile order
+nosort
