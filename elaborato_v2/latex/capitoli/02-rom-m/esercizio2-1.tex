@@ -6,9 +6,9 @@ Progettare, implementare in VHDL e testare mediante simulazione un sistema $S$ c
 
 \progetto
 
-Il sistema è formato da due componenti collegati in cascata: la ROM, che riceve l'indirizzo a 4 bit e fornisce il dato a 8 bit, e la macchina combinatoria $M$, che riduce tale dato a 4 bit. Il sistema è puramente combinatorio, senza clock né reset. Come funzione di $M$ è stata scelta l'AND tra coppie di bit adiacenti del dato letto: ciascuno dei quattro bit di uscita è l'AND di due bit consecutivi dell'ingresso.
+Il sistema è formato da due componenti collegati in cascata: la ROM, che riceve l'indirizzo a 4 bit e fornisce il dato a 8 bit, e la macchina combinatoria $M$, che riduce tale dato a 4 bit. Il sistema è puramente combinatorio. Come funzione di $M$ è stata scelta l'AND tra coppie di bit adiacenti del dato letto: ciascuno dei quattro bit di uscita è l'AND di due bit consecutivi dell'ingresso.
 
-Il top module \texttt{systemS} istanzia i due componenti e li collega tramite un segnale interno a 8 bit. Rispetto alla soluzione proposta, l'implementazione usa nomi diversi (\texttt{rom16\_8}, \texttt{systemM}, \texttt{systemS}) e istanzia i componenti in modo diretto (\texttt{entity work.\ldots}) anziché con dichiarazione di \texttt{component}. La struttura del sistema è riassunta in figura~\ref{fig:esercizio2-1:schema}.
+Il top module \texttt{systemS} istanzia i due componenti e li collega tramite un segnale interno a 8 bit.
 
 \begin{figure}[H]
   \centering
@@ -26,7 +26,7 @@ Il top module \texttt{systemS} istanzia i due componenti e li collega tramite un
 
 \implementazione
 
-L'entità \texttt{rom16\_8} ha come ingresso \texttt{address} (4 bit) e come uscita \texttt{data} (8 bit). Nell'architettura \texttt{Behavioral} si trova un array di 16 elementi da 8 bit, inizializzato con valori esadecimali, e un process, sensibile ad \texttt{address}, assegna a \texttt{data} l'elemento indicato dall'indirizzo convertito in intero. L'attributo \texttt{rom\_style} è impostato a \texttt{"block"}. Il contenuto della ROM (da 0x4A a 0xED) differisce da quello della soluzione proposta (0xA8, 0xBD, \ldots), che ripete due volte la stessa serie di otto valori.
+L'entità \texttt{rom16\_8} ha come ingresso \texttt{address} (4 bit) e come uscita \texttt{data} (8 bit). Nell'architettura \texttt{Behavioral} si trova un array di 16 elementi da 8 bit, inizializzato con valori esadecimali, e un process, sensibile ad \texttt{address}, assegna a \texttt{data} l'elemento indicato dall'indirizzo convertito in intero. L'attributo \texttt{rom\_style} è impostato a \texttt{"block"}.
 
 \vhdlfile{esercizio2-1/rom16_8.vhd}{Implementazione ROM 16x8}{lst:esercizio2-1:rom16-8}
 

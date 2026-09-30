@@ -29,15 +29,13 @@ Il multiplexer riceve il vettore \texttt{x} e la selezione \texttt{s\_i}, mentre
 
 Per il multiplexer 16:1 e per il multiplexer 4:1 si rimanda ai listati~\ref{lst:esercizio1-1:mux-16-1} e~\ref{lst:esercizio1-1:mux-4-1} dell'esercizio~1.1. Rimane da presentare il demultiplexer 1:4.
 
-L'entità \texttt{demux\_1\_4} ha tre porte: l'ingresso \texttt{a} di un bit, la selezione \texttt{s} a 2 bit e l'uscita \texttt{y}, vettore di 4 bit con indici crescenti da 0 a 3. L'architettura è di tipo dataflow: ciascun bit di \texttt{y} è assegnato con un'espressione condizionale \texttt{when ... else}, che porta su di esso il valore di \texttt{a} se \texttt{s} coincide con l'indice del bit e \texttt{'0'} negli altri casi. Le uscite non selezionate restano quindi a zero. Il codice è riportato qui sotto.
+L'entità \texttt{demux\_1\_4} ha tre porte: l'ingresso \texttt{a} di un bit, la selezione \texttt{s} a 2 bit e l'uscita \texttt{y}, vettore di 4 bit con indici crescenti da 0 a 3. L'architettura è di tipo dataflow: ciascun bit di \texttt{y} è assegnato con un'espressione condizionale \texttt{when ... else}, che porta su di esso il valore di \texttt{a} se \texttt{s} coincide con l'indice del bit e \texttt{'0'} negli altri casi. Le uscite non selezionate restano quindi a zero. Di seguito viene riportato il codice.
 
 \vhdlfile{esercizio1-2/demux_1_4.vhd}{Implementazione DEMUX 1:4}{lst:esercizio1-2:demux-1-4}
 
-Il top module \texttt{interconn16\_4} ha come ingressi il vettore \texttt{x} di 16 bit, la selezione \texttt{s\_i} di 4 bit e la selezione \texttt{s\_o} di 2 bit, e come uscita il vettore \texttt{y} di 4 bit. L'architettura è di tipo structural: il segnale interno \texttt{q}, inizializzato a \texttt{'0'}, collega l'uscita del multiplexer, istanziato con il port mapping \texttt{a => x}, \texttt{s => s\_i}, \texttt{y => q}, all'ingresso \texttt{a} del demultiplexer, il cui port mapping è \texttt{a => q}, \texttt{s => s\_o}, \texttt{y => y}. Le istanze sono dirette (\texttt{entity work.\dots}), senza dichiarazione di component. Di seguito il codice.
+Il top module \texttt{interconn16\_4} ha come ingressi il vettore \texttt{x} di 16 bit, la selezione \texttt{s\_i} di 4 bit e la selezione \texttt{s\_o} di 2 bit, e come uscita il vettore \texttt{y} di 4 bit. L'architettura è di tipo structural: il segnale interno \texttt{q}, inizializzato a \texttt{'0'}, collega l'uscita del multiplexer, istanziato con il port mapping \texttt{a => x}, \texttt{s => s\_i}, \texttt{y => q}, all'ingresso \texttt{a} del demultiplexer, il cui port mapping è \texttt{a => q}, \texttt{s => s\_o}, \texttt{y => y}. 
 
 \vhdlfile{esercizio1-2/interconn16_4.vhd}{Implementazione della rete di interconnessione 16:4}{lst:esercizio1-2:interconn16-4}
-
-Rispetto alla soluzione proposta nel riferimento, l'implementazione differisce per i nomi delle entità e delle porte (\texttt{demux\_1\_4} in luogo di \texttt{dmux1\_4}, \texttt{x} e \texttt{s\_o} al posto di \texttt{i} e \texttt{s\_y}), per la descrizione del demultiplexer, basata su confronti di \texttt{s} con i valori costanti invece che su espressioni booleane, e per l'istanziazione diretta dei componenti.
 
 \simulazione
 
