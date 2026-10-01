@@ -4,7 +4,6 @@
 Progettare, implementare in VHDL e verificare mediante simulazione un sistema composto da una memoria ROM di $N$ locazioni da 8 bit, una macchina combinatoria $M$ che trasforma la stringa letta dalla ROM in una stringa di 4 bit e una memoria MEM di $N$ locazioni che memorizza l'uscita di $M$. Il sistema parte a fronte di un segnale \texttt{START} esterno; una unità di controllo gestisce la tempificazione, scandisce una locazione della ROM alla volta e scrive la locazione corrispondente di MEM. Gli indirizzi sono forniti da un contatore; ROM e MEM hanno rispettivamente lettura e scrittura sincrone.
 \end{traccia}
 
-L'implementazione si discosta dalla soluzione proposta in vari punti, che segnaliamo man mano: i nomi di entità e porte, la parametrizzazione con due generic (\texttt{N} e \texttt{A}), la MEM dotata di una porta di lettura per il testbench, l'unità di controllo con uscita \texttt{done} e senza segnale di reset del contatore, e la funzione scelta per $M$.
 
 \progetto
 
@@ -56,7 +55,7 @@ Lo schema a blocchi dell'architettura è riportato in Figura~\ref{fig:esercizio6
 
 \implementazione
 
-Partiamo dai componenti della parte operativa. La ROM è descritta dall'entità \texttt{rom}, con generic \texttt{N} (locazioni) e \texttt{A} (bit di indirizzo) e porte \texttt{clk}, \texttt{rd}, \texttt{addr} (\texttt{A} bit) e \texttt{data} (8 bit). L'architettura \texttt{behavioral} contiene la costante \texttt{CONTENT}, un array di \texttt{N} byte con sedici valori iniziali e gli altri a \texttt{x"00"}. Un process sensibile a \texttt{clk} carica \texttt{data} sul fronte di salita solo se \texttt{rd} vale '1', quindi la lettura è sincrona. Un \texttt{assert} con severità \texttt{failure} controlla che \texttt{N} sia indirizzabile su \texttt{A} bit. Il contenuto della ROM è diverso da quello della soluzione proposta, e manca l'attributo \texttt{rom\_style}.
+Partiamo dai componenti della parte operativa. La ROM è descritta dall'entità \texttt{rom}, con generic \texttt{N} (locazioni) e \texttt{A} (bit di indirizzo) e porte \texttt{clk}, \texttt{rd}, \texttt{addr} (\texttt{A} bit) e \texttt{data} (8 bit). L'architettura \texttt{behavioral} contiene la costante \texttt{CONTENT}, un array di \texttt{N} byte con sedici valori iniziali e gli altri a \texttt{x"00"}. Un process sensibile a \texttt{clk} carica \texttt{data} sul fronte di salita solo se \texttt{rd} vale '1', quindi la lettura è sincrona. Un \texttt{assert} con severità \texttt{failure} controlla che \texttt{N} sia indirizzabile su \texttt{A} bit. 
 
 \vhdlfile{esercizio6-1/rom.vhd}{Implementazione della ROM}{lst:esercizio6-1:rom}
 
@@ -64,7 +63,7 @@ La macchina combinatoria $M$ è l'entità \texttt{onecount}, con ingresso \textt
 
 \vhdlfile{esercizio6-1/onecount.vhd}{Implementazione della macchina combinatoria $M$ (conteggio degli '1')}{lst:esercizio6-1:onecount}
 
-L'entità \texttt{mem} ha generic \texttt{N}, \texttt{A} e \texttt{W} (larghezza del dato, 4 per default) e porte \texttt{clk}, \texttt{we}, \texttt{waddr}, \texttt{din}, oltre a \texttt{raddr} e \texttt{dout}, aggiunte per consentire al testbench di leggere il contenuto. La scrittura avviene in un process sincrono, quando \texttt{we} vale '1'; la lettura su \texttt{dout} è invece un assegnamento concorrente, quindi asincrona. Le locazioni sono inizializzate a tutti '1'. La MEM, a differenza di quella proposta, espone quindi un'uscita.
+L'entità \texttt{mem} ha generic \texttt{N}, \texttt{A} e \texttt{W} (larghezza del dato, 4 per default) e porte \texttt{clk}, \texttt{we}, \texttt{waddr}, \texttt{din}, oltre a \texttt{raddr} e \texttt{dout}, aggiunte per consentire al testbench di leggere il contenuto. La scrittura avviene in un process sincrono, quando \texttt{we} vale '1'; la lettura su \texttt{dout} è invece un assegnamento concorrente, quindi asincrona. Le locazioni sono inizializzate a tutti '1'. La MEM, anche se non richiesto esplicitamente dalla traccia, espone un'uscita.
 
 \vhdlfile{esercizio6-1/mem.vhd}{Implementazione della memoria MEM}{lst:esercizio6-1:mem}
 
@@ -77,7 +76,7 @@ L'unità di controllo \texttt{control\_unit} è una FSM di tipo Moore con quattr
   \item in \texttt{S\_WRITE} vengono attivati \texttt{we} e \texttt{cnt\_en}; se \texttt{tc} vale '1' si va in \texttt{S\_DONE}, altrimenti si torna in \texttt{S\_READ};
   \item in \texttt{S\_DONE} viene attivato \texttt{done}, e si torna in \texttt{S\_IDLE} solo quando \texttt{start} torna a '0'.
 \end{enumerate}
-Ogni locazione richiede quindi due cicli di clock: nel primo la ROM campiona l'indirizzo, nel secondo il dato elaborato da $M$ è disponibile e viene scritto in MEM nello stesso fronte in cui il contatore avanza. Anche qui ci sono differenze dalla soluzione proposta: gli stati sono quattro e con un altro significato, il contatore riceve direttamente \texttt{rst} (manca l'uscita di reset) ed è presente \texttt{done}.
+Ogni locazione richiede quindi due cicli di clock: nel primo la ROM campiona l'indirizzo, nel secondo il dato elaborato da $M$ è disponibile e viene scritto in MEM nello stesso fronte in cui il contatore avanza. 
 
 \vhdlfile{esercizio6-1/control_unit.vhd}{Implementazione della Control Unit}{lst:esercizio6-1:cu}
 

@@ -42,6 +42,7 @@ begin
             when S_WRITE =>
                 we <= '1';
                 cnt_en <= '1';
+                -- abbiamo scritto, quindi avanziamo
                 if tc = '1' then 
                     stato_prossimo <= S_DONE;
                 else 

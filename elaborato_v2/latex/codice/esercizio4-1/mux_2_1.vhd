@@ -29,9 +29,7 @@ begin
 end alternative;
 
 architecture alternative2 of mux_2_1 is
--- La semantica è parallela, non a priorità: è l'equivalente del case. 
--- I casi non possono sovrapporsi - il compilatore te lo impedisce - 
--- e devono coprire l'intero dominio del selettore
+-- La semantica è parallela, non a priorità
 begin
 
     with s select

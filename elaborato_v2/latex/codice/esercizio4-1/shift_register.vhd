@@ -9,7 +9,7 @@ entity shift_register is
         clk: in std_logic;
         rst: in std_logic; -- reset sincrono
         load: in std_logic; -- 1 -> parallel load
-        en: in std_logic; -- shift (<< xor >>)
+        en: in std_logic; -- shift (<< aut >>)
         dir: in std_logic; -- 0 >>, 1 <<
         pos: in std_logic; -- 0 -> 1 pos, 1 -> 2 pos
         d: in std_logic_vector(N-1 downto 0); -- data 2 be load
@@ -55,7 +55,7 @@ architecture structural of shift_register is
     signal r    :   std_logic_vector(N-1 downto 0); -- uscite ff
     signal ext  :   std_logic_vector(N+3 downto 0); -- r con padding 
     signal sh   :   std_logic_vector(N-1 downto 0); -- uscita MUX 4:1 (shift)
-    signal nx   :   std_logic_vector(N-1 downto 0); -- shift o load  (next)
+    signal nx   :   std_logic_vector(N-1 downto 0); -- shift vel load  (next)
     signal dn   :   std_logic_vector(N-1 downto 0); -- ingresso ff (d next)
     signal we   :   std_logic;                      -- 1 -> il registro si aggiorna (write en)
     

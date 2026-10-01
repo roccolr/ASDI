@@ -6,7 +6,7 @@ Progettare, implementare in VHDL e testare mediante simulazione un cronometro ch
 
 \progetto
 
-Il cronometro è ottenuto dalla cascata di quattro istanze dello stesso componente, il contatore modulare \texttt{counter\_mod}, che verrà riutilizzato anche negli esercizi successivi. La prima istanza, il prescaler, ha modulo \texttt{F\_CLK}, pari al numero di cicli di clock contenuti in un secondo, e produce un impulso \texttt{tick} una volta al secondo. Fa quindi da divisore di frequenza, ma senza generare un clock a 1 Hz: il conteggio dei secondi è pilotato da un segnale di abilitazione, così tutto il circuito resta sincrono con il clock della board.
+Il cronometro è ottenuto dalla cascata di quattro istanze dello stesso componente, il contatore modulare \texttt{counter\_mod}, che verrà riutilizzato anche negli esercizi successivi. La prima istanza, il prescaler, ha modulo \texttt{F\_CLK}, pari al numero di cicli di clock contenuti in un secondo, e produce un impulso \texttt{tick} una volta al secondo. Fa quindi da divisore di frequenza. Il conteggio dei secondi è comunque pilotato da un segnale di abilitazione, così tutto il circuito resta sincrono con il clock della board.
 
 Le tre istanze successive contano i secondi (modulo 60, 6 bit), i minuti (modulo 60, 6 bit) e le ore (modulo 24, 5 bit). L'uscita di riporto \texttt{tc} di ciascun contatore abilita quello successivo: \texttt{tick} abilita i secondi, \texttt{tc\_s} i minuti e \texttt{tc\_m} le ore. Clock, reset e set sono comuni a tutti i contatori, mentre \texttt{run} abilita il solo prescaler e permette di fermare il conteggio. Lo schema è visibile in figura~\ref{fig:esercizio5-1:schema}.
 
@@ -19,14 +19,6 @@ Le tre istanze successive contano i secondi (modulo 60, 6 bit), i minuti (modulo
 
 Il valore iniziale è caricato tramite l'ingresso \texttt{load} dei contatori, collegato a \texttt{set}: ogni contatore riceve la propria parte del valore (\texttt{s\_in}, \texttt{m\_in}, \texttt{h\_in}), mentre il prescaler carica una costante nulla, così da ripartire dall'inizio del secondo.
 
-L'implementazione diverge dalla soluzione proposta in vari punti:
-\begin{itemize}
-  \item non esiste un \texttt{clock\allowbreak\_\allowbreak divider} distinto dal contatore: le funzioni sono unite in \texttt{counter\allowbreak\_\allowbreak mod};
-  \item il riporto \texttt{tc} è combinatorio, non sincrono;
-  \item il reset è sincrono;
-  \item è presente l'ingresso \texttt{run}, assente dal riferimento;
-  \item le uscite \texttt{h}, \texttt{m}, \texttt{s} sono vettori separati.
-\end{itemize}
 
 \implementazione
 

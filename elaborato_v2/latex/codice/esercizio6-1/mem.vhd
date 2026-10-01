@@ -33,6 +33,7 @@ begin
     begin 
         if clk'event and clk = '1' then
             if we = '1' then
+                -- scrittura sincrona
                 ram(to_integer(unsigned(waddr))) <= din;
             end if;
         end if;
