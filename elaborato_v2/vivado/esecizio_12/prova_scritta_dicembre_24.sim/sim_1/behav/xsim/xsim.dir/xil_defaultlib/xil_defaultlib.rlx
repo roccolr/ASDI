@@ -1,0 +1,14 @@
+0.7
+2020.2
+May  7 2023
+15:24:31
+C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sim_1/new/full_system_tb.vhd,1790961295,vhdl,,,,full_system_tb,,,,,,,,
+C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sources_1/new/CLA.vhd,1790958464,vhdl,C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sources_1/new/unitB.vhd,,,cla,,,,,,,,
+C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sources_1/new/ROM_8_4.vhd,1790955151,vhdl,C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sources_1/new/unitA.vhd,,,rom_8_4,,,,,,,,
+C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sources_1/new/contatore_mod_8.vhd,1790961888,vhdl,C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sources_1/new/unitA.vhd,,,contatore_mod_8,,,,,,,,
+C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sources_1/new/cuA.vhd,1790961090,vhdl,C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sources_1/new/unitA.vhd,,,cua,,,,,,,,
+C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sources_1/new/cuB.vhd,1790961100,vhdl,C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sources_1/new/unitB.vhd,,,cub,,,,,,,,
+C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sources_1/new/full_system.vhd,1790961180,vhdl,C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sim_1/new/full_system_tb.vhd,,,full_system,,,,,,,,
+C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sources_1/new/registro_6.vhd,1790960569,vhdl,C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sources_1/new/unitB.vhd,,,registro_6,,,,,,,,
+C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sources_1/new/unitA.vhd,1790961204,vhdl,C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sources_1/new/full_system.vhd,,,unita,,,,,,,,
+C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sources_1/new/unitB.vhd,1790961213,vhdl,C:/work/asdi_lab/prova_scritta_dicembre_24/prova_scritta_dicembre_24.srcs/sources_1/new/full_system.vhd,,,unitb,,,,,,,,

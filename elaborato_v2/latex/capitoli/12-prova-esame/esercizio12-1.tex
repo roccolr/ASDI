@@ -1,1 +1,250 @@
-\esercizioDaSvolgere{Prova d'esame di dicembre 2024}{esercizio12-1}
+\esSezione{Prova d'esame di dicembre 2024}\label{sec:esercizio12-1}
+
+\begin{traccia}
+Un sistema è composto da 2 nodi, A e B. A include una ROM (progettata come macchina sequenziale con READ sincrono) di 8 locazioni da 4 bit, mentre B include un sommatore parallelo in grado di effettuare la somma di 2 stringhe di 4 bit ciascuna e un registro R di 4 bit. Il sistema opera come segue: all'arrivo di un segnale di start, A inizia a prelevare gli elementi ROM[i] dalla propria memoria e li invia, uno alla volta, a B mediante handshaking. B somma progressivamente le stringhe ricevute utilizzando il sommatore e alla fine inserisce il risultato nel registro R.
+\begin{enumerate}
+  \item Si disegni l'architettura complessiva del sistema tramite un diagramma a blocchi, identificando parte operativa e parte di controllo di ciascun nodo. Ogni nodo deve essere progettato seguendo un approccio strutturale, individuando tutti i componenti, le loro interfacce e le loro interconnessioni.
+  \item Si progettino le unità di controllo di A e B evidenziando gli stati, gli ingressi e le uscite negli automi risultanti. È obbligatorio specificare la tempificazione che si intende dare alle macchine (fronte attivo del clock, tempificazione dei segnali di READ/WRITE su registri e memorie).
+  \item Si progetti il sommatore secondo un'architettura di tipo carry look ahead.
+  \item Si fornisca l'implementazione in VHDL dell'intero sistema e si proceda alla simulazione nel caso in cui il clock del sistema A e del sistema B siano diversi (A più lento e A più veloce).
+\end{enumerate}
+\end{traccia}
+
+%------------------------------------------------------------------------------
+\esSottosezione{Punto numero 1}
+
+Lo schema a blocchi del sistema, con la suddivisione di ciascun nodo in parte operativa e parte di controllo, è riportato in figura~\ref{fig:esercizio12-1:architettura}. Il top module \texttt{full\_system} istanzia i due nodi, \texttt{unitA} e \texttt{unitB}, che comunicano attraverso tre soli collegamenti: i segnali di handshaking \texttt{rts} (request to send) e \texttt{cts} (clear to send) e il bus \texttt{data} a 4 bit. Il segnale \texttt{start} è un ingresso del nodo A, mentre \texttt{clk\_a} e \texttt{clk\_b} sono due ingressi di clock distinti, uno per nodo, così che i due nodi possano funzionare a frequenze diverse.
+
+\begin{figure}[htbp]
+  \centering
+  \resizebox{\linewidth}{!}{%
+  \begin{tikzpicture}[font=\sffamily\small]
+    % ---------------- Nodo A ----------------
+    \draw[dashed, thick] (-1.4,-1.8) rectangle (7.0,6.8);
+    \node[anchor=east, font=\sffamily\bfseries\small] at (6.9,6.5) {Nodo A};
+    \begin{scope}[on background layer]
+      \draw[fill=black!5, draw=black!35] (-0.5,0.4) rectangle (6.9,2.5);
+    \end{scope}
+    \node[anchor=south east, font=\sffamily\footnotesize\bfseries] at (6.9,0.4) {PO};
+
+    \node[ctrl, minimum width=5.5cm] (cua) at (2.5,5) {\texttt{cuA}\\[-1pt]{\footnotesize PC, istanza \texttt{cu}}};
+    \node[blocco, minimum width=3.0cm, minimum height=1.1cm] (cont) at (1.3,1.5) {\footnotesize\texttt{contatore\_mod\_8}\\[-1pt]\footnotesize istanza \texttt{cont}};
+    \node[blocco, minimum width=2.2cm, minimum height=1.1cm] (rom) at (5.7,1.5) {\footnotesize\texttt{ROM\_8\_4}\\[-1pt]\footnotesize istanza \texttt{rom}};
+
+    % controllo -> parte operativa
+    \draw[seg] (0.3,4.5) -- node[left, font=\footnotesize]{\texttt{rst}} (0.3,2.05);
+    \draw[seg] (1.2,4.5) -- node[right, font=\footnotesize, pos=0.35]{\texttt{en}} (1.2,2.05);
+    \draw[seg] (2.1,2.05) -- node[right, font=\footnotesize, pos=0.65]{\texttt{tk}} (2.1,4.5);
+    \draw[seg] (4.8,4.5) -- node[right, font=\footnotesize]{\texttt{rd}} (4.8,2.05);
+    % indirizzo
+    \draw[bus] (2.8,1.5) -- node[larghezza=3, pos=0.25]{/} node[below, font=\footnotesize, pos=0.7]{\texttt{addr}} (4.6,1.5);
+    % clock A
+    \draw[seg] (-0.8,-1.8) -- (-0.8,-0.4);
+    \node[font=\footnotesize, anchor=west] at (-0.7,-1.4) {\texttt{clk\_a}};
+    \draw[thin] (-0.8,-0.4) -- (5.7,-0.4);
+    \draw[seg] (-0.8,-0.4) -- (-0.8,5) -- (cua.west);
+    \draw[seg] (1.3,-0.4) -- (cont.south);
+    \draw[seg] (5.7,-0.4) -- (rom.south);
+    \fill (1.3,-0.4) circle (1.2pt);
+    \fill (5.7,-0.4) circle (1.2pt);
+    % start
+    \draw[seg] (1.0,7.6) -- (1.0,5.5);
+    \node[left, font=\footnotesize] at (1.0,7.2) {\texttt{start}};
+
+    % ---------------- Nodo B ----------------
+    \draw[dashed, thick] (8.9,-1.8) rectangle (19.6,6.8);
+    \node[anchor=east, font=\sffamily\bfseries\small] at (19.5,6.5) {Nodo B};
+    \begin{scope}[on background layer]
+      \draw[fill=black!5, draw=black!35] (9.7,0.0) rectangle (19.5,2.6);
+    \end{scope}
+    \node[anchor=south west, font=\sffamily\footnotesize\bfseries] at (9.75,0.02) {PO};
+
+    \node[ctrl, minimum width=2.4cm] (cub) at (11.8,5) {\texttt{cuB}\\[-1pt]{\footnotesize PC, istanza \texttt{cu}}};
+    \node[blocco, minimum width=1.6cm, minimum height=1.1cm] (ext) at (10.8,1.5) {\footnotesize\texttt{ext\_data}\\[-1pt]\footnotesize\texttt{00 \& data}};
+    \node[blocco, minimum width=2.0cm, minimum height=1.1cm] (cla) at (14.0,1.5) {\footnotesize\texttt{CLA}\\[-1pt]\footnotesize istanza \texttt{CarryLA}};
+    \node[reg, align=center, minimum width=2.2cm, minimum height=1.1cm] (r) at (17.7,1.5) {\footnotesize\texttt{registro\_6}\\[-1pt]\footnotesize istanza \texttt{R}};
+
+    % handshaking A <-> B
+    \draw[seg] (5.25,5.2) -- node[above, font=\footnotesize, pos=0.5]{\texttt{rts}} (10.6,5.2);
+    \draw[seg] (10.6,4.8) -- node[below, font=\footnotesize, pos=0.5]{\texttt{cts}} (5.25,4.8);
+    % dato
+    \draw[bus] (6.8,1.5) -- node[larghezza=4, pos=0.2]{/} node[below, font=\footnotesize, pos=0.45]{\texttt{data}} (ext.west);
+    \draw[bus] (ext.east) -- node[larghezza=6]{/} (cla.west);
+    \draw[bus] (cla.east) -- node[larghezza=6, pos=0.3]{/} node[below, font=\footnotesize, pos=0.7]{\texttt{sum}} (r.west);
+    % uscita e retroazione
+    \draw[bus] (r.east) -- node[larghezza=6, pos=0.35]{/} (20.6,1.5) node[right, font=\footnotesize]{\texttt{data\_out}};
+    \draw[bus] (19.3,1.5) -- (19.3,0.3) -- node[larghezza=6, pos=0.2]{/} node[below, font=\footnotesize, pos=0.6]{\texttt{data\_out}} (14.0,0.3) -- (cla.south);
+    \fill (19.3,1.5) circle (1.2pt);
+    % costanti non usate
+    \draw[seg] (13.5,3.3) -- (13.5,2.05);
+    \node[above, font=\footnotesize] at (13.5,3.3) {\texttt{c0 = '0'}};
+    \draw[seg] (14.5,2.05) -- (14.5,2.9);
+    \node[above, font=\footnotesize] at (14.7,2.9) {\texttt{c\_out}};
+    \draw[seg] (17.0,3.7) -- (17.0,2.05);
+    \node[above, font=\footnotesize] at (17.0,3.7) {\texttt{rst = '0'}};
+    % load
+    \draw[seg] (13.0,4.8) -- node[above, font=\footnotesize, pos=0.4]{\texttt{load}} (17.8,4.8) -- (17.8,2.05);
+    % clock B
+    \draw[seg] (9.4,7.6) -- (9.4,5.9);
+    \node[font=\footnotesize, anchor=west] at (9.5,7.2) {\texttt{clk\_b}};
+    \draw[thin] (9.4,5.9) -- (18.5,5.9);
+    \draw[seg] (11.2,5.9) -- (11.2,5.5);
+    \draw[seg] (18.5,5.9) -- (18.5,2.05);
+    \fill (11.2,5.9) circle (1.2pt);
+  \end{tikzpicture}}
+  \caption{Architettura del sistema}
+  \label{fig:esercizio12-1:architettura}
+\end{figure}
+
+Il nodo A è composto da una parte di controllo, l'unità \texttt{cuA}, e da una parte operativa formata dal contatore \texttt{contatore\_mod\_8}, che genera l'indirizzo \texttt{addr} a 3 bit, e dalla memoria \texttt{ROM\_8\_4}, di 8 locazioni da 4 bit. L'unità di controllo riceve da \texttt{start}, \texttt{cts} e dal terminal count \texttt{tk} del contatore, e pilota il reset \texttt{rst} e l'abilitazione \texttt{en} del contatore, il comando di lettura \texttt{rd} della ROM e la richiesta \texttt{rts}. L'uscita della ROM è direttamente il bus \texttt{data}.
+
+Il nodo B è composto dall'unità di controllo \texttt{cuB} e da una parte operativa che contiene il sommatore \texttt{CLA} a 6 bit, il registro \texttt{registro\_6} e la sola estensione a 6 bit del dato in ingresso, ottenuta anteponendo due zeri (\texttt{ext\_data}). Il registro è a 6 bit, e non a 4, perché deve contenere la somma degli otto valori memorizzati, che con 4 bit non sarebbe rappresentabile. L'uscita del registro, \texttt{data\_out}, è riportata sul secondo ingresso del sommatore, realizzando l'accumulo, ed è anche l'uscita del sistema. Il riporto in ingresso \texttt{c0} è fissato a \texttt{'0'}, il riporto in uscita \texttt{c\_out} non è collegato e l'ingresso \texttt{rst} del registro è fissato a \texttt{'0'}: l'azzeramento del registro non è quindi utilizzato.
+
+%------------------------------------------------------------------------------
+\esSottosezione{Punto numero 2}
+
+Le due unità di controllo, \texttt{cuA} e \texttt{cuB}, sono descritte dagli automi delle figure~\ref{fig:esercizio12-1:fsm-a} e~\ref{fig:esercizio12-1:fsm-b}. Sugli archi è riportata la condizione di transizione e, dopo la barra, le uscite che diventano attive; le uscite non nominate sono a \texttt{'0'}. Le uscite associate ad uno stato sono scritte all'interno dello stato stesso.
+
+\begin{figure}[htbp]
+  \centering
+  \resizebox{0.9\linewidth}{!}{%
+  \begin{tikzpicture}[font=\sffamily\small, node distance=4cm, every edge/.append style={font=\sffamily\scriptsize, ->, thick}]
+    \node[fsmstate, initial, initial text={}] (idle) at (0,0) {IDLE\\{\scriptsize \texttt{rst=1}}};
+    \node[fsmstate] (read) at (5,0) {READ\\{\scriptsize \texttt{rd=1}}};
+    \node[fsmstate] (req) at (10,0) {REQ\\{\scriptsize \texttt{rts=1}}};
+    \node[fsmstate] (ack) at (10,-4.5) {ACK};
+    \node[fsmstate] (fine) at (5,-4.5) {FINE};
+    \path[->, thick]
+      (idle) edge node[above, font=\scriptsize]{\texttt{start=1}} (read)
+      (idle) edge[loop above] node[above, font=\scriptsize]{\texttt{start=0}} (idle)
+      (read) edge node[above, font=\scriptsize]{sempre} (req)
+      (req) edge[loop above] node[above, font=\scriptsize]{\texttt{cts=0}} (req)
+      (req) edge node[right, font=\scriptsize]{\texttt{cts=1}} (ack)
+      (ack) edge[loop right] node[right, font=\scriptsize]{\texttt{cts=1}} (ack)
+      (ack) edge node[below, font=\scriptsize]{\texttt{cts=0, tk=1 / en=1}} (fine)
+      (ack) edge node[above, sloped, font=\scriptsize, pos=0.5]{\texttt{cts=0, tk=0 / en=1}} (read)
+      (fine) edge node[above, sloped, font=\scriptsize, pos=0.5]{\texttt{start=0}} (idle)
+      (fine) edge[loop below] node[below, font=\scriptsize]{\texttt{start=1}} (fine);
+  \end{tikzpicture}}
+  \caption{FSM dell'unità \texttt{cuA}}
+  \label{fig:esercizio12-1:fsm-a}
+\end{figure}
+
+L'automa di \texttt{cuA} ha cinque stati, elencati nel tipo enumerato \texttt{stato}: \texttt{IDLE}, \texttt{READ}, \texttt{REQ}, \texttt{ACK} e \texttt{FINE}. In \texttt{IDLE} il contatore è mantenuto a zero tramite \texttt{rst=}\texttt{'1'}, finché \texttt{start} non passa a \texttt{'1'}. In \texttt{READ} viene attivato \texttt{rd}, e lo stato successivo è sempre \texttt{REQ}, dove viene alzato \texttt{rts} fino a quando B non risponde con \texttt{cts=}\texttt{'1'}. In \texttt{ACK} la richiesta è già stata abbassata, e l'automa attende che B abbassi a sua volta \texttt{cts}: solo allora viene attivato \texttt{en}, che fa avanzare il contatore, e si torna in \texttt{READ} per l'elemento successivo, oppure si passa in \texttt{FINE} se \texttt{tk} indica che l'ultimo indirizzo, il 7, è stato appena trasmesso. In \texttt{FINE} si resta finché \texttt{start} rimane a \texttt{'1'}, per evitare che il trasferimento riparta; con \texttt{start=}\texttt{'0'} si ritorna in \texttt{IDLE}. Lo stato iniziale è il primo valore del tipo enumerato, \texttt{IDLE}, dato che il codice non prevede un reset della macchina.
+
+\begin{figure}[htbp]
+  \centering
+  \resizebox{0.6\linewidth}{!}{%
+  \begin{tikzpicture}[font=\sffamily\small, every edge/.append style={font=\sffamily\scriptsize, ->, thick}]
+    \node[fsmstate, initial, initial text={}] (listen) at (0,0) {LISTEN};
+    \node[fsmstate] (ack) at (6.5,0) {ACK\\{\scriptsize \texttt{cts=1}}};
+    \path[->, thick]
+      (listen) edge[bend left=25] node[above, font=\scriptsize]{\texttt{rts=1 / load=1}} (ack)
+      (ack) edge[bend left=25] node[below, font=\scriptsize]{\texttt{rts=0}} (listen)
+      (listen) edge[loop left] node[left, font=\scriptsize]{\texttt{rts=0}} (listen)
+      (ack) edge[loop right] node[right, font=\scriptsize]{\texttt{rts=1}} (ack);
+  \end{tikzpicture}}
+  \caption{FSM dell'unità \texttt{cuB}}
+  \label{fig:esercizio12-1:fsm-b}
+\end{figure}
+
+L'automa di \texttt{cuB} ha due soli stati, \texttt{LISTEN} e \texttt{ACK}. In \texttt{LISTEN} attende \texttt{rts=}\texttt{'1'}: appena la richiesta è presente, \texttt{load} viene attivato (l'uscita dipende quindi dall'ingresso \texttt{rts}) e si passa in \texttt{ACK}, dove \texttt{cts} è mantenuto a \texttt{'1'} fino a quando A non abbassa \texttt{rts}.
+
+La tempificazione scelta è la seguente. Tutti gli elementi di memoria, cioè i registri di stato delle due unità di controllo, il contatore, la ROM e il registro \texttt{registro\_6}, sono sensibili al solo fronte di salita del proprio clock: \texttt{clk\_a} per il nodo A e \texttt{clk\_b} per il nodo B. Le uscite delle unità di controllo sono invece combinatorie e dipendono dallo stato corrente (e, dove indicato nelle figure, dagli ingressi). La lettura della ROM è sincrona: \texttt{rd} è attivo durante lo stato \texttt{READ} e il dato viene campionato sul fronte di salita che termina tale stato, per cui \texttt{data} è valido quando \texttt{cuA} si trova in \texttt{REQ} ed alza \texttt{rts}. Analogamente, \texttt{load} è attivo in \texttt{LISTEN} con \texttt{rts=}\texttt{'1'} e il registro memorizza \texttt{sum} sul fronte di \texttt{clk\_b} in cui \texttt{cuB} passa in \texttt{ACK}; solo da quel momento \texttt{cts} è alto. Infine \texttt{en} è attivo in \texttt{ACK} con \texttt{cts=}\texttt{'0'}, e il contatore si incrementa sul fronte successivo, quello in cui \texttt{cuA} lascia \texttt{ACK}. Poiché ogni cambio di fase passa attraverso uno scambio completo di \texttt{rts} e \texttt{cts}, il protocollo funziona qualunque sia il rapporto tra i due clock.
+
+%------------------------------------------------------------------------------
+\esSottosezione{Punto numero 3}
+
+Il sommatore carry look-ahead è realizzato dall'entità \texttt{CLA}, la cui struttura è mostrata in figura~\ref{fig:esercizio12-1:cla}. Si tratta della forma non ottimizzata, in cui ogni riporto è espresso direttamente in funzione di \texttt{G}, \texttt{P} e del riporto in ingresso, senza reti di calcolo a più livelli.
+
+\begin{figure}[htbp]
+  \centering
+  \resizebox{0.95\linewidth}{!}{%
+  \begin{tikzpicture}[font=\sffamily\small]
+    \node[blocco, minimum width=3.4cm, minimum height=1.8cm] (gp) at (0,0) {\footnotesize\texttt{gen\_pro}\\[2pt]\scriptsize\texttt{G(i) = x(i) and y(i)}\\\scriptsize\texttt{P(i) = x(i) xor y(i)}};
+    \node[blocco, minimum width=4.2cm, minimum height=1.8cm] (cc) at (6.6,0) {\footnotesize rete dei riporti\\[2pt]\scriptsize\texttt{C(i+1) = G(i) or P(i) and C(i)}\\\scriptsize\texttt{espanso, per i = 0..5}};
+    \node[blocco, minimum width=3.4cm, minimum height=1.8cm] (ss) at (13.6,0) {\footnotesize\texttt{sum}\\[2pt]\scriptsize\texttt{s(i) = P(i) xor C(i)}};
+    % ingressi
+    \draw[bus] (-3.8,0.45) -- node[larghezza=6, pos=0.3]{/} node[below, font=\scriptsize, pos=0.8]{\texttt{x}} (gp.west |- 0,0.45);
+    \draw[bus] (-3.8,-0.45) -- node[larghezza=6, pos=0.3]{/} node[below, font=\scriptsize, pos=0.8]{\texttt{y}} (gp.west |- 0,-0.45);
+    % G e P
+    \draw[bus] (gp.east |- 0,0.45) -- node[larghezza=6, pos=0.2]{/} node[below, font=\scriptsize, pos=0.6]{\texttt{G}} (cc.west |- 0,0.45);
+    \draw[bus] (gp.east |- 0,-0.45) -- node[larghezza=6, pos=0.2]{/} (cc.west |- 0,-0.45);
+    \fill (3.9,-0.45) circle (1.3pt);
+    \draw[bus] (3.9,-0.45) -- (3.9,-1.8) -- node[larghezza=6, pos=0.2]{/} node[below, font=\scriptsize, pos=0.55]{\texttt{P}} (12.4,-1.8) -- (12.4,-0.9);
+    % riporti
+    \draw[bus] (cc.east |- 0,0.45) -- node[larghezza=6, pos=0.3]{/} node[below, font=\scriptsize, pos=0.75]{\texttt{C(5..0)}} (ss.west |- 0,0.45);
+    \draw[bus] (ss.east) -- node[larghezza=6, pos=0.3]{/} node[below, font=\scriptsize, pos=0.7]{\texttt{s}} ++(2.3,0);
+    % c0 e c_out
+    \draw[seg] (5.6,2.4) -- (5.6,0.9);
+    \node[above, font=\scriptsize] at (5.6,2.4) {\texttt{c0}};
+    \draw[seg] (7.6,0.9) -- (7.6,1.9) -- (15.9,1.9) node[right, font=\scriptsize]{\texttt{c\_out}};
+    \node[above, font=\scriptsize] at (9.2,1.9) {\texttt{C(6)}};
+  \end{tikzpicture}}
+  \caption{Architettura del sommatore \texttt{CLA}}
+  \label{fig:esercizio12-1:cla}
+\end{figure}
+
+Nell'architettura \texttt{dataflow} i segnali interni \texttt{G} e \texttt{P} (generate e propagate), a 6 bit, sono calcolati bit a bit da un ciclo \texttt{for generate}: \texttt{G(i)} è l'AND dei bit \texttt{x(i)} e \texttt{y(i)}, \texttt{P(i)} il loro XOR. Il vettore dei riporti \texttt{C}, a 7 bit, è calcolato con un'assegnazione concorrente per ciascun elemento: \texttt{C(0)} coincide con \texttt{c0}, e \texttt{C(i+1)} è la somma di prodotti ottenuta srotolando la ricorsione \texttt{C(i+1) = G(i) or (P(i) and C(i))} fino a \texttt{C(0)}. In questo modo tutti i riporti dipendono soltanto da \texttt{G}, \texttt{P} e \texttt{c0}, e non dal riporto dello stadio precedente. Un secondo ciclo \texttt{for generate} forma i bit della somma, \texttt{s(i) = P(i) xor C(i)}, mentre \texttt{c\_out} coincide con \texttt{C(6)}.
+
+%------------------------------------------------------------------------------
+\esSottosezione{Punto numero 4}
+
+\implementazione
+
+Presentiamo i componenti in ordine bottom-up, a partire dalla parte operativa del nodo A. L'entità \texttt{contatore\_mod\_8} ha come ingressi \texttt{clk\_a}, \texttt{en} e \texttt{rst} e come uscite \texttt{addr} a 3 bit e \texttt{tk}. Il process è sensibile a \texttt{clk\_a}: sul fronte di salita il segnale interno \texttt{count} di tipo \texttt{unsigned} viene azzerato con \texttt{rst}, altrimenti, se \texttt{en} è alto, viene incrementato, tornando a zero dopo il valore 7. L'uscita \texttt{tk} è un'assegnazione concorrente, alta quando \texttt{en} è alto e \texttt{count} vale 7.
+
+\vhdlfile{esercizio12-1/contatore_mod_8.vhd}{Implementazione \texttt{contatore\_mod\_8}}{lst:esercizio12-1:contatore-mod-8}
+
+La memoria \texttt{ROM\_8\_4} ha come porte \texttt{clk\_a}, \texttt{rd}, \texttt{addr} a 3 bit e l'uscita \texttt{data} a 4 bit. Il contenuto è un array di 8 elementi da 4 bit, inizializzato con i valori da \texttt{x"0"} a \texttt{x"7"}. La lettura è sincrona: un process sensibile a \texttt{clk\_a} assegna a \texttt{data} il contenuto della locazione indicata da \texttt{addr}, sul fronte di salita e solo se \texttt{rd} è alto; negli altri casi l'uscita mantiene il valore precedente.
+
+\vhdlfile{esercizio12-1/rom_8_4.vhd}{Implementazione \texttt{ROM\_8\_4}}{lst:esercizio12-1:rom-8-4}
+
+L'unità \texttt{cuA} ha ingressi \texttt{clk\_a}, \texttt{start}, \texttt{tk} e \texttt{cts} e uscite \texttt{rst}, \texttt{rd}, \texttt{en} e \texttt{rts}. È descritta con due process, come da automa di figura~\ref{fig:esercizio12-1:fsm-a}: il process \texttt{f\_stato\_uscita}, combinatorio e sensibile a stato corrente e ingressi, calcola stato futuro e uscite con un \texttt{case} sullo stato (le uscite sono poste a \texttt{'0'} all'inizio, così da non generare latch), mentre il process \texttt{mem} aggiorna \texttt{current\_state} sul fronte di salita di \texttt{clk\_a}.
+
+\vhdlfile{esercizio12-1/cua.vhd}{Implementazione \texttt{cuA}}{lst:esercizio12-1:cua}
+
+L'entità \texttt{unitA} è il nodo A, descritto con architettura \texttt{structural}. Dichiara i segnali interni \texttt{addr}, \texttt{en}, \texttt{tk}, \texttt{rd} e \texttt{rst} e, tramite port mapping, istanzia il contatore \texttt{cont}, la memoria \texttt{rom} e l'unità di controllo \texttt{cu}. Nell'interfaccia compare, commentata, una porta \texttt{done} non utilizzata.
+
+\vhdlfile{esercizio12-1/unita.vhd}{Implementazione \texttt{unitA}}{lst:esercizio12-1:unita}
+
+Passiamo al nodo B. Il sommatore \texttt{CLA} ha ingressi \texttt{x} e \texttt{y} a 6 bit e \texttt{c0}, uscite \texttt{s} a 6 bit e \texttt{c\_out}; il suo funzionamento è stato descritto al punto 3.
+
+\vhdlfile{esercizio12-1/cla.vhd}{Implementazione \texttt{CLA}}{lst:esercizio12-1:cla}
+
+Il registro \texttt{registro\_6} ha 6 bit, con ingressi \texttt{clk\_b}, \texttt{sum}, \texttt{load} e \texttt{rst} e uscita \texttt{data\_out}. Il process, sensibile a \texttt{clk\_b}, sul fronte di salita azzera il registro se \texttt{rst} è alto, altrimenti carica \texttt{sum} se \texttt{load} è alto; \texttt{data\_out} è un'assegnazione concorrente del segnale interno \texttt{reg}.
+
+\vhdlfile{esercizio12-1/registro_6.vhd}{Implementazione \texttt{registro\_6}}{lst:esercizio12-1:registro-6}
+
+L'unità \texttt{cuB} ha ingressi \texttt{clk\_b} e \texttt{rts} e uscite \texttt{cts} e \texttt{load}; come \texttt{cuA}, è composta da un process combinatorio \texttt{f\_stato\_uscita} e dal process \texttt{mem} sensibile al fronte di salita di \texttt{clk\_b}, e segue l'automa di figura~\ref{fig:esercizio12-1:fsm-b}.
+
+\vhdlfile{esercizio12-1/cub.vhd}{Implementazione \texttt{cuB}}{lst:esercizio12-1:cub}
+
+L'entità \texttt{unitB} è il nodo B, con architettura \texttt{structural}. Ha ingressi \texttt{clk\_b}, \texttt{rts} e \texttt{data} (4 bit) e uscite \texttt{cts} e \texttt{output} (6 bit). Il segnale \texttt{ext\_data} è ottenuto per concatenazione, \texttt{"00" \& data}, e collegato all'ingresso \texttt{x} del sommatore; l'ingresso \texttt{y} riceve \texttt{data\_out}, uscita del registro \texttt{R}, e l'uscita \texttt{sum} del sommatore è collegata all'ingresso del registro. Le porte \texttt{c0} e \texttt{rst} sono legate a \texttt{'0'} e \texttt{c\_out} è lasciata \texttt{open}.
+
+\vhdlfile{esercizio12-1/unitb.vhd}{Implementazione \texttt{unitB}}{lst:esercizio12-1:unitb}
+
+Infine il top module \texttt{full\_system} istanzia \texttt{unitA} (istanza \texttt{A}) e \texttt{unitB} (istanza \texttt{B}), collegandole con i segnali interni \texttt{rts}, \texttt{cts} e \texttt{data} (4 bit); le sue porte sono \texttt{start}, \texttt{clk\_a}, \texttt{clk\_b} e l'uscita \texttt{data\_out} a 6 bit.
+
+\vhdlfile{esercizio12-1/full_system.vhd}{Implementazione \texttt{full\_system}}{lst:esercizio12-1:full-system}
+
+\simulazione
+
+Il testbench \texttt{full\_system\_tb}, privo di porte, istanzia il top module come \texttt{dut} e utilizza due process per generare i clock: \texttt{clk\_a\_proc} con periodo \texttt{TA} di \SI{10}{ns} e \texttt{clk\_b\_proc} con periodo \texttt{TB} di \SI{14}{ns}. Il test prova quindi un solo caso, con i due clock a frequenze diverse (il clock di A è il più veloce). Il process \texttt{stim} mantiene \texttt{start} a \texttt{'0'} per tre periodi di \texttt{clk\_a}, lo porta a \texttt{'1'} e attende \SI{2}{\micro\second}, tempo abbondante per gli otto trasferimenti. Poi verifica con un \texttt{assert} che \texttt{data\_out} valga 28, ossia la somma dei valori 0, 1, \dots, 7 contenuti nella ROM, e stampa la somma con un \texttt{report}; infine riporta \texttt{start} a \texttt{'0'} e termina con \texttt{wait;}.
+
+\vhdlfile{esercizio12-1/full_system_tb.vhd}{Testbench \texttt{full\_system}}{lst:esercizio12-1:full-system-tb}
+
+Il risultato della simulazione è riportato in figura~\ref{fig:esercizio12-1:simulazione}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\linewidth]{figure/esercizio12-1/simulazione}
+  \caption{Simulazione del sistema completo}
+  \label{fig:esercizio12-1:simulazione}
+\end{figure}
+
+La forma d'onda mostra \texttt{clk\_a}, \texttt{clk\_b}, \texttt{start} e \texttt{data\_out}. Il segnale \texttt{start} sale dopo \SI{30}{ns} e resta alto. L'uscita \texttt{data\_out} parte da 0 e assume in successione i valori 1, 3, 6, 10, 15 e 21, ossia le somme parziali dei valori della ROM (0+1, 1+2, 3+3, 6+4, 10+5, 15+6), fino al valore 28 (\texttt{011100}), che è la somma finale e che rimane stabile; è lo stesso valore atteso dall'\texttt{assert} del testbench. Gli scatti di \texttt{data\_out} avvengono a intervalli irregolari, perché ciascun trasferimento richiede alcuni periodi di \texttt{clk\_a} e di \texttt{clk\_b} per completare lo scambio di \texttt{rts} e \texttt{cts}.
+
+\begin{risultato}
+Con \texttt{TA} = \SI{10}{ns} e \texttt{TB} = \SI{14}{ns}, \texttt{data\_out} raggiunge il valore finale 28.
+\end{risultato}
