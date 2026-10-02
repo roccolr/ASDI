@@ -1,7 +1,11 @@
 \esSezione{Riconoscitore della sequenza 101}\label{sec:esercizio3-1}
 
 \begin{traccia}
-Progettare, implementare in VHDL e testare mediante simulazione una macchina che riconosce la sequenza \texttt{101}. La macchina riceve un dato binario seriale $i$, un segnale di tempificazione $A$ e un segnale di modo $M$, e porta a '1' l'uscita $Y$ quando la sequenza viene riconosciuta. Se $M=0$ i bit sono valutati a gruppi di tre, senza sovrapposizione; se $M=1$ i bit sono valutati uno alla volta e la macchina torna allo stato iniziale a ogni riconoscimento (sequenze parzialmente sovrapposte).
+Progettare, implementare in VHDL e testare mediante simulazione una macchina in grado di riconoscere la sequenza 101. La macchina prende in ingresso un segnale binario i che rappresenta il dato, un segnale A di tempificazione e un segnale M di modo, che ne disciplina il funzionamento, e fornisce un'uscita Y alta quando la sequenza viene riconosciuta. In particolare:
+\begin{itemize}
+  \item se M=0, la macchina valuta i bit seriali in ingresso a gruppi di 3 (sequenze non sovrapposte);
+  \item se M=1, la macchina valuta i bit seriali in ingresso uno alla volta, tornando allo stato iniziale ogni volta che la sequenza viene correttamente riconosciuta (sequenze parzialmente sovrapposte).
+\end{itemize}
 \end{traccia}
 
 \progetto

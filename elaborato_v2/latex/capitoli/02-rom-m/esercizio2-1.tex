@@ -1,7 +1,7 @@
 \esSezione{Sistema ROM + M}\label{sec:esercizio2-1}
 
 \begin{traccia}
-Progettare, implementare in VHDL e testare mediante simulazione un sistema $S$ composto da una ROM puramente combinatoria di 16 locazioni da 8 bit e da una macchina combinatoria $M$. Fornito un indirizzo $A$ di 4 bit, il sistema restituisce il contenuto della ROM all'indirizzo $A$ trasformato da $M$. Il comportamento di $M$ è a scelta, con il solo vincolo di 8 bit in ingresso e 4 bit in uscita.
+Progettare, implementare in VHDL e testare mediante simulazione un sistema S composto da una ROM puramente combinatoria di 16 locazioni da 8 bit ciascuna e da una macchina combinatoria M che opera come segue: fornito al sistema un indirizzo A di 4 bit, il sistema restituisce il valore contenuto nella ROM all'indirizzo A opportunamente ``trasformato'' attraverso la macchina M. Il comportamento della macchina M è totalmente a scelta dello studente, l'unico vincolo è che essa prenda in ingresso 8 bit e ne fornisca in uscita 4.
 \end{traccia}
 
 \progetto
@@ -30,7 +30,7 @@ L'entità \texttt{rom16\_8} ha come ingresso \texttt{address} (4 bit) e come usc
 
 \vhdlfile{esercizio2-1/rom16_8.vhd}{Implementazione ROM 16x8}{lst:esercizio2-1:rom16-8}
 
-L'entità \texttt{systemM} ha l'ingresso \texttt{data\_in} (8 bit) e l'uscita \texttt{data\_out} (4 bit). L'architettura \texttt{dataflow} assegna a ciascun bit di uscita l'AND di due bit adiacenti: \texttt{data\_out(0)} da \texttt{data\_in(0)} e \texttt{data\_in(1)}, \texttt{data\_out(1)} da \texttt{data\_in(2)} e \texttt{data\_in(3)}, e così via fino a \texttt{data\_out(3)}. A differenza della soluzione proposta, le porte sono dichiarate con indici decrescenti (\texttt{7 downto 0}).
+L'entità \texttt{systemM} ha l'ingresso \texttt{data\_in} (8 bit) e l'uscita \texttt{data\_out} (4 bit). L'architettura \texttt{dataflow} assegna a ciascun bit di uscita l'AND di due bit adiacenti: \texttt{data\_out(0)} da \texttt{data\_in(0)} e \texttt{data\_in(1)}, \texttt{data\_out(1)} da \texttt{data\_in(2)} e \texttt{data\_in(3)}, e così via fino a \texttt{data\_out(3)}. Le porte sono dichiarate con indici decrescenti (\texttt{7 downto 0}).
 
 \vhdlfile{esercizio2-1/systemm.vhd}{Implementazione macchina combinatoria M}{lst:esercizio2-1:systemm}
 

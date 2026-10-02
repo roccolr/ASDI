@@ -1,7 +1,7 @@
 \esSezione{Comunicazione seriale UART-RS232}\label{sec:esercizio10-1}
 
 \begin{traccia}
-Partendo dal dispositivo UART-RS232 fornito dalla Digilent (componente \texttt{RS232RefComp}), progettare, implementare in VHDL e testare mediante simulazione un sistema formato da due unità, A e B, che condividono lo stesso clock e comunicano su una linea seriale. L'unità A contiene una ROM di 8 locazioni da 1 byte, un contatore per scandirle e una UART; l'unità B contiene una memoria MEM di 8 locazioni da 1 byte, un contatore per scandirla e una UART. Quando in A viene asserito il segnale di scrittura, un byte letto dalla ROM viene trasmesso a B, che lo riceve e lo salva in MEM.
+Partendo dall'implementazione fornita dalla Digilent di un dispositivo UART-RS232 (componente \texttt{RS232RefComp.vhd}), progettare, implementare e simulare in VHDL un sistema composto da 2 unità A e B che condividono lo stesso segnale di clock e comunicano tra loro mediante interfaccia seriale. Il sistema A contiene una ROM di 8 locazioni da 1 byte ciascuno, un contatore CONT\_A per scandire le locazioni della ROM e una UART\_A, mentre il sistema B contiene una memoria MEM di 8 locazioni da 1 byte ciascuno, un contatore CONT\_B per scandire le locazioni della MEM e una UART\_B. Quando un segnale WR viene asserito nell'unità A, viene prelevato un byte dalla ROM e inviato all'unità B, che dovrà riceverlo e salvarlo in MEM.
 \end{traccia}
 
 \progetto
@@ -132,6 +132,15 @@ La UART è il componente \texttt{Rs232RefComp}, fornito con l'esercitazione e no
 
 \vhdlfile[firstline=23, lastline=38]{esercizio10-1/rs232refcomp.vhd}{Entità del componente RS232RefComp}{lst:esercizio10-1:rs232refcomp}
 
+Il modello del componente, con tutti i suoi segnali, è riportato in figura~\ref{fig:esercizio10-1:uart-modello}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.38\linewidth]{figure/esercizio10-1/uart-modello.png}
+  \caption{Il componente UART (documentazione Digilent)}
+  \label{fig:esercizio10-1:uart-modello}
+\end{figure}
+
 Le porte \texttt{TXD} e \texttt{RXD} sono la linea seriale in uscita e in ingresso, \texttt{DBIN} e \texttt{DBOUT} i bus di dato paralleli a 8 bit, \texttt{RST} il reset. Il significato dei flag di stato e dei comandi è il seguente.
 \begin{enumerate}
   \item \texttt{TBE}: stato del registro di trasmissione; scende quando viene asserito \texttt{WR}.
@@ -143,6 +152,46 @@ Le porte \texttt{TXD} e \texttt{RXD} sono la linea seriale in uscita e in ingres
   \item \texttt{RD}: comando di lettura; il byte ricevuto è disponibile su \texttt{DBOUT} e il flag \texttt{RDA} viene abbassato.
 \end{enumerate}
 Il controllo del flusso è affidato alla coppia \texttt{rts}/\texttt{cts} tra le unità di controllo: nel sistema sono quindi utilizzati \texttt{WR} in trasmissione, \texttt{RDA} e \texttt{RD} in ricezione, mentre \texttt{TBE}, \texttt{PE}, \texttt{FE} e \texttt{OE} restano non collegati.
+
+Internamente la UART contiene due macchine a stati, una per la trasmissione e una per la ricezione. Le figure~\ref{fig:esercizio10-1:uart-tx} e~\ref{fig:esercizio10-1:uart-rx} ne danno una versione semplificata, limitata agli stati che entrano in gioco nell'esercizio. In trasmissione la macchina resta in \texttt{Idle}, con \texttt{TBE} alto, finché non viene asserito \texttt{WR}; in \texttt{Transfer} il byte presente su \texttt{DBIN} viene caricato nello shift register, preceduto dallo start bit e seguito da parità e stop bit, e in \texttt{Shift} i bit del frame vengono inviati uno alla volta su \texttt{TXD}. Terminato il frame, la macchina torna in \texttt{Idle} e \texttt{TBE} si rialza.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[font=\sffamily\scriptsize, auto, shorten >=1pt]
+    \node[fsmstate, initial, initial text=] (tidle)  at (0,0) {Idle};
+    \node[fsmstate]                         (tload)  at (4,0) {Transfer};
+    \node[fsmstate]                         (tshift) at (8,0) {Shift};
+    \path[->, thick]
+      (tidle)  edge[loop above] node{\texttt{WR=0} / \texttt{TBE=1}} ()
+      (tidle)  edge node[above]{\texttt{WR=1}} (tload)
+      (tload)  edge node[above]{carica \texttt{DBIN}} (tshift)
+      (tshift) edge[loop above] node{bit su \texttt{TXD}} ()
+      (tshift) edge[bend left=35] node[below]{frame inviato} (tidle);
+  \end{tikzpicture}
+  \caption{FSM di trasmissione della UART (semplificata)}
+  \label{fig:esercizio10-1:uart-tx}
+\end{figure}
+
+In ricezione la macchina attende in \texttt{Idle} che \texttt{RXD} scenda a \texttt{'0'}, cioè l'arrivo dello start bit. In \texttt{EightDelay} lascia passare mezzo bit, in modo da campionare la linea al centro di ciascun bit, e in \texttt{GetData} acquisisce i bit del frame. Ricevuti tutti i 10 bit, passa in \texttt{CheckStop}, dove vengono valutati gli errori e viene alzato \texttt{RDA}, quindi torna in \texttt{Idle}. Il flag \texttt{RDA} resta alto finché l'unità di controllo B non asserisce \texttt{RD}.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[font=\sffamily\scriptsize, auto, shorten >=1pt]
+    \node[fsmstate, initial, initial text=] (ridle)  at (0,0)    {Idle};
+    \node[fsmstate]                         (rdelay) at (4,0)    {EightDelay};
+    \node[fsmstate]                         (rget)   at (8,0)    {GetData};
+    \node[fsmstate]                         (rcheck) at (4,-3.2) {CheckStop};
+    \path[->, thick]
+      (ridle)  edge[loop above] node{\texttt{RXD=1}} ()
+      (ridle)  edge node[above]{\texttt{RXD=0}} (rdelay)
+      (rdelay) edge node[above]{centro del bit} (rget)
+      (rget)   edge[loop above] node{bit ricevuti $<$ 10} ()
+      (rget)   edge node[right, xshift=1mm]{10 bit ricevuti} (rcheck)
+      (rcheck) edge node[left, xshift=-1mm]{/ \texttt{RDA=1}} (ridle);
+  \end{tikzpicture}
+  \caption{FSM di ricezione della UART (semplificata)}
+  \label{fig:esercizio10-1:uart-rx}
+\end{figure}
 
 L'unità di controllo A, \texttt{cuA}, ha ingressi \texttt{clk}, \texttt{rst}, \texttt{start} e \texttt{cts}, uscite \texttt{en} (abilitazione del contatore), \texttt{wr} e \texttt{rts}. L'architettura \texttt{Behavioral} usa due process: \texttt{f\_stato\_uscita}, combinatorio, calcola stato prossimo e uscite con un \texttt{case} sul tipo enumerato \texttt{stato} (\texttt{IDLE}, \texttt{FIRE}, \texttt{RELOAD}), assegnando prima i valori di default a tutte le uscite; \texttt{mem}, sensibile al fronte di salita di \texttt{clk}, aggiorna \texttt{current\_state} con \texttt{next\_state} e riporta la FSM in \texttt{IDLE} con il reset sincrono.
 

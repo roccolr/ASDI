@@ -1,7 +1,9 @@
 \esSezione{Comunicazione con handshaking}\label{sec:esercizio8-1}
 
 \begin{traccia}
-Progettare, implementare in VHDL e testare mediante simulazione un sistema formato da due nodi, A e B, che comunicano con un protocollo di handshaking. Ciascun nodo dispone di una memoria interna con $N$ stringhe di $M$ bit, indicate rispettivamente con $X(i)$ e $Y(i)$, per $i = 0, \dots, N-1$. Il nodo A trasmette a B ogni stringa $X(i)$; B, ricevutala, calcola $S(i) = X(i) + Y(i)$ e memorizza la somma nella propria memoria. La somma può essere descritta in modo comportamentale, mentre in entrambi i nodi deve essere presente un componente contatore che scandisce le stringhe e determina la fine della comunicazione.
+Progettare, implementare in VHDL e testare mediante simulazione un sistema composto da 2 nodi, A e B, che comunicano mediante un protocollo di handshaking. Il nodo A e il nodo B possiedono entrambi una memoria interna in cui sono memorizzate $N$ stringhe di $M$ bit, denominate $X(i)$ e $Y(i)$ rispettivamente ($i = 0, \dots, N-1$). Il nodo A trasmette a B ciascuna stringa $X(i)$ utilizzando un protocollo di handshaking; B, ricevuta la stringa $X(i)$, calcola $S(i) = X(i) + Y(i)$ e immagazzina la somma in opportune locazioni della propria memoria interna.
+
+Per il progetto è possibile considerare una implementazione di tipo comportamentale per effettuare la somma, mentre è necessario prevedere esplicitamente un componente contatore sia nel sistema A sia nel sistema B per scandire la trasmissione/ricezione delle stringhe e per terminare la comunicazione.
 \end{traccia}
 
 \progetto
@@ -34,10 +36,10 @@ Il protocollo è a quattro fasi. A porta \texttt{req} a \texttt{'1'} dopo aver l
 Nelle figure le uscite non indicate in uno stato valgono \texttt{'0'}; \texttt{req} e \texttt{ack} sono uscite registrate, aggiornate al fronte di clock in funzione dello stato successivo (segnalate con un asterisco). L'FSM di A ha sei stati (\texttt{IDLE}, \texttt{DATA\_READ}, \texttt{START\_TX}, \texttt{WAIT\_ACK}, \texttt{END\_TX}, \texttt{CHECK\_COUNT}) e quella di B quattro (\texttt{WAIT\_TX}, \texttt{ACK\_TX}, \texttt{WAIT\_END\_REQ}, \texttt{END\_TX}).
 
 \begin{osservazione}
-Rispetto alla soluzione proposta, l'implementazione differisce nei seguenti punti:
+L'implementazione presenta le seguenti caratteristiche:
 \begin{itemize}
-  \item le unità di controllo sono \texttt{cu\_A} e \texttt{cu\_B}, con porte \texttt{clk}, \texttt{count\_en} e \texttt{count\_rst} (invece di \texttt{clock}, \texttt{counter\_enable} e \texttt{counter\_reset});
-  \item la FSM di A include \texttt{WAIT\_ACK} (non \texttt{DATA\_WAIT}) e non usa one-hot esplicita;
+  \item le unità di controllo sono \texttt{cu\_A} e \texttt{cu\_B}, con porte \texttt{clk}, \texttt{count\_en} e \texttt{count\_rst};
+  \item la FSM di A include \texttt{WAIT\_ACK} e non usa one-hot esplicita;
   \item le FSM sono descritte con due process distinti (combinatorio e sequenziale);
   \item la ROM del nodo A è \texttt{rom\_8\_8} con contenuto fisso;
   \item memoria e contatore sono componenti comuni;

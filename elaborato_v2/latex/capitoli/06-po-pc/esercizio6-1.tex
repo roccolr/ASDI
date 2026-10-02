@@ -1,7 +1,9 @@
 \esSezione{Sistema PO/PC}\label{sec:esercizio6-1}
 
 \begin{traccia}
-Progettare, implementare in VHDL e verificare mediante simulazione un sistema composto da una memoria ROM di $N$ locazioni da 8 bit, una macchina combinatoria $M$ che trasforma la stringa letta dalla ROM in una stringa di 4 bit e una memoria MEM di $N$ locazioni che memorizza l'uscita di $M$. Il sistema parte a fronte di un segnale \texttt{START} esterno; una unità di controllo gestisce la tempificazione, scandisce una locazione della ROM alla volta e scrive la locazione corrispondente di MEM. Gli indirizzi sono forniti da un contatore; ROM e MEM hanno rispettivamente lettura e scrittura sincrone.
+Progettare, implementare in VHDL e verificare mediante simulazione un sistema dotato di una memoria ROM di N locazioni da 8 bit ciascuna, una macchina combinatoria M in grado di trasformare (secondo una funzione a scelta dello studente) la stringa di 8 bit letta dalla ROM in una stringa di 4 bit, e una memoria MEM di N locazioni che memorizza la stringa in output da M.
+
+Il sistema si avvia in corrispondenza di un segnale di START che viene fornito esternamente. Una volta avviato, tramite un'apposita unità di controllo che gestisce la tempificazione del sistema, viene scandita una locazione alla volta della ROM e viene scritta la corrispondente locazione di MEM. Gli indirizzi di memoria sono forniti da un contatore. Le memorie ROM e MEM hanno rispettivamente un read e un write sincrono.
 \end{traccia}
 
 
@@ -63,7 +65,7 @@ La macchina combinatoria $M$ è l'entità \texttt{onecount}, con ingresso \textt
 
 \vhdlfile{esercizio6-1/onecount.vhd}{Implementazione della macchina combinatoria $M$ (conteggio degli '1')}{lst:esercizio6-1:onecount}
 
-L'entità \texttt{mem} ha generic \texttt{N}, \texttt{A} e \texttt{W} (larghezza del dato, 4 per default) e porte \texttt{clk}, \texttt{we}, \texttt{waddr}, \texttt{din}, oltre a \texttt{raddr} e \texttt{dout}, aggiunte per consentire al testbench di leggere il contenuto. La scrittura avviene in un process sincrono, quando \texttt{we} vale '1'; la lettura su \texttt{dout} è invece un assegnamento concorrente, quindi asincrona. Le locazioni sono inizializzate a tutti '1'. La MEM, anche se non richiesto esplicitamente dalla traccia, espone un'uscita.
+L'entità \texttt{mem} ha generic \texttt{N}, \texttt{A} e \texttt{W} (larghezza del dato, 4 per default) e porte \texttt{clk}, \texttt{we}, \texttt{waddr}, \texttt{din}, oltre a \texttt{raddr} e \texttt{dout}, aggiunte per consentire al testbench di leggere il contenuto. La scrittura avviene in un process sincrono, quando \texttt{we} vale '1'; la lettura su \texttt{dout} è invece un assegnamento concorrente, quindi asincrona. Le locazioni sono inizializzate a tutti '1'. La MEM espone quindi anche un'uscita.
 
 \vhdlfile{esercizio6-1/mem.vhd}{Implementazione della memoria MEM}{lst:esercizio6-1:mem}
 
