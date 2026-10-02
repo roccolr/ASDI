@@ -1,1 +1,84 @@
-\esercizioDaSvolgere{Riconoscitore di sequenza su board}{esercizio3-2}
+\esSezione{Riconoscitore di sequenza su board}\label{sec:esercizio3-2}
+
+\begin{traccia}
+Sintetizzare e implementare su board il riconoscitore di sequenza dell'esercizio precedente. Uno switch codifica l'ingresso $i$ e un secondo switch il modo $M$; due bottoni permettono di acquisire rispettivamente $i$ e $M$ in sincronia con il segnale di tempificazione $A$, ricavato dal clock della board. L'uscita $Y$ è mostrata su un LED.
+\end{traccia}
+
+\progetto
+
+Al riconoscitore dell'esercizio~\ref{sec:esercizio3-1} si aggiungono due componenti: un debouncer, istanziato due volte (una per ciascun bottone), e un \texttt{input\_manager}, che memorizza i valori degli switch quando i bottoni vengono premuti. Il top module \texttt{fsm\_sequence\_tl} collega i blocchi come mostrato in figura~\ref{fig:esercizio3-2:architettura}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\linewidth]{figure/esercizio3-2/architettura}
+  \caption{Architettura del top module}
+  \label{fig:esercizio3-2:architettura}
+\end{figure}
+
+Il segnale di tempificazione $A$ coincide con il clock a \SI{100}{MHz} della board. Perché la FSM avanzi solo quando l'utente lo richiede, le si è dato un ingresso di enable \texttt{en}, pilotato da un impulso di un solo ciclo (\texttt{step}) che l'\texttt{input\_manager} genera a ogni pressione del bottone di caricamento. Un registro sull'uscita, abilitato dallo stesso \texttt{step}, mantiene il valore di \texttt{y} relativo all'ultimo bit acquisito: il LED resta così stabile tra una pressione e la successiva. Il reset è attivo basso, sul bottone \texttt{CPU\_RESETN}, e viene negato all'interno del top module.
+
+\implementazione
+
+Si riportano i componenti nell'ordine bottom-up: debouncer, \texttt{input\_manager}, modifiche alla FSM, top module.
+
+\medskip\noindent\textbf{\textit{Debouncer}}
+
+L'entità \texttt{debouncer} ha due generic, \texttt{clk\_period} (\SI{10}{ns}, default) e \texttt{noise\_duration} (\SI{10000000}{ns}, cioè \SI{10}{ms}), e quattro porte: \texttt{clk}, \texttt{rst} e \texttt{button} in ingresso, \texttt{button\_fix} in uscita. La costante \texttt{max\_count} è il rapporto tra le due durate, ossia il numero di cicli di clock che compongono l'intervallo di quiete richiesto. Il componente è descritto come FSM a tre stati, \texttt{IDLE}, \texttt{PULSE} e \texttt{LOCK}, visibile in figura~\ref{fig:esercizio3-2:fsm-debouncer}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\linewidth]{figure/esercizio3-2/fsm-debouncer}
+  \caption{FSM del debouncer}
+  \label{fig:esercizio3-2:fsm-debouncer}
+\end{figure}
+
+In \texttt{IDLE} l'uscita è a '0' e si attende che \texttt{button} diventi '1'. Il primo fronte rilevato porta in \texttt{PULSE}, stato in cui \texttt{button\_fix} vale '1' per esattamente un ciclo di clock, per poi passare in \texttt{LOCK}. Qui il contatore \texttt{count}, a 20 bit, viene incrementato a ogni ciclo in cui \texttt{button} è '0' e azzerato non appena il bottone torna a '1', in modo che i rimbalzi in fase di rilascio ripartano dall'inizio dell'attesa. Quando il bottone è rilasciato e \texttt{count} vale \texttt{max\_count - 1} si ritorna in \texttt{IDLE}.
+
+Il process combinatorio \texttt{f\_stato\_uscita} calcola stato prossimo e uscita, con default in testa (\texttt{next\_state} uguale allo stato corrente, \texttt{button\_fix} a '0'); il process \texttt{mem}, sincrono sul fronte di salita di \texttt{clk}, aggiorna lo stato e il contatore e applica il reset sincrono. Ogni pressione, anche prolungata, genera quindi un solo impulso di un ciclo.
+
+\vhdlfile{esercizio3-2/debouncer.vhd}{Implementazione del debouncer}{lst:esercizio3-2:debouncer}
+
+\medskip\noindent\textbf{\textit{Input manager}}
+
+L'entità \texttt{input\_manager} riceve \texttt{clk}, il vettore \texttt{input} a due bit (gli switch) e i due impulsi \texttt{load\_next} e \texttt{change\_m}; produce \texttt{detect\_input}, \texttt{detect\_m} e \texttt{detect\_en}. L'architettura è un unico process sincrono su \texttt{clk}. Ad ogni ciclo \texttt{detect\_en} è portato a '0'; se \texttt{load\_next} è '1' vengono campionati \texttt{input(0)} su \texttt{detect\_input} e \texttt{detect\_en} è posto a '1', generando l'impulso \texttt{step}. Se \texttt{change\_m} è '1' viene campionato \texttt{input(1)} su \texttt{detect\_m}. I due controlli sono indipendenti e non mutuamente esclusivi.
+
+\vhdlfile{esercizio3-2/input_manager.vhd}{Implementazione dell'input manager}{lst:esercizio3-2:input-manager}
+
+\medskip\noindent\textbf{\textit{Riconoscitore con enable}}
+
+Il riconoscitore riprende porte e architettura di quello dell'esercizio~\ref{sec:esercizio3-1} (listato~\ref{lst:esercizio3-1:fsm}) con due sole modifiche: l'entità riceve l'ingresso aggiuntivo \texttt{en} e il process \texttt{mem}, sensibile ad \texttt{a}, aggiorna lo stato solo se \texttt{en} vale '1'. Senza \texttt{step} la macchina resta ferma nello stato corrente, pur con il clock in funzione.
+
+\lstinputlisting[style=vhdl,firstline=4,lastline=13,caption={Entità del riconoscitore con ingresso di enable},label={lst:esercizio3-2:fsm-entity}]{codice/esercizio3-2/fsm_sequence.vhd}
+
+\lstinputlisting[style=vhdl,firstline=86,lastline=95,caption={Process di memoria con enable},label={lst:esercizio3-2:fsm-mem}]{codice/esercizio3-2/fsm_sequence.vhd}
+
+\medskip\noindent\textbf{\textit{Top module}}
+
+Il top module \texttt{fsm\_sequence\_tl} ha architettura \texttt{structural}. Le porte sono:
+
+\begin{itemize}
+  \item \texttt{CLK100MHZ}: clock della board, usato sia come clock dei componenti sia come segnale di tempificazione \texttt{a} della FSM;
+  \item \texttt{CPU\_RESETN}: reset attivo basso;
+  \item \texttt{SW}: due switch, \texttt{SW(0)} per $i$ e \texttt{SW(1)} per $M$;
+  \item \texttt{BTNL} e \texttt{BTNR}: bottoni di acquisizione di $i$ e di $M$;
+  \item \texttt{LED}: tre uscite.
+\end{itemize}
+
+Il segnale \texttt{rst} è ottenuto negando \texttt{CPU\_RESETN}. Le istanze \texttt{u\_db\_i} e \texttt{u\_db\_m} filtrano \texttt{BTNL} e \texttt{BTNR} e producono \texttt{load\_next} e \texttt{change\_m}; \texttt{u\_in} istanzia l'\texttt{input\_manager}, che fornisce \texttt{bit\_i}, \texttt{mode\_m} e \texttt{step}; \texttt{u\_fsm} istanzia il riconoscitore. Il process \texttt{reg\_y} carica \texttt{y\_reg} con \texttt{y\_fsm} quando \texttt{step} è '1', ed è azzerato dal reset. Sui LED sono riportati: \texttt{LED(0)} l'uscita \texttt{y\_reg}, \texttt{LED(1)} l'ultimo bit acquisito e \texttt{LED(2)} il modo corrente.
+
+\vhdlfile{esercizio3-2/fsm_sequence_tl.vhd}{Implementazione del top module}{lst:esercizio3-2:top}
+
+\simulazione
+
+% TODO: testbench e simulazione non presenti nel progetto Vivado di questo esercizio.
+Per questo esercizio non è stato sviluppato un testbench dedicato e non sono disponibili forme d'onda: la verifica del comportamento del riconoscitore in simulazione è quella dell'esercizio~\ref{sec:esercizio3-1}, mentre il sistema completo è stato pensato per la prova diretta su board.
+
+\sintesiboard
+
+Per usare il sistema si impostano \texttt{SW(0)} e \texttt{SW(1)} sui valori desiderati di $i$ e $M$. Premendo \texttt{BTNR} il modo viene acquisito e mostrato su \texttt{LED(2)}; premendo \texttt{BTNL} il bit viene acquisito, mostrato su \texttt{LED(1)}, e la FSM avanza di un passo, aggiornando \texttt{LED(0)} con l'uscita $Y$. Ogni bit della sequenza richiede quindi una pressione di \texttt{BTNL}, dopo aver eventualmente riposizionato lo switch. Il bottone \texttt{CPU\_RESETN} riporta la macchina nello stato iniziale e azzera l'uscita.
+
+% TODO: foto della scheda non disponibile.
+
+Nel file dei constraint sono state decommentate le seguenti righe.
+
+\xdcfile{esercizio3-2/vincoli.xdc}{Constraint}{lst:esercizio3-2:vincoli}

@@ -1,0 +1,61 @@
+\esSezione{Riconoscitore della sequenza 101}\label{sec:esercizio3-1}
+
+\begin{traccia}
+Progettare, implementare in VHDL e testare mediante simulazione una macchina che riconosce la sequenza \texttt{101}. La macchina riceve un dato binario seriale, un segnale di modo e un segnale di clock, e porta a '1' l'uscita quando la sequenza viene riconosciuta. Se il modo è '0' le sequenze non si sovrappongono; se il modo è '1' la valutazione procede bit per bit e sono ammesse sequenze parzialmente sovrapposte.
+\end{traccia}
+
+
+\progetto
+
+Il riconoscitore è una macchina a stati finiti di tipo Mealy, con cinque stati \texttt{S0}, \dots, \texttt{S4}, descritta con due process distinti: uno combinatorio per la funzione di stato prossimo e di uscita, uno sincrono per il registro di stato. Gli ingressi sono il dato \texttt{x}, il modo \texttt{mode}, il clock \texttt{clk} e il reset \texttt{rst}; l'uscita è \texttt{y}, che dipende sia dallo stato corrente sia dal valore di \texttt{x}.
+
+Gli stati sono divisi in due sottografi, uno per ciascun modo. Con \texttt{mode} a '0' si percorre \texttt{S0}, \texttt{S1}, \texttt{S2}; con \texttt{mode} a '1' si percorre \texttt{S0}, \texttt{S3}, \texttt{S4}. Il diagramma è riportato in figura~\ref{fig:esercizio3-1:stati}, con etichette nel formato \texttt{mode x / y}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{figure/esercizio3-1/stati}
+  \caption{FSM del riconoscitore 101}
+  \label{fig:esercizio3-1:stati}
+\end{figure}
+
+In verde sono rappresentati gli stati del modo 0 e in viola quelli del modo 1; le transizioni in arancione sono quelle in cui l'uscita vale '1'. Se \texttt{mode} non è coerente con il sottografo in cui si trova la macchina, dato che la traccia non impone nessun vincolo, assumiamo che lo stato prossimo sia \texttt{S0}. In modo 0, dopo il riconoscimento (\texttt{S2} con \texttt{x} a '1') si torna in \texttt{S0}; in modo 1, il riconoscimento avviene in \texttt{S4} e la macchina passa in \texttt{S3}, riutilizzando l'ultimo '1' come primo bit di una nuova sequenza. Rispetto alla soluzione proposta, dunque, in modo 1 dopo il riconoscimento non si torna allo stato iniziale ma si passa in \texttt{S3}.
+
+\implementazione
+
+L'entità \texttt{fsm\_sequence} ha cinque porte: \texttt{x}, \texttt{mode}, \texttt{clk} e \texttt{rst} in ingresso, \texttt{y} in uscita, tutte di tipo \texttt{std\_logic}. L'architettura \texttt{Behavioral} definisce il tipo enumerato \texttt{state} e i segnali \texttt{current\_state} e \texttt{next\_state}.
+
+Il process \texttt{f\_stato\_uscita} ha come sensitivity list \texttt{current\_state}, \texttt{mode} e \texttt{x}. In testa vengono assegnati i valori di default (\texttt{next\_state} a \texttt{S0}, \texttt{y} a '0'), così ogni combinazione non esplicitamente prevista riporta la macchina in \texttt{S0} senza introdurre latch indesiderati. Il costrutto \texttt{case} sullo stato corrente descrive poi le transizioni utili. Il process \texttt{mem} è sensibile a \texttt{clk}: sul fronte di salita carica \texttt{S0} se \texttt{rst} vale '1', altrimenti \texttt{next\_state}; il reset è quindi sincrono.
+
+\vhdlfile{esercizio3-1/fsm_sequence.vhd}{Implementazione del riconoscitore di sequenza}{lst:esercizio3-1:fsm}
+
+In modo 0, lo stato \texttt{S1} resta tale finché \texttt{x} vale '1' e passa a \texttt{S2} quando \texttt{x} vale '0'; da \texttt{S2}, un '1' produce l'uscita alta e il ritorno in \texttt{S0}. La sequenza \texttt{1101} viene quindi riconosciuta: sul secondo '1' la macchina rimane in \texttt{S1}.
+
+\simulazione
+
+Il testbench \texttt{fsm\_sequence\_tb} ha un'entità senza porte. Istanzia il componente come \texttt{dut} tramite port mapping, genera il clock con un process dedicato (periodo di \SI{10}{ns}) e applica gli stimoli in \texttt{stim}, con un \texttt{wait for} di un periodo tra un bit e il successivo. Non sono presenti \texttt{assert}: il controllo dell'uscita è visivo, e gli esiti attesi sono riportati come commenti. Dopo un reset iniziale di due periodi, i test sono quattro:
+
+\begin{enumerate}
+  \item modo 0, sequenza \texttt{10101}: un solo riconoscimento, sul terzo bit;
+  \item modo 0, sequenza \texttt{1101}: riconoscimento sull'ultimo bit;
+  \item modo 1, sequenza \texttt{10101}: due riconoscimenti, sul terzo e sul quinto bit;
+  \item modo 1 con cambio di modo a metà sequenza (\texttt{1}, \texttt{0}, poi \texttt{mode} a '0' e \texttt{1}): nessun riconoscimento.
+\end{enumerate}
+
+Tra un test e il successivo \texttt{rst} viene portato a '1' per un periodo. Si riporta di seguito il testbench.
+
+\vhdlfile{esercizio3-1/fsm_sequence_tb.vhd}{Testbench del riconoscitore di sequenza}{lst:esercizio3-1:tb}
+
+Il risultato della simulazione è mostrato in figura~\ref{fig:esercizio3-1:simulazione}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{figure/esercizio3-1/simulazione}
+  \caption{Simulazione del riconoscitore 101}
+  \label{fig:esercizio3-1:simulazione}
+\end{figure}
+
+Nel primo test, con \texttt{mode} a '0', \texttt{x} vale '1' dopo il reset e la macchina passa in \texttt{S1}; con \texttt{x} a '0' passa in \texttt{S2}; con il successivo '1' l'uscita \texttt{y} sale a '1' (intorno a \SI{40}{ns}) e \texttt{current\_state} torna a \texttt{S0}. Il bit finale della sequenza non produce un secondo impulso. Con \texttt{mode} a '1' (dopo circa \SI{130}{ns}) la forma d'onda mostra la commutazione tra \texttt{S3} e \texttt{S4} e due impulsi di \texttt{y} ravvicinati, come previsto dal terzo test; nel quarto test \texttt{y} resta a '0'.
+
+\begin{risultato}
+Sono visibili quattro impulsi di \texttt{y}: uno per ciascuno dei primi due test e due nel terzo test, in modo 1; nel quarto test l'uscita resta bassa.
+\end{risultato}

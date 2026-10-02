@@ -1,0 +1,84 @@
+\documentclass[11pt, a4paper, oneside, openany]{report}
+\input{structure.tex} % Pacchetti, stili, ambienti e comandi personalizzati
+
+% ----------------------------------------------------------------------------------------
+% DATI DELL'ELABORATO
+% ----------------------------------------------------------------------------------------
+\corso{Architettura dei Sistemi Digitali}
+\docente{Prof. Nicola Mazzocca e Prof.ssa Alessandra De Benedictis}
+\annoaccademico{2025/2026}
+\studente{Rocco Lo Russo}{M63001865}
+% \studente{Secondo Componente}{N00000001}   % un \studente per ogni componente del gruppo
+
+% Commentare per la versione finale: nasconde tutti i \todo{...}
+% \bozzafalse
+
+% ----------------------------------------------------------------------------------------
+\input{elaborato-macro}
+\begin{document}
+
+% ----------------------------------------------------------------------------------------
+% FRONTESPIZIO
+% ----------------------------------------------------------------------------------------
+\pagenumbering{Alph} % numerazione "nascosta" per il frontespizio (evita link duplicati)
+\begin{titlepage}
+	\begin{tikzpicture}[remember picture, overlay]
+		\node[opacity=0.9] at (current page.center) {\includegraphics[width=0.85\paperwidth]{logo_unina.png}};
+	\end{tikzpicture}
+	\centering\sffamily
+	{\large\bfseries UNIVERSITÀ DEGLI STUDI DI NAPOLI FEDERICO II\par}
+	\vspace{0.3em}
+	{\normalsize Scuola Politecnica e delle Scienze di Base\par}
+	{\normalsize Dipartimento di Ingegneria Elettrica e delle Tecnologie dell'Informazione\par}
+	\vspace{0.3em}
+	{\small Corso di Laurea Magistrale in Ingegneria Informatica\par}
+
+	\vfill
+	{\color{accento}\rule{\linewidth}{1pt}\par}
+	\vspace{0.8em}
+	{\Huge\bfseries\color{accento} Elaborato di\\[0.2em] \thecorso\par}
+	\vspace{0.6em}
+	{\color{accento}\rule{\linewidth}{1pt}\par}
+	\vfill
+
+	{\large \thedocente\par}
+	\vspace{2em}
+	\begin{tabular}{l l}
+		\multicolumn{2}{l}{\textbf{Studenti}} \\[0.3em]
+		\thestudenti
+	\end{tabular}
+	\vfill
+	{\large Anno Accademico \theannoaccademico\par}
+\end{titlepage}
+
+% ----------------------------------------------------------------------------------------
+% INDICI
+% ----------------------------------------------------------------------------------------
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+
+% ----------------------------------------------------------------------------------------
+% CAPITOLI
+% ----------------------------------------------------------------------------------------
+\input{capitoli/01-multiplexer/capitolo}
+\input{capitoli/02-rom-m/capitolo}
+\input{capitoli/03-riconoscitore-sequenza/capitolo}
+\input{capitoli/04-shift-register/capitolo}
+\input{capitoli/05-cronometro/capitolo}
+\input{capitoli/06-po-pc/capitolo}
+\input{capitoli/07-moltiplicatore-booth/capitolo}
+\input{capitoli/08-handshaking/capitolo}
+\input{capitoli/09-processore/capitolo}
+\input{capitoli/10-interfaccia-seriale/capitolo}
+\input{capitoli/11-switch-multistadio/capitolo}
+\input{capitoli/12-prova-esame/capitolo}
+%% === CONTENUTO ELABORATO ===
+
+% ----------------------------------------------------------------------------------------
+% APPENDICE: componenti elementari riusati in più esercizi
+% ----------------------------------------------------------------------------------------
+\appendix
+
+\end{document}

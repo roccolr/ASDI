@@ -114,3 +114,9 @@ Cose che il documento non fa mai: note a piè di pagina; bibliografia; confronti
 10. Ci sono solo elementi presenti nel modello (niente tabelle di risorse o confronti di area/frequenza non forniti dal progetto), e ogni cifra è mostrata da un'immagine o da un report?
 11. Le sezioni su board terminano con foto/descrizione dell'uso e il listato dei constraint introdotto dalla formula tipica?
 12. I componenti già presentati non sono ripetuti, ma richiamati con un rimando?
+
+## 10. Regola dell'utente (2026-10-02) — riferimenti invisibili
+- I due PDF di riferimento servono SOLO come guida interna (cosa chiede la traccia, approccio atteso, stile). Nel testo non vanno MAI citati né evocati.
+- Vietate espressioni come: "rispetto alla traccia/soluzione di riferimento", "rispetto alla soluzione proposta", "a differenza della soluzione proposta", "il riferimento prevede", "nella versione di riferimento", "diversamente da quanto atteso". Il testo descrive l'implementazione per quello che è, come scelta propria dell'autore.
+- Le scelte diverse da quelle della traccia si presentano in positivo ("si è scelto di...", "per semplicità il contatore...") senza confronto con altre soluzioni. Restano ammessi i rimandi interni all'elaborato (altri esercizi, listati, figure).
+- Vale per gli esercizi scritti da ora in poi; gli esercizi già presenti (modificati a mano dall'utente) NON si toccano.

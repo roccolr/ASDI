@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenRun Id="synth_1" LaunchPart="xc7a100tcsg324-1" LaunchTime="1790874253">
+  <File Type="PA-TCL" Name="sistema_tl.tcl"/>
+  <File Type="RDS-PROPCONSTRS" Name="sistema_tl_drc_synth.rpt"/>
+  <File Type="REPORTS-TCL" Name="sistema_tl_reports.tcl"/>
+  <File Type="RDS-RDS" Name="sistema_tl.vds"/>
+  <File Type="RDS-UTIL" Name="sistema_tl_utilization_synth.rpt"/>
+  <File Type="RDS-UTIL-PB" Name="sistema_tl_utilization_synth.pb"/>
+  <File Type="RDS-DCP" Name="sistema_tl.dcp"/>
+  <File Type="VDS-TIMINGSUMMARY" Name="sistema_tl_timing_summary_synth.rpt"/>
+  <File Type="VDS-TIMING-PB" Name="sistema_tl_timing_summary_synth.pb"/>
+  <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
+    <Filter Type="Srcs"/>
+    <File Path="$PSRCDIR/sources_1/imports/asdi_lab/esercizio6_1/esercizio6_1.srcs/sources_1/new/control_unit.vhd">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../esercizio6_1/esercizio6_1.srcs/sources_1/new/control_unit.vhd"/>
+        <Attr Name="ImportTime" Val="1790588262"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/asdi_lab/src/counter_mod.vhd">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../src/counter_mod.vhd"/>
+        <Attr Name="ImportTime" Val="1790549116"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/src/debouncer.vhd">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../src/debouncer.vhd"/>
+        <Attr Name="ImportTime" Val="1790804792"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/src/mem.vhd">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../src/mem.vhd"/>
+        <Attr Name="ImportTime" Val="1790677981"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/src/onecount.vhd">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../src/onecount.vhd"/>
+        <Attr Name="ImportTime" Val="1790584754"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/src/rom.vhd">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../src/rom.vhd"/>
+        <Attr Name="ImportTime" Val="1790676094"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/imports/asdi_lab/esercizio6_1/esercizio6_1.srcs/sources_1/new/sistema.vhd">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../esercizio6_1/esercizio6_1.srcs/sources_1/new/sistema.vhd"/>
+        <Attr Name="ImportTime" Val="1790590783"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/sistema_tl.vhd">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="DesignMode" Val="RTL"/>
+      <Option Name="TopModule" Val="sistema_tl"/>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1" RelGenDir="$PGENDIR/constrs_1">
+    <Filter Type="Constrs"/>
+    <File Path="$PSRCDIR/constrs_1/imports/Desktop/Nexys-A7-100T-Master.xdc">
+      <FileInfo>
+        <Attr Name="ImportPath" Val="$PPRDIR/../../../Users/Flexo Rodriguez/Desktop/Nexys-A7-100T-Master.xdc"/>
+        <Attr Name="ImportTime" Val="1790776750"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="ConstrsType" Val="XDC"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="utils" Type="Utils" RelSrcDir="$PSRCDIR/utils_1" RelGenDir="$PGENDIR/utils_1">
+    <Filter Type="Utils"/>
+    <Config>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <Strategy Version="1" Minor="2">
+    <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2023">
+      <Desc>Vivado Synthesis Defaults</Desc>
+    </StratHandle>
+    <Step Id="synth_design"/>
+  </Strategy>
+</GenRun>

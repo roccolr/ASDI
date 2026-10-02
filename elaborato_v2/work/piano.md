@@ -12,19 +12,19 @@ Autonomi: nessuno.
 |---|---|---|---|---|---|---|
 | 1 | esercizio1-1 | Multiplexer 16:1 | derivato | STILE p. 5-8 · ALTRO p. 6-8 | vivado/esercizio1_1 + src | testbench mancante (vivado/sim assente); wave_1_1.png presente |
 | 2 | esercizio1-2 | Rete di interconnessione 16:4 | derivato | STILE p. 9-12 · ALTRO p. 9-10 | vivado/esercizio1_2 + src | demux_1_4 e testbench mancanti (vivado/sim assente); wave_1_2.png presente |
-| 3 | esercizio1-3 | Rete di interconnessione su board | placeholder | STILE p. 13-14 · ALTRO p. 11-13 | — | |
+| 3 | esercizio1-3 | Rete di interconnessione su board | derivato | STILE p. 13-14 · ALTRO p. 11-13 | vivado/esercizio1_3 | board, aggiunto 2026-10-02 |
 
 ## 02-rom-m — Sistema ROM + M
 | # | slug | titolo | tipo | riferimento | cartella vivado | note |
 |---|---|---|---|---|---|---|
 | 1 | esercizio2-1 | Sistema ROM + M | derivato | STILE p. 15-18 · ALTRO p. 14-15 | vivado/esercizio2_1 | usa src/rom16_8 |
-| 2 | esercizio2-2 | Sistema ROM + M su board | placeholder | STILE p. 19-20 · ALTRO p. 16 | — | |
+| 2 | esercizio2-2 | Sistema ROM + M su board | derivato | STILE p. 19-20 · ALTRO p. 16 | vivado/esercizio2_2 | board, aggiunto 2026-10-02 |
 
 ## 03-riconoscitore-sequenza — Riconoscitore di sequenza
 | # | slug | titolo | tipo | riferimento | cartella vivado | note |
 |---|---|---|---|---|---|---|
-| 1 | esercizio3-1 | Riconoscitore della sequenza 101 | derivato | STILE p. 22-26 · ALTRO p. 17-19 | vivado/esercizio3_1 | autosufficiente |
-| 2 | esercizio3-2 | Riconoscitore su board | placeholder | STILE p. 27-31 · ALTRO p. 19-21 | — | |
+| 1 | esercizio3-1 | Riconoscitore della sequenza 101 | derivato | STILE p. 22-26 · ALTRO p. 17-19 | vivado/esercizio3_1 | rifatto dall'utente, riscritto 2026-10-02 |
+| 2 | esercizio3-2 | Riconoscitore su board | derivato | STILE p. 27-31 · ALTRO p. 19-21 | vivado/esercizio3_2 | board, aggiunto 2026-10-02 |
 
 ## 04-shift-register — Shift register
 | # | slug | titolo | tipo | riferimento | cartella vivado | note |
@@ -35,20 +35,20 @@ Autonomi: nessuno.
 | # | slug | titolo | tipo | riferimento | cartella vivado | note |
 |---|---|---|---|---|---|---|
 | 1 | esercizio5-1 | Cronometro | derivato | STILE p. 38-44 · ALTRO p. 24-26 | vivado/esercizio5_1 | usa src/counter_mod |
-| 2 | esercizio5-2 | Cronometro su board | placeholder | STILE p. 45-53 · ALTRO p. 26-31 | — | |
+| 2 | esercizio5-2 | Cronometro su board | derivato | STILE p. 45-53 · ALTRO p. 26-31 | vivado/esercizio5_2 | board, aggiunto 2026-10-02 |
 
 ## 06-po-pc — Sistema di lettura, elaborazione e scrittura (PO/PC)
 | # | slug | titolo | tipo | riferimento | cartella vivado | note |
 |---|---|---|---|---|---|---|
 | 1 | esercizio6-1 | Sistema PO/PC | derivato | STILE p. 54-63 · ALTRO p. 32-34 | vivado/esercizio6_1 | usa src/counter_mod, mem, onecount, rom |
-| 2 | esercizio6-2 | Sistema PO/PC su board | placeholder | STILE p. 64-66 · ALTRO p. 35-37 | — | |
+| 2 | esercizio6-2 | Sistema PO/PC su board | derivato | STILE p. 64-66 · ALTRO p. 35-37 | vivado/esercizio6_2 | board, aggiunto 2026-10-02 |
 | 3 | esercizio6-3 | Timing analysis | placeholder | STILE p. 67-68 | — | |
 
 ## 07-moltiplicatore-booth — Moltiplicatore di Booth
 | # | slug | titolo | tipo | riferimento | cartella vivado | note |
 |---|---|---|---|---|---|---|
 | 1 | esercizio7-1 | Moltiplicatore di Booth | derivato | STILE p. 70-80 · ALTRO p. 38-42 | vivado/esercizio7_1 | usa src/full_adder, rca, add_sub, counter_mod |
-| 2 | esercizio7-2 | Moltiplicatore di Booth su board | placeholder | STILE p. 81-90 · ALTRO p. 42-46 | — | |
+| 2 | esercizio7-2 | Moltiplicatore di Booth su board | derivato | STILE p. 81-90 · ALTRO p. 42-46 | vivado/esercizio7_2 | board, aggiunto 2026-10-02 |
 
 ## 08-handshaking — Comunicazione con handshaking
 | # | slug | titolo | tipo | riferimento | cartella vivado | note |
@@ -58,12 +58,12 @@ Autonomi: nessuno.
 ## 09-processore — Processore MIC-1
 | # | slug | titolo | tipo | riferimento | cartella vivado | note |
 |---|---|---|---|---|---|---|
-| 1 | esercizio9-1 | Processore MIC-1 | placeholder | STILE p. 107-110 · ALTRO p. 53-57 | — | |
+| 1 | esercizio9-1 | Processore MIC-1 | dubbio | STILE p. 107-110 · ALTRO p. 53-57 | vivado/mic1 (+ esercizio_9 vuoto) | MIC-1 proprio, senza testbench; aggiunto 2026-10-02 |
 
 ## 10-interfaccia-seriale — Interfaccia seriale UART
 | # | slug | titolo | tipo | riferimento | cartella vivado | note |
 |---|---|---|---|---|---|---|
-| 1 | esercizio10-1 | Comunicazione seriale UART-RS232 | placeholder | STILE p. 112-117 · ALTRO p. 58-63 | — | |
+| 1 | esercizio10-1 | Comunicazione seriale UART-RS232 | derivato | STILE p. 112-117 · ALTRO p. 58-63 | vivado/esercizio_10 | aggiunto 2026-10-02 |
 
 ## 11-switch-multistadio — Switch multistadio
 | # | slug | titolo | tipo | riferimento | cartella vivado | note |
@@ -78,3 +78,5 @@ Autonomi: nessuno.
 ## Non pianificato
 - Appendice dei componenti comuni (STILE-APP): non pianificata; i componenti si presentano dentro gli esercizi (vedi sopra). In src ci sono anche automa, common_defs, cont_16_s, ffT, mic1_datapath: non citati da alcun progetto, non inclusi.
 - Placeholder confermati dall'utente: le prove su board (1.3, 2.2, 3.2, 5.2, 6.2, 7.2), la timing analysis 6.3 e le tracce 9-12.
+- Esercitazioni escluse (2026-10-02): vivado/RCA, add_sub, full_adder, contatore_modulo16_seriale, lab01_mux, lab02 — non corrispondono a tracce.
+- Prima comparsa dei nuovi componenti comuni: debouncer → esercizio3-2 (lst:esercizio3-2:debouncer); bin2dec, dispaly_driver, seg7_decoder → esercizio5-2; RS232RefComp → esercizio10-1.

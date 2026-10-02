@@ -1,0 +1,8 @@
+0.7
+2020.2
+May  7 2023
+15:24:31
+C:/work/asdi_lab/add_sub/add_sub.srcs/sim_1/new/add_sub_tb.vhd,1790608609,vhdl,,,,add_sub_tb,,,,,,,,
+C:/work/asdi_lab/src/add_sub.vhd,1790607269,vhdl,C:/work/asdi_lab/add_sub/add_sub.srcs/sim_1/new/add_sub_tb.vhd,,,add_sub,,,,,,,,
+C:/work/asdi_lab/src/full_adder.vhd,1788273999,vhdl,C:/work/asdi_lab/src/rca.vhd,,,full_adder,,,,,,,,
+C:/work/asdi_lab/src/rca.vhd,1790606211,vhdl,C:/work/asdi_lab/src/add_sub.vhd,,,rca,,,,,,,,

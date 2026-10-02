@@ -1,0 +1,188 @@
+\esSezione{Comunicazione seriale UART-RS232}\label{sec:esercizio10-1}
+
+\begin{traccia}
+Partendo dal dispositivo UART-RS232 fornito dalla Digilent (componente \texttt{RS232RefComp}), progettare, implementare in VHDL e testare mediante simulazione un sistema formato da due unità, A e B, che condividono lo stesso clock e comunicano su una linea seriale. L'unità A contiene una ROM di 8 locazioni da 1 byte, un contatore per scandirle e una UART; l'unità B contiene una memoria MEM di 8 locazioni da 1 byte, un contatore per scandirla e una UART. Quando in A viene asserito il segnale di scrittura, un byte letto dalla ROM viene trasmesso a B, che lo riceve e lo salva in MEM.
+\end{traccia}
+
+\progetto
+
+Ciascuna unità è composta da quattro componenti, collegati come nello schema di figura~\ref{fig:esercizio10-1:schema}.
+\begin{enumerate}
+  \item Unità A (\texttt{systemA}): unità di controllo \texttt{cuA}, ROM, contatore modulo 8 e UART di trasmissione.
+  \item Unità B (\texttt{systemB}): unità di controllo \texttt{cuB}, memoria MEM, contatore modulo 8 e UART di ricezione.
+\end{enumerate}
+Il top module \texttt{marco\_system} istanzia le due unità e collega l'uscita seriale \texttt{tx} di A all'ingresso \texttt{rx} di B tramite il segnale \texttt{wire}. Il clock e il reset sono comuni e non sono disegnati nello schema.
+
+\begin{figure}[H]
+  \centering
+  \resizebox{\linewidth}{!}{%
+  \begin{tikzpicture}[font=\sffamily\small]
+    % --- unità A
+    \node[ctrl]   (cuA)   at (0,0)      {\texttt{cuA}};
+    \node[blocco] (cntA)  at (0,-2.2)   {contatore};
+    \node[blocco] (romA)  at (0,-4.4)   {ROM};
+    \node[blocco, minimum width=2.2cm] (uartA) at (4.2,-3) {UART A};
+    % --- unità B
+    \node[ctrl]   (cuB)   at (12,0)     {\texttt{cuB}};
+    \node[blocco] (cntB)  at (12,-2.2)  {contatore};
+    \node[blocco] (memB)  at (12,-4.4)  {MEM};
+    \node[blocco, minimum width=2.2cm] (uartB) at (7.8,-3) {UART B};
+    % contenitori
+    \node[draw, dashed, black!50, rounded corners, fit=(cuA)(cntA)(romA)(uartA), inner sep=5mm] (boxA) {};
+    \node[draw, dashed, black!50, rounded corners, fit=(cuB)(cntB)(memB)(uartB), inner sep=5mm] (boxB) {};
+    \node[font=\sffamily\scriptsize\bfseries, anchor=south west, black!60] at (boxA.south west) {systemA};
+    \node[font=\sffamily\scriptsize\bfseries, anchor=south west, black!60] at (boxB.south west) {systemB};
+
+    % --- ingresso start
+    \draw[seg] (-2.3,0) -- node[above, font=\ttfamily\scriptsize, pos=.4]{start} (cuA.west);
+
+    % --- unità A
+    \draw[seg] (cuA.south) -- node[right, font=\ttfamily\scriptsize]{en} (cntA.north);
+    \draw[bus] (cntA.south) -- node[right, font=\ttfamily\scriptsize, pos=.3]{counter\_2\_rom}
+                               node[larghezza=3, pos=.75]{/} (romA.north);
+    \draw[bus] (romA.east) -| node[below, font=\ttfamily\scriptsize, pos=.2]{rom\_2\_uart}
+                              node[larghezza=8, pos=.14]{/} (uartA.south);
+    \draw[seg] (cuA.east) -| node[above, font=\ttfamily\scriptsize, pos=.2]{wr} (uartA.north);
+
+    % --- unità B
+    \draw[seg] (cuB.south) -- node[left, font=\ttfamily\scriptsize]{en} (cntB.north);
+    \draw[bus] (cntB.south) -- node[left, font=\ttfamily\scriptsize, pos=.3]{counter\_2\_ram}
+                               node[larghezza=3, pos=.75]{/} (memB.north);
+    \draw[bus] (uartB.south) |- node[below, font=\ttfamily\scriptsize, pos=.75]{uart\_2\_ram}
+                                node[larghezza=8, pos=.95]{/} (memB.west);
+    \draw[seg] ([yshift=2mm]cuB.west) -| node[above, font=\ttfamily\scriptsize, pos=.2]{rd}
+               ([xshift=-3mm]uartB.north);
+    \draw[seg] ([xshift=3mm]uartB.north) |- node[below, font=\ttfamily\scriptsize, pos=.8]{rda}
+               ([yshift=-2mm]cuB.west);
+    \draw[seg] (cuB.east) -- ++(0.7,0) |- node[right, font=\ttfamily\scriptsize, pos=.25]{memw} (memB.east);
+
+    % --- linea seriale
+    \draw[seg] (uartA.east) -- node[above, font=\ttfamily\scriptsize]{wire} (uartB.west);
+
+    % --- handshake tra le unità di controllo
+    \draw[seg] ([xshift=5mm]cuA.north) -- ++(0,0.5) -| ([xshift=-5mm]cuB.north);
+    \draw[seg] ([xshift=5mm]cuB.north) -- ++(0,1.0) -| ([xshift=-5mm]cuA.north);
+    \node[font=\ttfamily\scriptsize, below] at (6,1.0) {rts};
+    \node[font=\ttfamily\scriptsize, above] at (6,1.5) {cts};
+
+    % --- lettura della memoria
+    \draw[bus] ([xshift=-5mm]memB.south) -- ++(0,-1.0) node[larghezza=3, pos=.5]{/}
+               node[left, font=\ttfamily\scriptsize, pos=1]{raddr};
+    \draw[bus] ([xshift=5mm]memB.south) ++(0,-1.0) -- node[larghezza=8, pos=.5]{/}
+               node[right, font=\ttfamily\scriptsize, pos=0]{dout} ([xshift=5mm]memB.south);
+  \end{tikzpicture}}
+  \caption{Architettura del sistema}
+  \label{fig:esercizio10-1:schema}
+\end{figure}
+
+Il trasferimento di un byte avviene con un handshake a due fili, \texttt{rts} (da A a B) e \texttt{cts} (da B ad A), scambiato direttamente tra le due unità di controllo. L'unità A segnala la richiesta di invio con \texttt{rts}; B risponde con \texttt{cts}, ossia si dichiara pronta a ricevere; solo a questo punto A asserisce \texttt{wr} e il byte, presente sul bus \texttt{rom\_2\_uart}, viene trasmesso dalla UART. B attende il flag \texttt{rda} della propria UART, che indica un byte ricevuto, e lo scrive in MEM all'indirizzo fornito dal suo contatore. In entrambe le unità il contatore avanza una sola volta per byte, così che ROM e MEM siano scandite con lo stesso indirizzo.
+
+Le due unità di controllo sono descritte dalle FSM nelle figure~\ref{fig:esercizio10-1:fsm-a} e~\ref{fig:esercizio10-1:fsm-b}. Le uscite non indicate in un arco o in uno stato valgono \texttt{'0'}; su ogni arco la condizione precede la barra e le uscite attive la seguono. Nello stato \texttt{FIRE} l'uscita \texttt{rts} è asserita, come nell'arco da \texttt{IDLE} a \texttt{FIRE}; nello stato \texttt{ACCEPT} è asserita \texttt{cts}, come nell'arco da \texttt{LISTEN} ad \texttt{ACCEPT}.
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[font=\sffamily\scriptsize, node distance=3cm, auto, shorten >=1pt]
+    \node[fsmstate, initial, initial text=] (idle)   at (0,0)    {IDLE};
+    \node[fsmstate]                         (fire)   at (6,0)    {FIRE};
+    \node[fsmstate]                         (reload) at (3,-3.2) {RELOAD};
+    \path[->, thick]
+      (idle)   edge node[above]{\texttt{start=1} / \texttt{rts=1}} (fire)
+      (idle)   edge[loop above] node{\texttt{start=0}} ()
+      (fire)   edge node[right, xshift=1mm]{\texttt{cts=1} / \texttt{wr=1}} (reload)
+      (fire)   edge[loop above] node{\texttt{cts=0}} ()
+      (reload) edge node[left, xshift=-1mm]{\texttt{cts=0} / \texttt{en=1}} (idle)
+      (reload) edge[loop below] node{\texttt{cts=1}} ();
+  \end{tikzpicture}
+  \caption{FSM dell'unità di controllo A}
+  \label{fig:esercizio10-1:fsm-a}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[font=\sffamily\scriptsize, node distance=3cm, auto, shorten >=1pt]
+    \node[fsmstate, initial, initial text=] (listen) at (0,0)    {LISTEN};
+    \node[fsmstate]                         (accept) at (6,0)    {ACCEPT};
+    \node[fsmstate]                         (mem)    at (3,-3.2) {MEM};
+    \path[->, thick]
+      (listen) edge node[above]{\texttt{rts=1} / \texttt{cts=1}} (accept)
+      (listen) edge[loop above] node{\texttt{rts=0}} ()
+      (accept) edge node[right, xshift=1mm]{\texttt{rda=1}} (mem)
+      (accept) edge[loop above] node{\texttt{rda=0}} ()
+      (mem)    edge node[left, xshift=-1mm]{\texttt{memw=1, rd=1, en=1}} (listen);
+  \end{tikzpicture}
+  \caption{FSM dell'unità di controllo B}
+  \label{fig:esercizio10-1:fsm-b}
+\end{figure}
+
+In A l'avanzamento del contatore avviene alla fine dello scambio, quando \texttt{cts} torna a \texttt{'0'}; in B lo stato \texttt{MEM} dura un solo ciclo, nel quale la scrittura in memoria, la lettura della UART e l'incremento del contatore sono contemporanei. Il segnale \texttt{rd} azzera il flag \texttt{rda} della UART e, nello stesso ciclo, \texttt{cts} torna a \texttt{'0'} perché la FSM ritorna in \texttt{LISTEN}.
+
+\implementazione
+
+Si presentano i componenti dal basso verso l'alto. Il contatore modulo 8 è \texttt{counter\_mod}, già riportato nell'esercizio 5.1 (listato~\ref{lst:esercizio5-1:counter-mod}); in entrambe le unità è istanziato con \texttt{M} pari a 8 e \texttt{W} pari a 3, con \texttt{load} a \texttt{'0'} e uscita \texttt{tc} non collegata. La memoria \texttt{mem} è quella dell'esercizio 6.1 (listato~\ref{lst:esercizio6-1:mem}), istanziata con \texttt{N=8}, \texttt{A=3} e \texttt{W=8}.
+
+La ROM di questo esercizio ha generic \texttt{N} (numero di locazioni) e \texttt{A} (bit di indirizzo), e porte \texttt{clk}, \texttt{rd}, \texttt{addr} a \texttt{A} bit e \texttt{data} a 8 bit. L'architettura \texttt{behavioral} contiene la costante \texttt{CONTENT}, con gli otto byte x"00", x"FF", x"01", x"80", x"0F", x"F0", x"AA" e x"55", e un process sensibile a \texttt{clk} che, con \texttt{rd} a \texttt{'1'}, campiona \texttt{addr} al fronte di salita e aggiorna \texttt{data}. Un \texttt{assert} con severità \texttt{failure} verifica che \texttt{N} sia indirizzabile con \texttt{A} bit.
+
+\vhdlfile{esercizio10-1/rom.vhd}{Implementazione della ROM}{lst:esercizio10-1:rom}
+
+La UART è il componente \texttt{Rs232RefComp}, fornito con l'esercitazione e non scritto dall'autore; per questo non ne viene riportato il codice, ma solo l'entità, che ne mostra l'interfaccia.
+
+\vhdlfile[firstline=23, lastline=38]{esercizio10-1/rs232refcomp.vhd}{Entità del componente RS232RefComp}{lst:esercizio10-1:rs232refcomp}
+
+Le porte \texttt{TXD} e \texttt{RXD} sono la linea seriale in uscita e in ingresso, \texttt{DBIN} e \texttt{DBOUT} i bus di dato paralleli a 8 bit, \texttt{RST} il reset. Il significato dei flag di stato e dei comandi è il seguente.
+\begin{enumerate}
+  \item \texttt{TBE}: stato del registro di trasmissione; scende quando viene asserito \texttt{WR}.
+  \item \texttt{RDA}: dato disponibile nel registro di ricezione; viene abbassato da \texttt{RD}.
+  \item \texttt{PE}: errore di parità.
+  \item \texttt{FE}: errore di frame.
+  \item \texttt{OE}: errore di sovrascrittura, ossia un nuovo dato ricevuto prima della lettura del precedente.
+  \item \texttt{WR}: comando di scrittura; il byte presente su \texttt{DBIN} viene caricato per la trasmissione.
+  \item \texttt{RD}: comando di lettura; il byte ricevuto è disponibile su \texttt{DBOUT} e il flag \texttt{RDA} viene abbassato.
+\end{enumerate}
+Il controllo del flusso è affidato alla coppia \texttt{rts}/\texttt{cts} tra le unità di controllo: nel sistema sono quindi utilizzati \texttt{WR} in trasmissione, \texttt{RDA} e \texttt{RD} in ricezione, mentre \texttt{TBE}, \texttt{PE}, \texttt{FE} e \texttt{OE} restano non collegati.
+
+L'unità di controllo A, \texttt{cuA}, ha ingressi \texttt{clk}, \texttt{rst}, \texttt{start} e \texttt{cts}, uscite \texttt{en} (abilitazione del contatore), \texttt{wr} e \texttt{rts}. L'architettura \texttt{Behavioral} usa due process: \texttt{f\_stato\_uscita}, combinatorio, calcola stato prossimo e uscite con un \texttt{case} sul tipo enumerato \texttt{stato} (\texttt{IDLE}, \texttt{FIRE}, \texttt{RELOAD}), assegnando prima i valori di default a tutte le uscite; \texttt{mem}, sensibile al fronte di salita di \texttt{clk}, aggiorna \texttt{current\_state} con \texttt{next\_state} e riporta la FSM in \texttt{IDLE} con il reset sincrono.
+
+\vhdlfile{esercizio10-1/cua.vhd}{Implementazione dell'unità di controllo A}{lst:esercizio10-1:cua}
+
+L'unità di controllo B, \texttt{cuB}, ha ingressi \texttt{clk}, \texttt{rst}, \texttt{rts} e \texttt{rda}, uscite \texttt{cts}, \texttt{rd}, \texttt{en} e \texttt{memw}. Anche qui un process combinatorio (\texttt{f\_stato\_uscita}) realizza transizioni e uscite sui tre stati \texttt{LISTEN}, \texttt{ACCEPT} e \texttt{MEM}, mentre il process sincrono \texttt{mem\_proc} aggiorna lo stato e, con \texttt{rst} a \texttt{'1'}, torna in \texttt{LISTEN}. Le uscite \texttt{memw}, \texttt{rd} ed \texttt{en} sono asserite solo nello stato \texttt{MEM}.
+
+\vhdlfile{esercizio10-1/cub.vhd}{Implementazione dell'unità di controllo B}{lst:esercizio10-1:cub}
+
+Il top module di A, \texttt{systemA}, ha ingressi \texttt{clk}, \texttt{rst}, \texttt{start}, \texttt{cts} e uscite \texttt{tx} e \texttt{rts}. L'architettura è \texttt{structural}: i segnali interni \texttt{counter\_2\_rom} (3 bit), \texttt{rom\_2\_uart} (8 bit), \texttt{en} e \texttt{wr} collegano le quattro istanze \texttt{rom}, \texttt{cnt}, \texttt{cu} e \texttt{uart}. La ROM ha \texttt{rd} fisso a \texttt{'1'}. La UART è usata solo in trasmissione: \texttt{RXD} e \texttt{RD} sono a \texttt{'0'}, \texttt{DBIN} riceve \texttt{rom\_2\_uart} e le uscite di stato sono lasciate \texttt{open}.
+
+\vhdlfile{esercizio10-1/systema.vhd}{Implementazione dell'unità A}{lst:esercizio10-1:systema}
+
+L'unità B, \texttt{systemB}, ha ingressi \texttt{clk}, \texttt{rst}, \texttt{rx}, \texttt{rts}, uscita \texttt{cts} e, per l'osservazione del contenuto della memoria, l'indirizzo di lettura \texttt{raddr} (3 bit) e l'uscita \texttt{dout} (8 bit). L'istanza \texttt{ram} scrive il dato \texttt{uart\_2\_ram}, proveniente da \texttt{DBOUT}, all'indirizzo \texttt{counter\_2\_ram} quando \texttt{we} è asserito; \texttt{raddr} e \texttt{dout} sono collegati alla porta di lettura. La UART è usata solo in ricezione: \texttt{TXD} è non collegato, \texttt{WR} è a \texttt{'0'}, \texttt{RDA} e \texttt{RD} sono collegati alla unità di controllo.
+
+\vhdlfile{esercizio10-1/systemb.vhd}{Implementazione dell'unità B}{lst:esercizio10-1:systemb}
+
+Infine il top module \texttt{marco\_system} ha ingressi \texttt{clk}, \texttt{rst}, \texttt{start}, \texttt{addr} (3 bit) e uscita \texttt{data} (8 bit). Istanzia \texttt{sysA} e \texttt{sysB} e dichiara i segnali \texttt{wire} (linea seriale), \texttt{rts} e \texttt{cts}; \texttt{addr} e \texttt{data} permettono di leggere dall'esterno il contenuto della MEM di B.
+
+\vhdlfile{esercizio10-1/marco_system.vhd}{Implementazione del top module}{lst:esercizio10-1:marco-system}
+
+\simulazione
+
+Il testbench \texttt{macro\_system\_tb} ha entità senza porte e istanzia il top module come \texttt{dut}. Il clock ha periodo \texttt{T} di \SI{10}{ns} ed è generato dal process \texttt{clock}; la costante \texttt{EXPECTED} contiene gli otto byte della ROM di A. Il process \texttt{stim} esegue i passi seguenti.
+\begin{enumerate}
+  \item Mantiene \texttt{rst} a \texttt{'1'} per $5T$, lo porta a \texttt{'0'} e attende altri $2T$.
+  \item Per \texttt{i} da 0 a 7 genera un impulso di \texttt{start} di durata \texttt{T} e attende \SI{1}{ms}, tempo che, secondo il commento nel testbench, copre il frame seriale (circa \SI{0,7}{ms}).
+  \item Per \texttt{i} da 0 a 7 pone \texttt{addr} pari a \texttt{i}, attende \texttt{T} e confronta \texttt{data} con \texttt{EXPECTED(i)}, incrementando il contatore degli errori \texttt{errors} e segnalando con un \texttt{assert} (severità \texttt{error}) l'eventuale discrepanza.
+  \item Riporta con \texttt{report} l'esito complessivo e termina con \texttt{wait;}.
+\end{enumerate}
+
+\vhdlfile{esercizio10-1/macro_system_tb.vhd}{Testbench del sistema}{lst:esercizio10-1:macro-system-tb}
+
+Il risultato della simulazione, eseguita per \SI{10}{ms}, è riportato nella console di Vivado in figura~\ref{fig:esercizio10-1:testbench}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\linewidth]{figure/esercizio10-1/testbench}
+  \caption{Simulazione del sistema}
+  \label{fig:esercizio10-1:testbench}
+\end{figure}
+
+La figura mostra il messaggio \texttt{TEST SUPERATO: MEM = ROM}, emesso dal process \texttt{stim} all'istante \SI{8000230}{ns}: tutte le otto locazioni di MEM, lette tramite \texttt{addr} e \texttt{data}, coincidono con i byte attesi. Il tempo è coerente con la sequenza di stimoli: $5T + 2T = \SI{70}{ns}$ di reset, otto trasferimenti da $T + \SI{1}{ms}$ ciascuno e infine otto letture da $T$, per un totale di $\SI{8000230}{ns}$. Nel caso della locazione 1, ad esempio, la ROM contiene x"FF" ($11111111_2$) e la lettura di MEM con \texttt{addr} pari a \texttt{"001"} restituisce lo stesso valore.
+
+\begin{risultato}
+Al termine degli otto trasferimenti la memoria di B coincide con la ROM di A: la console riporta \texttt{TEST SUPERATO: MEM = ROM} a \SI{8000230}{ns}.
+\end{risultato}
