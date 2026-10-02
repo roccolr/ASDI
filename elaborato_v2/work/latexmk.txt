@@ -1,6 +1,0 @@
-Rc files read:
-  NONE
-Latexmk: This is Latexmk, John Collins, 27 Dec. 2024. Version 4.86a.
-Latexmk: Nothing to do for 'main.tex'.
-Latexmk: All targets (/c/Users/Flexo Rodriguez/Desktop/ASDI/elaborato_v2/out/elaborato.pdf) are up-to-date
-
