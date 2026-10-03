@@ -10,13 +10,14 @@ A partire dall'implementazione fornita del processore operante secondo il modell
 
 % TODO: manca il testbench di simulazione (programma IJVM in memoria, forme d'onda dei registri)
 
+
+
 \progetto
 
-Il processore segue l'architettura MIC-1: una parte operativa a \SI{32}{bit}, che contiene i registri e le linee di trasferimento, e un'unità di controllo che, a ogni ciclo di clock, emette un insieme di comandi letti da una memoria di microcodice (control store). Il top module \texttt{processor} istanzia le due parti e le collega con quattro gruppi di comandi (ALU, bus C, memoria, bus B), in direzione unità di controllo verso parte operativa, e con tre informazioni di ritorno: il registro \texttt{mbr} e i flag \texttt{n\_flag} e \texttt{z\_flag} dell'ALU.
+Il processore presentato segue l'architettura MIC-1: una parte operativa a \SI{32}{bit}, che contiene i registri e le linee di trasferimento, e un'unità di controllo che, a ogni ciclo di clock, emette un insieme di comandi letti da una memoria ROM di microcodice denominata \texttt{control store}. Il top module \texttt{processor} istanzia le due parti e le collega con quattro gruppi di comandi (ALU, bus C, memoria, bus B), in direzione unità di controllo verso parte operativa, e con tre informazioni di ritorno: il registro \texttt{mbr} e i flag \texttt{n\_flag} e \texttt{z\_flag} dell'ALU.
 
-I componenti del sistema sono i seguenti:
+I componenti del sistema presentato, oltre al package con larghezze dei registi, tipi dei campi di controllo e costanti simboliche per i bit di comando, sono i seguenti:
 \begin{enumerate}
-  \item \texttt{common\_defs}: package con larghezze dei registri, tipi dei campi di controllo e costanti simboliche per i bit di comando;
   \item \texttt{alu}: unità aritmetico-logica con shifter, ingressi \texttt{a} e \texttt{b}, uscita \texttt{c} e flag \texttt{n} e \texttt{z};
   \item \texttt{control\_store}: memoria di microcodice da 512 parole di \SI{36}{bit};
   \item \texttt{mic1\_cu}: unità di controllo con registro di microistruzione (MIR) e logica di calcolo del prossimo indirizzo;
@@ -24,77 +25,103 @@ I componenti del sistema sono i seguenti:
   \item \texttt{processor}: top module.
 \end{enumerate}
 
-I registri hanno ampiezza di \SI{32}{bit} (costante \texttt{REG\_WIDTH}), tranne \texttt{mbr} che è di \SI{8}{bit} (\texttt{MBR\_WIDTH}) perché contiene un byte del flusso di istruzioni. L'indirizzamento della memoria dati passa per \texttt{mar}, il dato per \texttt{mdr}; la memoria istruzioni è indirizzata da \texttt{pc} e fornisce un byte alla volta.
+I registri hanno ampiezza di \SI{32}{bit} (\texttt{REG\_WIDTH}), tranne \texttt{mbr} che è di \SI{8}{bit} (\texttt{MBR\_WIDTH}) perché contiene un byte d'istruzione. L'indirizzamento della memoria dati passa per \texttt{mar}, il dato per \texttt{mdr}; la memoria istruzioni è indirizzata da \texttt{pc} e fornisce un byte alla volta.
 
-La microistruzione è un vettore di \SI{36}{bit} (tipo \texttt{mir\_type}), suddiviso nei campi seguenti, a partire dal bit più significativo:
+La microistruzione è un vettore di \SI{36}{bit} (\texttt{mir\_type}), suddiviso nei campi seguenti, a partire dal MSB:
 \begin{enumerate}
   \item \texttt{Addr} (9 bit): indirizzo della prossima microistruzione;
-  \item \texttt{JAM} (3 bit): \texttt{JMPC}, \texttt{JAMN} e \texttt{JAMZ}, che modificano l'indirizzo successivo;
-  \item \texttt{ALU} (8 bit): \texttt{SLL8}, \texttt{SRA1}, \texttt{F0}, \texttt{F1}, \texttt{ENA}, \texttt{ENB}, \texttt{INVA}, \texttt{INC};
-  \item \texttt{C} (9 bit): un bit di abilitazione per ciascuno dei registri \texttt{H}, \texttt{OPC}, \texttt{TOS}, \texttt{CPP}, \texttt{LV}, \texttt{SP}, \texttt{PC}, \texttt{MDR}, \texttt{MAR};
-  \item \texttt{Mem} (3 bit): \texttt{WRITE}, \texttt{READ}, \texttt{FETCH};
-  \item \texttt{B} (4 bit): codice del registro da porre sul bus B.
+  \item \texttt{JAM} (3 bit): \texttt{JMPC}, \texttt{JAMN} e \texttt{JAMZ}, segnali utili al controllo del flusso di esecuzione delle microistruzioni;
+  \item \texttt{ALU} (8 bit): \texttt{SLL8}, \texttt{SRA1} (segnali per lo shift aritmetico e logico), \texttt{F0}, \texttt{F1} (segnali di selezione della particolare operazione), \texttt{ENA}, \texttt{ENB} (caricamento operandi), \texttt{INVA}, \texttt{INC} (operazioni preliminari sugli operandi);
+  \item \texttt{C} (9 bit): un bit di abilitazione per ciascuno dei registri \texttt{H}, \texttt{OPC}, \texttt{TOS}, \texttt{CPP}, \texttt{LV}, \texttt{SP}, \texttt{PC}, \texttt{MDR}, \texttt{MAR}, realizzando di fatto il paradigma orizzontale;
+  \item \texttt{Mem} (3 bit): \texttt{WRITE}, \texttt{READ}, \texttt{FETCH} (segnali diretti all'interfaccia di memoria);
+  \item \texttt{B} (4 bit): codice del registro da porre sul bus B (paradigma verticale).
 \end{enumerate}
-Il codice del campo \texttt{B} seleziona \texttt{mdr} ("0000"), \texttt{pc} ("0001"), \texttt{mbr} con estensione di segno ("0010"), \texttt{mbr} senza segno ("0011"), \texttt{sp} ("0100"), \texttt{lv} ("0101"), \texttt{cpp} ("0110"), \texttt{tos} ("0111") oppure \texttt{opc} ("1000"); con qualunque altro codice, ad esempio "1111", il bus B vale zero.
+% Il codice del campo \texttt{B} seleziona \texttt{mdr} ("0000"), \texttt{pc} ("0001"), \texttt{mbr} con estensione di segno ("0010"), \texttt{mbr} senza segno ("0011"), \texttt{sp} ("0100"), \texttt{lv} ("0101"), \texttt{cpp} ("0110"), \texttt{tos} ("0111") oppure \texttt{opc} ("1000"); con qualunque altro codice, ad esempio "1111", il bus B vale zero.
 
-\implementazione
+% \implementazione
 
-Procediamo in ordine bottom-up. Il package \texttt{common\_defs} definisce i sottotipi dei registri (\texttt{reg\_data\_type} e \texttt{mbr\_data\_type}), i sottotipi dei quattro campi di comando con le posizioni dei singoli bit come costanti \texttt{natural} (ad esempio \texttt{ALU\_INC} o \texttt{C\_SP}), i codici del campo \texttt{B} e i tipi \texttt{mpc\_type} (9 bit) e \texttt{mir\_type} (36 bit).
+% Procediamo in ordine bottom-up. Il package \texttt{common\_defs} definisce i sottotipi dei registri (\texttt{reg\_data\_type} e \texttt{mbr\_data\_type}), i sottotipi dei quattro campi di comando con le posizioni dei singoli bit come costanti \texttt{natural} (ad esempio \texttt{ALU\_INC} o \texttt{C\_SP}), i codici del campo \texttt{B} e i tipi \texttt{mpc\_type} (9 bit) e \texttt{mir\_type} (36 bit).
 
-\vhdlfile{esercizio9-1/common_defs.vhd}{Package common\_defs}{lst:esercizio9-1:common-defs}
+% \vhdlfile{esercizio9-1/common_defs.vhd}{Package common\_defs}{lst:esercizio9-1:common-defs}
 
-\paragraph{ALU.}
-L'entità \texttt{alu} ha come ingressi il campo di controllo \texttt{ctrl} (8 bit) e gli operandi \texttt{a} e \texttt{b}, a \SI{32}{bit}, e come uscite il risultato \texttt{c} e i flag \texttt{n} (negativo) e \texttt{z} (zero). L'architettura \texttt{Behavioral} è puramente combinatoria, in stile dataflow. Gli ingressi sono abilitati singolarmente con \texttt{ENA} ed \texttt{ENB}: se il bit vale '0' l'operando è forzato a zero. Il bit \texttt{INVA} complementa l'ingresso \texttt{a}. I bit \texttt{F0} e \texttt{F1} selezionano, tramite un costrutto \texttt{with select}, l'AND ("00"), l'OR ("01"), il complemento di \texttt{b} ("10") oppure la somma \texttt{a + b + inc} ("11"), dove \texttt{inc} è il riporto in ingresso dato dal bit \texttt{INC}. I flag sono calcolati sul risultato prima dello shifter, che infine produce lo scorrimento a sinistra di otto posizioni con \texttt{SLL8} oppure lo scorrimento aritmetico a destra di una posizione con \texttt{SRA1}.
+% \paragraph{ALU.}
+% L'entità \texttt{alu} ha come ingressi il campo di controllo \texttt{ctrl} (8 bit) e gli operandi \texttt{a} e \texttt{b}, a \SI{32}{bit}, e come uscite il risultato \texttt{c} e i flag \texttt{n} (negativo) e \texttt{z} (zero). L'architettura \texttt{Behavioral} è puramente combinatoria, in stile dataflow. Gli ingressi sono abilitati singolarmente con \texttt{ENA} ed \texttt{ENB}: se il bit vale '0' l'operando è forzato a zero. Il bit \texttt{INVA} complementa l'ingresso \texttt{a}. I bit \texttt{F0} e \texttt{F1} selezionano, tramite un costrutto \texttt{with select}, l'AND ("00"), l'OR ("01"), il complemento di \texttt{b} ("10") oppure la somma \texttt{a + b + inc} ("11"), dove \texttt{inc} è il riporto in ingresso dato dal bit \texttt{INC}. I flag sono calcolati sul risultato prima dello shifter, che infine produce lo scorrimento a sinistra di otto posizioni con \texttt{SLL8} oppure lo scorrimento aritmetico a destra di una posizione con \texttt{SRA1}.
 
-\vhdlfile{esercizio9-1/alu.vhd}{Implementazione dell'ALU}{lst:esercizio9-1:alu}
+% \vhdlfile{esercizio9-1/alu.vhd}{Implementazione dell'ALU}{lst:esercizio9-1:alu}
 
-\paragraph{Control store.}
-L'entità \texttt{control\_store} ha un ingresso \texttt{addr} di tipo \texttt{mpc\_type} e un'uscita \texttt{word} di tipo \texttt{mir\_type}. L'architettura \texttt{rom} dichiara una costante di tipo array di 512 microistruzioni; la lettura è asincrona e consiste in un'unica assegnazione concorrente che indicizza l'array con \texttt{addr}. Le posizioni non inizializzate contengono la microistruzione \texttt{NOP}, che non scrive alcun registro, non accede alla memoria e rimanda all'indirizzo 0, cioè al ciclo principale.
+% \paragraph{Control store.}
+% L'entità \texttt{control\_store} ha un ingresso \texttt{addr} di tipo \texttt{mpc\_type} e un'uscita \texttt{word} di tipo \texttt{mir\_type}. L'architettura \texttt{rom} dichiara una costante di tipo array di 512 microistruzioni; la lettura è asincrona e consiste in un'unica assegnazione concorrente che indicizza l'array con \texttt{addr}. Le posizioni non inizializzate contengono la microistruzione \texttt{NOP}, che non scrive alcun registro, non accede alla memoria e rimanda all'indirizzo 0, cioè al ciclo principale.
 
-Il microprogramma presente nella memoria è composto da quattro blocchi:
-\begin{enumerate}
-  \item avvio (indirizzi 0x100--0x102): carica in \texttt{mar} il valore di \texttt{sp} avviando una lettura e un fetch, attende un ciclo la memoria e poi copia \texttt{mdr} in \texttt{tos};
-  \item ciclo principale (indirizzo 0x103): incrementa \texttt{pc}, avvia il fetch del byte successivo e salta all'indirizzo ottenuto dall'OR tra il campo \texttt{Addr} (zero) e il contenuto di \texttt{mbr}, ossia al codice operativo letto;
-  \item \texttt{iadd}, opcode 0x65 (indirizzi 0x065--0x067);
-  \item \texttt{halt}, opcode 0xFF (indirizzo 0x0FF): la microistruzione rimanda a se stessa.
-\end{enumerate}
-Poiché il salto \texttt{JMPC} lascia a zero il bit più significativo dell'indirizzo, ogni istruzione ha come indirizzo di partenza il proprio opcode.
+% Il microprogramma presente nella memoria è composto da quattro blocchi:
+% \begin{enumerate}
+%   \item avvio (indirizzi 0x100--0x102): carica in \texttt{mar} il valore di \texttt{sp} avviando una lettura e un fetch, attende un ciclo la memoria e poi copia \texttt{mdr} in \texttt{tos};
+%   \item ciclo principale (indirizzo 0x103): incrementa \texttt{pc}, avvia il fetch del byte successivo e salta all'indirizzo ottenuto dall'OR tra il campo \texttt{Addr} (zero) e il contenuto di \texttt{mbr}, ossia al codice operativo letto;
+%   \item \texttt{iadd}, opcode 0x65 (indirizzi 0x065--0x067);
+%   \item \texttt{halt}, opcode 0xFF (indirizzo 0x0FF): la microistruzione rimanda a se stessa.
+% \end{enumerate}
+% Poiché il salto \texttt{JMPC} lascia a zero il bit più significativo dell'indirizzo, ogni istruzione ha come indirizzo di partenza il proprio opcode.
 
-\vhdlfile{esercizio9-1/control_store.vhd}{Implementazione del control store}{lst:esercizio9-1:control-store}
+% \vhdlfile{esercizio9-1/control_store.vhd}{Implementazione del control store}{lst:esercizio9-1:control-store}
 
-\paragraph{Unità di controllo.}
-L'entità \texttt{mic1\_cu} riceve \texttt{clk}, \texttt{reset}, il byte \texttt{mbr\_in} e i flag \texttt{n\_flag} e \texttt{z\_flag}, ed emette i quattro gruppi di comando \texttt{alu\_ctrl}, \texttt{c\_ctrl}, \texttt{mem\_ctrl} e \texttt{b\_ctrl}. Un solo process sincrono, \texttt{mir\_proc}, con \texttt{clk} come sensitivity list, aggiorna il registro \texttt{mir} sul fronte di salita: con \texttt{reset} a '1' viene caricata la costante \texttt{RESET\_MIR}, microistruzione senza effetti che rimanda all'indirizzo 0x100 (avvio); altrimenti viene caricata la parola \texttt{cs\_word} letta dal control store. I campi di \texttt{mir} sono resi accessibili tramite \texttt{alias}, ad esempio \texttt{mir\_addr} e \texttt{mir\_jmpc}.
+% \paragraph{Unità di controllo.}
+% L'entità \texttt{mic1\_cu} riceve \texttt{clk}, \texttt{reset}, il byte \texttt{mbr\_in} e i flag \texttt{n\_flag} e \texttt{z\_flag}, ed emette i quattro gruppi di comando \texttt{alu\_ctrl}, \texttt{c\_ctrl}, \texttt{mem\_ctrl} e \texttt{b\_ctrl}. Un solo process sincrono, \texttt{mir\_proc}, con \texttt{clk} come sensitivity list, aggiorna il registro \texttt{mir} sul fronte di salita: con \texttt{reset} a '1' viene caricata la costante \texttt{RESET\_MIR}, microistruzione senza effetti che rimanda all'indirizzo 0x100 (avvio); altrimenti viene caricata la parola \texttt{cs\_word} letta dal control store. I campi di \texttt{mir} sono resi accessibili tramite \texttt{alias}, ad esempio \texttt{mir\_addr} e \texttt{mir\_jmpc}.
 
-Il prossimo indirizzo \texttt{mpc} è calcolato in modo combinatorio con la tecnica del bit ORing: gli otto bit bassi sono quelli di \texttt{mir\_addr}, posti in OR con \texttt{mbr\_in} quando \texttt{JMPC} vale '1'; il bit più alto è \texttt{mir\_addr(8)} in OR con \texttt{n\_flag} se \texttt{JAMN} vale '1' e con \texttt{z\_flag} se \texttt{JAMZ} vale '1'. L'indirizzo \texttt{mpc} è collegato a \texttt{control\_store} nell'istanza \texttt{u\_cs}. I comandi verso la parte operativa sono le porzioni di \texttt{mir} assegnate direttamente alle uscite: l'unità di controllo è dunque una macchina di tipo Moore, con comandi dipendenti solo dal registro \texttt{mir}.
+% Il prossimo indirizzo \texttt{mpc} è calcolato in modo combinatorio con la tecnica del bit ORing: gli otto bit bassi sono quelli di \texttt{mir\_addr}, posti in OR con \texttt{mbr\_in} quando \texttt{JMPC} vale '1'; il bit più alto è \texttt{mir\_addr(8)} in OR con \texttt{n\_flag} se \texttt{JAMN} vale '1' e con \texttt{z\_flag} se \texttt{JAMZ} vale '1'. L'indirizzo \texttt{mpc} è collegato a \texttt{control\_store} nell'istanza \texttt{u\_cs}. I comandi verso la parte operativa sono le porzioni di \texttt{mir} assegnate direttamente alle uscite: l'unità di controllo è dunque una macchina di tipo Moore, con comandi dipendenti solo dal registro \texttt{mir}.
 
-\vhdlfile{esercizio9-1/mic1_cu.vhd}{Implementazione dell'unità di controllo}{lst:esercizio9-1:mic1-cu}
+% \vhdlfile{esercizio9-1/mic1_cu.vhd}{Implementazione dell'unità di controllo}{lst:esercizio9-1:mic1-cu}
 
-\paragraph{Parte operativa.}
-L'entità \texttt{mic1\_datapath} riceve i comandi dall'unità di controllo e le uscite della memoria, ed espone \texttt{mbr\_out}, \texttt{n\_flag} e \texttt{z\_flag}; verso le memorie esporta \texttt{mem\_data\_addr}, \texttt{mem\_data\_out}, \texttt{mem\_data\_we} e \texttt{mem\_instr\_addr}. L'architettura \texttt{rtl} dichiara i registri \texttt{mar}, \texttt{mdr}, \texttt{pc}, \texttt{sp}, \texttt{lv}, \texttt{cpp}, \texttt{tos}, \texttt{opc}, \texttt{h} e \texttt{mbr}, più tre flip-flop di appoggio \texttt{rd\_ff}, \texttt{wr\_ff} e \texttt{fetch\_ff}.
+% \paragraph{Parte operativa.}
+% L'entità \texttt{mic1\_datapath} riceve i comandi dall'unità di controllo e le uscite della memoria, ed espone \texttt{mbr\_out}, \texttt{n\_flag} e \texttt{z\_flag}; verso le memorie esporta \texttt{mem\_data\_addr}, \texttt{mem\_data\_out}, \texttt{mem\_data\_we} e \texttt{mem\_instr\_addr}. L'architettura \texttt{rtl} dichiara i registri \texttt{mar}, \texttt{mdr}, \texttt{pc}, \texttt{sp}, \texttt{lv}, \texttt{cpp}, \texttt{tos}, \texttt{opc}, \texttt{h} e \texttt{mbr}, più tre flip-flop di appoggio \texttt{rd\_ff}, \texttt{wr\_ff} e \texttt{fetch\_ff}.
 
-Il process \texttt{reg\_proc}, sincrono su \texttt{clk}, gestisce tutti i registri. Il reset sincrono azzera i registri e inizializza \texttt{sp} a \texttt{x"00000101"}, \texttt{lv} a \texttt{x"00000100"} e \texttt{cpp} a \texttt{x"00000080"}. Nel funzionamento normale ogni registro è caricato dal bus \texttt{c\_bus} quando il rispettivo bit del campo \texttt{c\_ctrl} vale '1'. Il registro \texttt{mdr} ha una doppia sorgente: il bus C, che ha la precedenza, oppure \texttt{mem\_data\_in} quando \texttt{rd\_ff} vale '1'. Il registro \texttt{mbr} si carica da \texttt{mem\_instr\_in} quando \texttt{fetch\_ff} vale '1'. Le richieste di lettura, scrittura e fetch emesse da una microistruzione sono memorizzate in \texttt{rd\_ff}, \texttt{wr\_ff} e \texttt{fetch\_ff} e producono effetto nel ciclo successivo; \texttt{wr\_ff} pilota direttamente \texttt{mem\_data\_we}. Per questo, dopo una microistruzione con \texttt{READ} il dato non è ancora in \texttt{mdr}, e la microistruzione seguente non può ancora usarlo.
+% Il process \texttt{reg\_proc}, sincrono su \texttt{clk}, gestisce tutti i registri. Il reset sincrono azzera i registri e inizializza \texttt{sp} a \texttt{x"00000101"}, \texttt{lv} a \texttt{x"00000100"} e \texttt{cpp} a \texttt{x"00000080"}. Nel funzionamento normale ogni registro è caricato dal bus \texttt{c\_bus} quando il rispettivo bit del campo \texttt{c\_ctrl} vale '1'. Il registro \texttt{mdr} ha una doppia sorgente: il bus C, che ha la precedenza, oppure \texttt{mem\_data\_in} quando \texttt{rd\_ff} vale '1'. Il registro \texttt{mbr} si carica da \texttt{mem\_instr\_in} quando \texttt{fetch\_ff} vale '1'. Le richieste di lettura, scrittura e fetch emesse da una microistruzione sono memorizzate in \texttt{rd\_ff}, \texttt{wr\_ff} e \texttt{fetch\_ff} e producono effetto nel ciclo successivo; \texttt{wr\_ff} pilota direttamente \texttt{mem\_data\_we}. Per questo, dopo una microistruzione con \texttt{READ} il dato non è ancora in \texttt{mdr}, e la microistruzione seguente non può ancora usarlo.
 
-Il bus B è descritto con un costrutto \texttt{with select} su \texttt{b\_ctrl}. Il byte \texttt{mbr} è esteso a \SI{32}{bit} in due modi, con segno (\texttt{mbr\_s}) e senza segno (\texttt{mbr\_u}), tramite \texttt{resize} su tipi \texttt{signed} e \texttt{unsigned}. Le uscite \texttt{mem\_data\_addr}, \texttt{mem\_data\_out} e \texttt{mem\_instr\_addr} sono collegate ai registri \texttt{mar}, \texttt{mdr} e \texttt{pc}.
+% Il bus B è descritto con un costrutto \texttt{with select} su \texttt{b\_ctrl}. Il byte \texttt{mbr} è esteso a \SI{32}{bit} in due modi, con segno (\texttt{mbr\_s}) e senza segno (\texttt{mbr\_u}), tramite \texttt{resize} su tipi \texttt{signed} e \texttt{unsigned}. Le uscite \texttt{mem\_data\_addr}, \texttt{mem\_data\_out} e \texttt{mem\_instr\_addr} sono collegate ai registri \texttt{mar}, \texttt{mdr} e \texttt{pc}.
 
-\vhdlfile{esercizio9-1/mic1_datapath.vhd}{Implementazione della parte operativa}{lst:esercizio9-1:mic1-datapath}
+% \vhdlfile{esercizio9-1/mic1_datapath.vhd}{Implementazione della parte operativa}{lst:esercizio9-1:mic1-datapath}
 
-\paragraph{Top module.}
-Il top module è l'entità \texttt{processor}, contenuta nel file \texttt{mic1.vhd}, con architettura \texttt{structural}. Le porte sono \texttt{clk} e \texttt{reset}, l'interfaccia dati (\texttt{mem\_data\_addr}, \texttt{mem\_data\_out}, \texttt{mem\_data\_in}, \texttt{mem\_data\_we}) e l'interfaccia istruzioni (\texttt{mem\_instr\_addr}, \texttt{mem\_instr\_in}). I segnali interni \texttt{alu\_ctrl}, \texttt{c\_ctrl}, \texttt{mem\_ctrl}, \texttt{b\_ctrl}, \texttt{mbr}, \texttt{n\_flag} e \texttt{z\_flag} collegano, tramite port mapping per nome, le istanze \texttt{u\_dp} (\texttt{mic1\_datapath}) e \texttt{u\_cu} (\texttt{mic1\_cu}).
+% \paragraph{Top module.}
+% Il top module è l'entità \texttt{processor}, contenuta nel file \texttt{mic1.vhd}, con architettura \texttt{structural}. Le porte sono \texttt{clk} e \texttt{reset}, l'interfaccia dati (\texttt{mem\_data\_addr}, \texttt{mem\_data\_out}, \texttt{mem\_data\_in}, \texttt{mem\_data\_we}) e l'interfaccia istruzioni (\texttt{mem\_instr\_addr}, \texttt{mem\_instr\_in}). I segnali interni \texttt{alu\_ctrl}, \texttt{c\_ctrl}, \texttt{mem\_ctrl}, \texttt{b\_ctrl}, \texttt{mbr}, \texttt{n\_flag} e \texttt{z\_flag} collegano, tramite port mapping per nome, le istanze \texttt{u\_dp} (\texttt{mic1\_datapath}) e \texttt{u\_cu} (\texttt{mic1\_cu}).
 
-\vhdlfile{esercizio9-1/mic1.vhd}{Implementazione del top module}{lst:esercizio9-1:mic1}
+% \vhdlfile{esercizio9-1/mic1.vhd}{Implementazione del top module}{lst:esercizio9-1:mic1}
 
-\paragraph{Microprogramma: avvio e istruzione \texttt{iadd}.}
+% \paragraph{Microprogramma: avvio e istruzione \texttt{iadd}.}
+
+
+\subsubsection{Analisi istruzioni}
 Visioniamo come sono codificate nel control store due sequenze. La prima è l'avvio, a partire dall'indirizzo 0x100 raggiunto dopo il reset:
 \begin{enumerate}
-  \item \texttt{MAR = SP; rd; fetch}: i campi attivi sono \texttt{ENB}, \texttt{F1} e \texttt{B = SP}; poiché \texttt{ENA} è a '0', l'ALU lascia passare il solo bus B (\texttt{F0F1} = "01", OR con zero). Il risultato è scritto in \texttt{mar} e sono richieste una lettura e un fetch;
+  \item \texttt{MAR = SP; rd; fetch} $\rightarrow$ i campi attivi sono \texttt{ENB}, \texttt{F1} e \texttt{B = SP}; poiché \texttt{ENA} è a '0', l'ALU lascia passare il solo bus B (\texttt{F0F1} = "01", OR con zero). Il risultato è scritto in \texttt{mar} e sono richieste una lettura e un fetch;
   \item attesa della memoria, con una microistruzione che non comanda alcun registro;
-  \item \texttt{TOS = MDR}: il valore letto è copiato in \texttt{tos} con la stessa configurazione dell'ALU e \texttt{B = MDR}.
+  \item \texttt{TOS = MDR} $\rightarrow$ il valore letto è copiato in \texttt{tos} con la stessa configurazione dell'ALU e \texttt{B = MDR}.
 \end{enumerate}
-Segue la microistruzione del ciclo principale in 0x103, \texttt{PC = PC + 1; fetch; goto (MBR)}: con \texttt{ENA} a '0', \texttt{ENB} e \texttt{INC} a '1' e \texttt{F0F1} = "11" l'ALU calcola \texttt{pc + 1}; il risultato è scritto in \texttt{pc}, viene richiesto un nuovo fetch e il bit \texttt{JMPC} manda il controllo all'indirizzo contenuto in \texttt{mbr}.
+Segue la microistruzione del ciclo principale in 0x103, \texttt{PC = PC + 1; fetch; goto (MBR)} $\rightarrow$ con \texttt{ENA} a '0', \texttt{ENB} e \texttt{INC} a '1' e \texttt{F0F1} = "11" l'ALU calcola \texttt{pc + 1}; il risultato è scritto in \texttt{pc}, viene richiesto un nuovo fetch e il bit \texttt{JMPC} manda il controllo all'indirizzo contenuto in \texttt{mbr}.
 
 L'istruzione \texttt{iadd}, con opcode 0x65, estrae due interi dallo stack, ne calcola la somma e la riporta in cima. È composta da tre microistruzioni:
 \begin{enumerate}
-  \item \texttt{MAR = SP = SP - 1; rd}: con \texttt{ENA} a '0' e \texttt{INVA} a '1' il primo operando dell'ALU è \texttt{x"FFFFFFFF"}, e la somma con \texttt{sp} (\texttt{B = SP}) dà \texttt{sp - 1}; il risultato è scritto sia in \texttt{sp} sia in \texttt{mar} e parte la lettura del secondo operando;
-  \item \texttt{H = TOS}: il registro \texttt{tos}, posto sul bus B, è copiato in \texttt{h}, mentre la lettura è in corso;
+  \item \texttt{MAR = SP = SP - 1; rd} $\rightarrow$ con \texttt{ENA} a '0' e \texttt{INVA} a '1' il primo operando dell'ALU è \texttt{x"FFFFFFFF"} (-1, complemento di x00000000), e la somma con \texttt{sp} (\texttt{B = SP}) dà \texttt{sp - 1}; il risultato è scritto sia in \texttt{sp} sia in \texttt{mar} e parte la lettura del secondo operando;
+  \item \texttt{H = TOS} $\rightarrow$ il registro \texttt{tos}, posto sul bus B, è copiato in \texttt{h}, mentre la lettura è in corso;
   \item \texttt{MDR = TOS = MDR + H; wr; goto main}: con \texttt{ENA}, \texttt{ENB} e \texttt{F0F1} = "11" l'ALU somma \texttt{h} e \texttt{mdr} (\texttt{B = MDR}); il risultato è scritto in \texttt{mdr} e in \texttt{tos}, viene richiesta la scrittura in memoria e il campo \texttt{Addr} rimanda all'indirizzo 0x103, da cui parte l'istruzione successiva.
 \end{enumerate}
+
+\subsubsection{Sintesi istruzioni}
+In questa sezione presentiamo la modifica dell'istruzione \texttt{DUP} (x59). L'istruzione originale copia la parola in cima allo stack e la \textit{spinge} sullo stack stack. L'idea è quella di implementare \texttt{TRIP} (x59), ovvero la copia della parola in cima allo stack per due volte. 
+
+\vhdlfile{esercizio9-1/dup.vhdl}{Istruzione DUP}{lst:esercizio9-1:dup}
+
+\noindent
+L'istruzione \texttt{dup} è composta da due microistruzioni:
+
+\begin{enumerate}
+  \item MAR = SP = SP + 1; $\rightarrow$ l'istruzione comanda la ALU con \texttt{F0 F1 = 11}, \texttt{ENA = 0}, \texttt{ENB = 1}, \texttt{INVA = 0}, \texttt{INC = 1} → \texttt{0 + SP + 1}, ovvero somma l'ingresso B con 0 e 1.Il risultato è scritto sia in \texttt{SP} che in \texttt{MAR};
+  \item richiediamo una scrittura all'indirizzo aggiornato di \texttt{MAR} con il vecchio valore di \texttt{TOS}, ovvero il valore da duplicare. 
+\end{enumerate}
+
+La modifica consiste nell'aggiornamento dello stack pointere del memory address register; Il top of stack già conteneva il valore da duplicare, quindi richiediamo una scrittura del vecchio \texttt{TOS} all'indirizzo aggiornato di \texttt{MAR} sovrascrivendo \texttt{MDR}, e infine richiediamo la stessa operazione di scrittura (i registri di indirizzo e dato sono già impostati) incrementando nuovamente lo \texttt{SP} e il \texttt{MAR}. Infine si salta alla microistruzione principale \texttt{main}.
+
+\vhdlfile{esercizio9-1/trip.vhdl}{Istruzione TRIP}{lst:esercizio9-1:trip}
+\vhdlfile{esercizio9-1/program.ajvm}{Modifica al programma}{lst:esercizio9-1:program}
+\vhdlfile{esercizio9-1/processor_tb.vhdl}{Modifica al testbench}{lst:esercizio9-1:tb}
+
+\vhdlfile{esercizio9-1/bash_history.vhdl}{.bash\_history}{lst:esercizio9-1:shell}
+
+
