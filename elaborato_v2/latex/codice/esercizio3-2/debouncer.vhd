@@ -57,6 +57,7 @@ begin
                     count <= count + 1;
                 else 
                     count <= (others => '0');
+                    -- inizio a contare da quando il bottone viene rilasciato
                 end if;
             end if;
         end if;

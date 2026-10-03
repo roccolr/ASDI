@@ -14,7 +14,7 @@ A partire dall'implementazione fornita del processore operante secondo il modell
 
 \progetto
 
-Il processore presentato segue l'architettura MIC-1: una parte operativa a \SI{32}{bit}, che contiene i registri e le linee di trasferimento, e un'unità di controllo che, a ogni ciclo di clock, emette un insieme di comandi letti da una memoria ROM di microcodice denominata \texttt{control store}. Il top module \texttt{processor} istanzia le due parti e le collega con quattro gruppi di comandi (ALU, bus C, memoria, bus B), in direzione unità di controllo verso parte operativa, e con tre informazioni di ritorno: il registro \texttt{mbr} e i flag \texttt{n\_flag} e \texttt{z\_flag} dell'ALU.
+L'implementazione fornita del processore segue l'architettura MIC-1: una parte operativa a \SI{32}{bit}, che contiene i registri e le linee di trasferimento, e un'unità di controllo che, a ogni ciclo di clock, emette un insieme di comandi letti da una memoria ROM di microcodice denominata \texttt{control store}. Il top module \texttt{processor} istanzia le due parti e le collega con quattro gruppi di comandi (ALU, bus C, memoria, bus B), in direzione unità di controllo verso parte operativa, e con tre informazioni di ritorno: il registro \texttt{mbr} e i flag \texttt{n\_flag} e \texttt{z\_flag} dell'ALU.
 
 I componenti del sistema presentato, oltre al package con larghezze dei registi, tipi dei campi di controllo e costanti simboliche per i bit di comando, sono i seguenti:
 \begin{enumerate}

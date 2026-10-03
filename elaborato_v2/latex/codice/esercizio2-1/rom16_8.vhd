@@ -19,8 +19,6 @@ architecture Behavioral of rom16_8 is
                             x"FA", x"39", 
                             x"C5", x"78", 
                             x"20", x"ED");
-    attribute rom_style : string; 
-    attribute rom_style of mem : signal is "block";
     
 begin
     process(address)

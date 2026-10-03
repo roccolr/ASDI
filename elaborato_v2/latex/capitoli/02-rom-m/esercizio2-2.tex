@@ -6,13 +6,13 @@ Sintetizzare ed implementare su board il progetto del sistema ROM+M sviluppato a
 
 \progetto
 
-Il sistema $S$ è già stato progettato e descritto nell'esercizio~\ref{sec:esercizio2-1}: non viene modificato. Per portarlo su board si aggiunge un solo componente, un top module che espone le porte fisiche della scheda e le collega a quelle di \texttt{systemS}. Essendo il sistema puramente combinatorio, non sono necessari clock, reset né componenti di supporto come debouncer: gli interruttori pilotano direttamente l'ingresso e l'uscita comanda direttamente i LED.
+Il sistema $S$ è già stato progettato e descritto nell'esercizio~\ref{sec:esercizio2-1}: non viene modificato. Per portarlo su board si aggiunge un solo componente, un top module che espone le porte fisiche della scheda e le collega a quelle di \texttt{systemS}. Il sistema è puramente combinatorio, quindi usiamo solo switch e led.
 
 \implementazione
 
-I componenti \texttt{rom16\_8}, \texttt{systemM} e \texttt{systemS} sono quelli presentati nell'esercizio~\ref{sec:esercizio2-1} (listati~\ref{lst:esercizio2-1:rom16-8}, \ref{lst:esercizio2-1:systemm} e~\ref{lst:esercizio2-1:systems}) e non vengono ripetuti.
+I componenti \texttt{rom16\_8}, \texttt{systemM} e \texttt{systemS} sono quelli presentati nell'esercizio~\ref{sec:esercizio2-1} (listati~\ref{lst:esercizio2-1:rom16-8}, \ref{lst:esercizio2-1:systemm} e~\ref{lst:esercizio2-1:systems}) e non vengono ivi riportati.
 
-L'entità \texttt{systemS\_tl} ha l'ingresso \texttt{SW} e l'uscita \texttt{LED}, entrambi a 4 bit. L'architettura \texttt{structural} non dichiara segnali interni e contiene una sola istanza di \texttt{systemS}, con etichetta \texttt{SYSTEM\_S}, il cui port mapping per nome collega \texttt{input} a \texttt{SW} e \texttt{output} a \texttt{LED}. L'istanza è diretta, con la sintassi \texttt{entity work.systemS}, quindi non è richiesta la dichiarazione del componente.
+L'entità \texttt{systemS\_tl} ha l'ingresso \texttt{SW} e l'uscita \texttt{LED}, entrambi a 4 bit. L'architettura \texttt{structural} non dichiara segnali interni e contiene una sola istanza di \texttt{systemS}, con etichetta \texttt{SYSTEM\_S}, il cui port mapping per nome collega \texttt{input} a \texttt{SW} e \texttt{output} a \texttt{LED}. 
 
 \vhdlfile{esercizio2-2/systems_tl.vhd}{Implementazione del top module su board}{lst:esercizio2-2:systems-tl}
 
@@ -25,3 +25,10 @@ Gli interruttori \texttt{SW[0]}--\texttt{SW[3]} della scheda Nexys A7-100T forni
 Nel file dei constraint sono state decommentate le seguenti righe, che assegnano ai quattro interruttori e ai quattro LED i rispettivi pin della scheda, con standard di I/O \texttt{LVCMOS33}.
 
 \xdcfile{esercizio2-2/vincoli.xdc}{Constraint}{lst:esercizio2-2:vincoli}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.7\linewidth]{figure/esercizio2-2/irl.jpg}
+  \caption{Realizzazione sistema ROM + M}
+  \label{fig:esercizio2-2:realizzazione}
+\end{figure}

@@ -46,7 +46,7 @@ begin
         
         case current_state is
             when S0 => null;
-            
+            -- caso default in testa
             when S1 =>
                 if m = '1' and i = '0' then
                     next_state <= S2;

@@ -6,8 +6,8 @@ entity acq_reg is
         clk     : in  std_logic;
         load_lo : in  std_logic;                     -- carica la prima meta'
         load_hi : in  std_logic;                     -- carica la seconda meta'
-        d       : in  std_logic_vector(0 to 7);      -- mezzo dato, dagli switch
-        q       : out std_logic_vector(0 to 15)      -- dato completo, verso la rete
+        d       : in  std_logic_vector(0 to 7);      -- mezzo dato dagli switch
+        q       : out std_logic_vector(0 to 15)      -- dato completo verso la rete
     );
 end acq_reg;
 

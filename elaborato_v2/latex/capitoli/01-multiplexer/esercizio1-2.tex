@@ -6,7 +6,7 @@ Utilizzando il componente sviluppato al punto precedente, progettare, implementa
 
 \progetto
 
-La rete comprende due componenti: il multiplexer \texttt{mux\_16\_1}, che seleziona uno dei 16 ingressi mediante il segnale \texttt{s\_i} a 4 bit, e il demultiplexer \texttt{demux\_1\_4}, che ripropone il bit selezionato su una delle 4 uscite in base al segnale \texttt{s\_o} a 2 bit. Il bit intermedio transita nel segnale interno \texttt{q}, di un solo bit. Il multiplexer 16:1 è già stato presentato nell'esercizio~1.1, insieme al multiplexer 4:1 su cui è costruito, ed è qui riutilizzato senza modifiche. La figura~\ref{fig:esercizio1-2:schema} ne riporta lo schema.
+La rete comprende due componenti: il multiplexer \texttt{mux\_16\_1}, che seleziona uno dei 16 ingressi mediante il segnale \texttt{s\_i} a 4 bit, e il demultiplexer \texttt{demux\_1\_4}, che ripropone il bit selezionato su una delle 4 uscite in base al segnale \texttt{s\_o} a 2 bit. Il bit intermedio transita nel segnale interno \texttt{q}, di un solo bit. Il multiplexer 16:1 è già stato presentato nell'esercizio~1.1, insieme al multiplexer 4:1 su cui è costruito, ed è ivi riusato senza modifiche. La figura~\ref{fig:esercizio1-2:schema} ne riporta l'architettura complessiva.
 
 \begin{figure}[H]
   \centering
@@ -29,11 +29,13 @@ Il multiplexer riceve il vettore \texttt{x} e la selezione \texttt{s\_i}, mentre
 
 Per il multiplexer 16:1 e per il multiplexer 4:1 si rimanda ai listati~\ref{lst:esercizio1-1:mux-16-1} e~\ref{lst:esercizio1-1:mux-4-1} dell'esercizio~1.1. Rimane da presentare il demultiplexer 1:4.
 
+\noindent
 L'entità \texttt{demux\_1\_4} ha tre porte: l'ingresso \texttt{a} di un bit, la selezione \texttt{s} a 2 bit e l'uscita \texttt{y}, vettore di 4 bit con indici crescenti da 0 a 3. L'architettura è di tipo dataflow: ciascun bit di \texttt{y} è assegnato con un'espressione condizionale \texttt{when ... else}, che porta su di esso il valore di \texttt{a} se \texttt{s} coincide con l'indice del bit e \texttt{'0'} negli altri casi. Le uscite non selezionate restano quindi a zero. Di seguito viene riportato il codice.
+\newpage
 
 \vhdlfile{esercizio1-2/demux_1_4.vhd}{Implementazione DEMUX 1:4}{lst:esercizio1-2:demux-1-4}
 
-Il top module \texttt{interconn16\_4} ha come ingressi il vettore \texttt{x} di 16 bit, la selezione \texttt{s\_i} di 4 bit e la selezione \texttt{s\_o} di 2 bit, e come uscita il vettore \texttt{y} di 4 bit. L'architettura è di tipo structural: il segnale interno \texttt{q}, inizializzato a \texttt{'0'}, collega l'uscita del multiplexer, istanziato con il port mapping \texttt{a => x}, \texttt{s => s\_i}, \texttt{y => q}, all'ingresso \texttt{a} del demultiplexer, il cui port mapping è \texttt{a => q}, \texttt{s => s\_o}, \texttt{y => y}. 
+Il top module \texttt{interconn16\_4} ha come ingressi il vettore \texttt{x} di 16 bit, la selezione \texttt{s\_i} di 4 bit e la selezione \texttt{s\_o} di 2 bit, e come uscita il vettore \texttt{y} di 4 bit. L'architettura è di tipo structural poichè difatto vengono composti tra loro i componenti già presentati: il segnale interno \texttt{q}, inizializzato a \texttt{'0'}, collega l'uscita del multiplexer all'ingresso \texttt{a} del demultiplexer.
 
 \vhdlfile{esercizio1-2/interconn16_4.vhd}{Implementazione della rete di interconnessione 16:4}{lst:esercizio1-2:interconn16-4}
 
@@ -52,4 +54,4 @@ La simulazione è riportata in figura~\ref{fig:esercizio1-2:simulazione}.
   \label{fig:esercizio1-2:simulazione}
 \end{figure}
 
-L'ingresso \texttt{input[0:15]} vale 0x54C6 ($0101\,0100\,1100\,0110_2$) per tutta la durata mostrata, e il suo bit di indice 1 è \texttt{'1'}. Fino a \SI{10}{ns} le selezioni sono nulle: viene propagato \texttt{input(0)}, pari a \texttt{'0'}, e \texttt{output[0:3]} vale 0x0. A \SI{10}{ns} \texttt{ctrl\_in} diventa $0001_2$, quindi il multiplexer seleziona \texttt{input(1)}. Con \texttt{ctrl\_out} pari a $0_{10}$ l'uscita è 0x8 ($1000_2$), ossia \texttt{output(0)} a \texttt{'1'}; con $1_{10}$ è 0x4 ($0100_2$), con $2_{10}$ è 0x2 ($0010_2$) e con $3_{10}$ è 0x1 ($0001_2$). In ogni intervallo di \SI{10}{ns} è quindi attivo il solo bit selezionato, come richiesto dagli \texttt{assert} del testbench.
+% L'ingresso \texttt{input[0:15]} vale 0x54C6 ($0101\,0100\,1100\,0110_2$) per tutta la durata mostrata, e il suo bit di indice 1 è \texttt{'1'}. Fino a \SI{10}{ns} le selezioni sono nulle: viene propagato \texttt{input(0)}, pari a \texttt{'0'}, e \texttt{output[0:3]} vale 0x0. A \SI{10}{ns} \texttt{ctrl\_in} diventa $0001_2$, quindi il multiplexer seleziona \texttt{input(1)}. Con \texttt{ctrl\_out} pari a $0_{10}$ l'uscita è 0x8 ($1000_2$), ossia \texttt{output(0)} a \texttt{'1'}; con $1_{10}$ è 0x4 ($0100_2$), con $2_{10}$ è 0x2 ($0010_2$) e con $3_{10}$ è 0x1 ($0001_2$). In ogni intervallo di \SI{10}{ns} è quindi attivo il solo bit selezionato, come richiesto dagli \texttt{assert} del testbench.

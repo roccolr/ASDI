@@ -6,12 +6,45 @@ Sintetizzare e implementare su board la rete sviluppata al punto precedente, uti
 
 \progetto
 
-Al riconoscitore dell'esercizio~\ref{sec:esercizio3-1} si aggiungono due componenti: un debouncer, istanziato due volte (una per ciascun bottone), e un \texttt{input\_manager}, che memorizza i valori degli switch quando i bottoni vengono premuti. Il top module \texttt{fsm\_sequence\_tl} collega i blocchi come mostrato in figura~\ref{fig:esercizio3-2:architettura}.
+Al riconoscitore dell'esercizio~\ref{sec:esercizio3-1} si aggiungono due componenti: un debouncer, istanziato due volte (una per ciascun bottone), e un \texttt{input\_manager}, che memorizza i valori degli switch quando i bottoni vengono premuti. Il top module \texttt{fsm\_sequence\_tl} collega i blocchi come mostrato in figura~\ref{fig:esercizio3-2:architettura}. Un'osservazione interessante è che è necessario il debouncer perchè fornire un input alla macchina non è un'operazione idempotente.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.9\linewidth]{figure/esercizio3-2/architettura}
-  \caption{Architettura del top module}
+  \scalebox{0.79}{%
+  \begin{tikzpicture}[font=\sffamily\scriptsize]
+    % riquadro del top module
+    \draw[dashed, thick, black!70] (-1.6,-2.1) rectangle (14.7,3.4);
+    \node[anchor=north west, font=\sffamily\scriptsize\bfseries] at (-1.6,3.4) {\texttt{fsm\_sequence\_tl}};
+    % blocchi
+    \node[blocco, minimum width=2.2cm] (dbi) at (0,1.2)    {debouncer\\[-1pt]{\scriptsize istanza \texttt{u\_db\_i}}};
+    \node[blocco, minimum width=2.2cm] (dbm) at (0,-0.4)   {debouncer\\[-1pt]{\scriptsize istanza \texttt{u\_db\_m}}};
+    \node[blocco, minimum width=2.4cm, minimum height=3.2cm] (im)  at (4.4,0.4)  {\texttt{input\_manager}\\[-1pt]{\scriptsize istanza \texttt{u\_in}}};
+    \node[blocco, minimum width=3.4cm, minimum height=2.6cm] (fsm) at (9.5,0.4)  {\texttt{fsm\_sequence}\\[-1pt]{\scriptsize istanza \texttt{u\_fsm}}};
+    \node[reg, minimum width=1.5cm, minimum height=0.9cm]   (reg) at (13.3,0.4) {\texttt{y\_reg}};
+    % ingressi dalla board
+    \draw[seg] (-2.6,1.2)  node[left]{\texttt{BTNL}} -- (dbi.west);
+    \draw[seg] (-2.6,-0.4) node[left]{\texttt{BTNR}} -- (dbm.west);
+    \draw[bus] (-2.6,-1.05) node[left]{\texttt{SW}} -- node[pos=0.85, sloped]{/} node[pos=0.85, below=2pt]{2}
+               (im.west |- 0,-1.05) node[right]{\texttt{input}};
+    % debouncer -> input manager
+    \draw[seg] (dbi.east) -- node[above]{\texttt{load\_next}} (im.west |- dbi.east);
+    \draw[seg] (dbm.east) -- node[above]{\texttt{change\_m}} (im.west |- dbm.east);
+    % input manager -> riconoscitore
+    \draw[seg] (im.east |- 0,1.2)  -- node[pos=0.72, above]{\texttt{bit\_i}}  (fsm.west |- 0,1.2)  node[right]{\texttt{i}};
+    \draw[seg] (im.east |- 0,0.4)  -- node[pos=0.72, above]{\texttt{mode\_m}} (fsm.west |- 0,0.4)  node[right]{\texttt{m}};
+    \draw[seg] (im.east |- 0,-0.4) -- node[pos=0.72, above]{\texttt{step}}   (fsm.west |- 0,-0.4) node[right]{\texttt{en}};
+    % riconoscitore -> registro dell'uscita
+    \draw[seg] (fsm.east) node[left]{\texttt{y}} -- node[above]{\texttt{y\_fsm}} (reg.west);
+    \fill (6.05,-0.4) circle (1.3pt);
+    \draw[seg] (6.05,-0.4) |- (13.3,-1.6) -- node[pos=0.6, right]{\texttt{en}} (reg.south);
+    % uscite sui LED
+    \draw[seg] (reg.east) -- (15.7,0.4) node[right]{\texttt{LED(0)}};
+    \fill (5.85,1.2) circle (1.3pt);
+    \draw[seg] (5.85,1.2) |- (15.7,2.2) node[right]{\texttt{LED(1)}};
+    \fill (6.25,0.4) circle (1.3pt);
+    \draw[seg] (6.25,0.4) |- (15.7,2.8) node[right]{\texttt{LED(2)}};
+  \end{tikzpicture}}
+  \caption{Architettura del top module. \texttt{CLK100MHZ} e il reset \texttt{rst} (negazione di \texttt{CPU\_RESETN}) raggiungono tutti i blocchi e non sono disegnati.}
   \label{fig:esercizio3-2:architettura}
 \end{figure}
 
@@ -58,7 +91,7 @@ Il top module \texttt{fsm\_sequence\_tl} ha architettura \texttt{structural}. Le
 
 \begin{itemize}
   \item \texttt{CLK100MHZ}: clock della board, usato sia come clock dei componenti sia come segnale di tempificazione \texttt{a} della FSM;
-  \item \texttt{CPU\_RESETN}: reset attivo basso;
+  \item \texttt{CPU\_RESETN}: reset attivo a logica invertita;
   \item \texttt{SW}: due switch, \texttt{SW(0)} per $i$ e \texttt{SW(1)} per $M$;
   \item \texttt{BTNL} e \texttt{BTNR}: bottoni di acquisizione di $i$ e di $M$;
   \item \texttt{LED}: tre uscite.
@@ -70,9 +103,6 @@ Il segnale \texttt{rst} è ottenuto negando \texttt{CPU\_RESETN}. Le istanze \te
 
 \simulazione
 
-% TODO: testbench e simulazione non presenti nel progetto Vivado di questo esercizio.
-Per questo esercizio non è stato sviluppato un testbench dedicato e non sono disponibili forme d'onda: la verifica del comportamento del riconoscitore in simulazione è quella dell'esercizio~\ref{sec:esercizio3-1}, mentre il sistema completo è stato pensato per la prova diretta su board.
-
 \sintesiboard
 
 Per usare il sistema si impostano \texttt{SW(0)} e \texttt{SW(1)} sui valori desiderati di $i$ e $M$. Premendo \texttt{BTNR} il modo viene acquisito e mostrato su \texttt{LED(2)}; premendo \texttt{BTNL} il bit viene acquisito, mostrato su \texttt{LED(1)}, e la FSM avanza di un passo, aggiornando \texttt{LED(0)} con l'uscita $Y$. Ogni bit della sequenza richiede quindi una pressione di \texttt{BTNL}, dopo aver eventualmente riposizionato lo switch. Il bottone \texttt{CPU\_RESETN} riporta la macchina nello stato iniziale e azzera l'uscita.
@@ -82,3 +112,10 @@ Per usare il sistema si impostano \texttt{SW(0)} e \texttt{SW(1)} sui valori des
 Nel file dei constraint sono state decommentate le seguenti righe.
 
 \xdcfile{esercizio3-2/vincoli.xdc}{Constraint}{lst:esercizio3-2:vincoli}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{figure/esercizio3-2/irl}
+  \caption{Realizzazione del riconoscitore 101}
+  \label{fig:esercizio3-2:realizzazione}
+\end{figure}

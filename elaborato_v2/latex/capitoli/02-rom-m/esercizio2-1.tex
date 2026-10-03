@@ -6,7 +6,7 @@ Progettare, implementare in VHDL e testare mediante simulazione un sistema S com
 
 \progetto
 
-Il sistema è formato da due componenti collegati in cascata: la ROM, che riceve l'indirizzo a 4 bit e fornisce il dato a 8 bit, e la macchina combinatoria $M$, che riduce tale dato a 4 bit. Il sistema è puramente combinatorio. Come funzione di $M$ è stata scelta l'AND tra coppie di bit adiacenti del dato letto: ciascuno dei quattro bit di uscita è l'AND di due bit consecutivi dell'ingresso.
+Il sistema è formato da due componenti collegati in serie: la ROM, che riceve l'indirizzo a 4 bit e fornisce il dato a 8 bit, e la macchina combinatoria $M$, che comprime il dato in 4 bit. Il sistema è puramente combinatorio. Come funzione di $M$ è stata scelta l'AND tra coppie di bit adiacenti del dato letto.
 
 Il top module \texttt{systemS} istanzia i due componenti e li collega tramite un segnale interno a 8 bit.
 
@@ -26,11 +26,11 @@ Il top module \texttt{systemS} istanzia i due componenti e li collega tramite un
 
 \implementazione
 
-L'entità \texttt{rom16\_8} ha come ingresso \texttt{address} (4 bit) e come uscita \texttt{data} (8 bit). Nell'architettura \texttt{Behavioral} si trova un array di 16 elementi da 8 bit, inizializzato con valori esadecimali, e un process, sensibile ad \texttt{address}, assegna a \texttt{data} l'elemento indicato dall'indirizzo convertito in intero. L'attributo \texttt{rom\_style} è impostato a \texttt{"block"}.
+L'entità \texttt{rom16\_8} ha come ingresso \texttt{address} (4 bit) e come uscita \texttt{data} (8 bit). Nell'architettura \texttt{Behavioral} si trova un array di 16 elementi da 8 bit, inizializzato con valori esadecimali, e un process, sensibile ad \texttt{address}, assegna a \texttt{data} l'elemento indicato dall'indirizzo convertito in intero.
 
 \vhdlfile{esercizio2-1/rom16_8.vhd}{Implementazione ROM 16x8}{lst:esercizio2-1:rom16-8}
 
-L'entità \texttt{systemM} ha l'ingresso \texttt{data\_in} (8 bit) e l'uscita \texttt{data\_out} (4 bit). L'architettura \texttt{dataflow} assegna a ciascun bit di uscita l'AND di due bit adiacenti: \texttt{data\_out(0)} da \texttt{data\_in(0)} e \texttt{data\_in(1)}, \texttt{data\_out(1)} da \texttt{data\_in(2)} e \texttt{data\_in(3)}, e così via fino a \texttt{data\_out(3)}. Le porte sono dichiarate con indici decrescenti (\texttt{7 downto 0}).
+L'entità \texttt{systemM} ha l'ingresso \texttt{data\_in} (8 bit) e l'uscita \texttt{data\_out} (4 bit). L'architettura \texttt{dataflow} assegna a ciascun bit di uscita l'AND di due bit adiacenti: \texttt{data\_out(0)} da \texttt{data\_in(0)} e \texttt{data\_in(1)}, \texttt{data\_out(1)} da \texttt{data\_in(2)} e \texttt{data\_in(3)}, e così via fino a \texttt{data\_out(3)}. 
 
 \vhdlfile{esercizio2-1/systemm.vhd}{Implementazione macchina combinatoria M}{lst:esercizio2-1:systemm}
 
@@ -40,7 +40,7 @@ Definite le due entità, il top module \texttt{systemS} ha l'ingresso \texttt{in
 
 \simulazione
 
-Il testbench \texttt{systemS\_tb} ha entità senza porte. Istanzia il sistema sotto test (\texttt{SYSTEM\_S}) e una seconda istanza di \texttt{systemM}, usata come riferimento, alimentata con i valori di una copia della ROM (\texttt{ref\_mem}) dichiarata nel testbench. Il process \texttt{stim\_proc} attende \SI{10}{ns}, poi con un ciclo \texttt{for} da 0 a 15 applica l'indirizzo \texttt{x} e carica in \texttt{ref\_in} il dato corrispondente. Dopo \SI{10}{ns} confronta \texttt{y} con \texttt{ref\_out} tramite \texttt{assert}, con \texttt{severity failure} in caso di differenza, e termina con \texttt{wait;}.
+Il testbench \texttt{systemS\_tb} ha entità senza porte. Istanzia il sistema sotto test (\texttt{SYSTEM\_S}) e una seconda istanza di \texttt{systemM}, usata come esclusivamente riferimento, alimentata con i valori di una copia della ROM (\texttt{ref\_mem}) dichiarata nel testbench. Il process \texttt{stim\_proc} attende \SI{10}{ns}, poi con un ciclo \texttt{for} da 0 a 15 applica l'indirizzo \texttt{x} e carica in \texttt{ref\_in} il dato corrispondente. Dopo \SI{10}{ns} confronta \texttt{y} con \texttt{ref\_out} tramite \texttt{assert}, con \texttt{severity failure} in caso di differenza, e termina con \texttt{wait;}.
 
 \vhdlfile{esercizio2-1/systems_tb.vhd}{Testbench sistema ROM + M}{lst:esercizio2-1:systems-tb}
 
@@ -52,8 +52,6 @@ Il risultato della simulazione è mostrato in figura~\ref{fig:esercizio2-1:simul
   \caption{Simulazione sistema ROM + M}
   \label{fig:esercizio2-1:simulazione}
 \end{figure}
-
-Per l'indirizzo \texttt{x} $= 1$ ($0001_2$) il sistema legge dalla ROM il valore 0x1C ($00011100_2$), presente in \texttt{ref\_in}. Le coppie di bit adiacenti, dalla meno significativa, valgono $00$, $11$, $01$, $00$: l'uscita \texttt{y} è quindi $0010_2$, cioè 2 in esadecimale, uguale a \texttt{ref\_out}. Lo stesso vale per tutti i sedici indirizzi e l'\texttt{assert} non segnala errori.
 
 \begin{risultato}
 Per i sedici indirizzi, \texttt{y} coincide con \texttt{ref\_out} (ad esempio 0x2 per l'indirizzo 1 e 0x3 per l'indirizzo 2).

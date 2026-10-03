@@ -6,7 +6,7 @@ Progettare, implementare in VHDL e testare mediante simulazione un multiplexer i
 
 \progetto
 
-Realizziamo il multiplexer 16:1 con un'architettura modulare ad albero, ovvero attraverso due livelli di multiplexer 4:1. Al primo livello ci sono quattro componenti: ognuno riceve un gruppo di quattro ingressi consecutivi e i due bit meno significativi della selezione. Le loro uscite alimentano un quinto multiplexer 4:1, pilotato dai due bit più significativi della selezione, e l'uscita di quest'ultimo è quella del top module. Il top module ha quindi venti ingressi complessivi, sedici dati e quattro di selezione, e un'unica uscita. Lo schema è visibile in figura~\ref{fig:esercizio1-1:schema}.
+Realizziamo il multiplexer 16:1 con un'architettura modulare ad albero, ovvero attraverso due livelli di multiplexer 4:1. Al primo livello troviamo quattro componenti: ognuno riceve un gruppo di quattro ingressi consecutivi e i due bit meno significativi della selezione. Le loro uscite alimentano un quinto multiplexer 4:1, pilotato dai due bit più significativi della selezione, e l'uscita di quest'ultimo è quella del top module. Il top module ha quindi venti ingressi complessivi, sedici dati e quattro di selezione, e un'unica uscita. Lo schema è visibile in figura~\ref{fig:esercizio1-1:schema}.
 
 \begin{figure}[H]
   \centering
@@ -52,15 +52,13 @@ Nello schema \texttt{u} indica il segnale interno di quattro bit che raccoglie l
 
 \implementazione
 
-Partiamo dal componente elementare, l'entità \texttt{mux\_4\_1}, che ha come porte \texttt{a}, vettore di quattro ingressi dati indicizzato da 0 a 3, \texttt{s}, selezione a due bit, e \texttt{y}, uscita a un bit. L'architettura \texttt{dataflow} usa un'assegnazione \texttt{with select}: a ogni valore di \texttt{s} corrisponde un ingresso, mentre per i valori non validi l'uscita assume \texttt{'-'} (ivi usato difensivamente, come \textit{good practice}). 
+Partiamo dal componente elementare, l'entità \texttt{mux\_4\_1}, che ha come porte \texttt{a}, vettore di quattro ingressi dati indicizzato da 0 a 3, \texttt{s}, selezione a due bit, e \texttt{y}, uscita a un bit. L'architettura \texttt{dataflow} usa un'assegnazione \texttt{with select}: a ogni valore di \texttt{s} corrisponde un ingresso, mentre per i valori non validi l'uscita assume \texttt{'-'}. 
 
 \vhdlfile{esercizio1-1/mux_4_1.vhd}{Implementazione MUX 4:1}{lst:esercizio1-1:mux-4-1}
 
 Definito tale componente, vediamo il top module \texttt{mux\_16\_1}, che ha come porte il vettore \texttt{a} di sedici ingressi (indici da 0 a 15), la selezione \texttt{s} a quattro bit e l'uscita \texttt{y}. L'architettura è \texttt{structural}: il segnale interno \texttt{u}, di quattro bit, raccoglie le uscite dei componenti \texttt{M0}, \texttt{M1}, \texttt{M2} ed \texttt{M3}, istanziati con port mapping sui gruppi \texttt{a(0 to 3)}, \texttt{a(4 to 7)}, \texttt{a(8 to 11)} e \texttt{a(12 to 15)} e con \texttt{s(1 downto 0)} come selezione. Il componente \texttt{M4} riceve \texttt{u} come vettore di ingressi, ha \texttt{s(3 downto 2)} come selezione e produce \texttt{y}. 
 
 \vhdlfile{esercizio1-1/mux_16_1.vhd}{Implementazione MUX 16:1}{lst:esercizio1-1:mux-16-1}
-
-L'entità \texttt{mux\_4\_1} non verrà ripresentata quando sarà riutilizzata in altri esercizi.
 
 \simulazione
 
