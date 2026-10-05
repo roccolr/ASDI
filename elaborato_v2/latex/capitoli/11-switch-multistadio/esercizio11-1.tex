@@ -202,9 +202,9 @@ Definiti i componenti, il top module \texttt{omega\_network\_4} li compone con u
 
 \vhdlfile{esercizio11-1/omega_network_4.vhd}{Implementazione dell'omega network a 4 nodi}{lst:esercizio11-1:omega-network-4}
 
-\begin{osservazione}
-Nei file sorgente l'\texttt{arbitro} e la rete \texttt{omega\_network\_4} sono componenti separati: \texttt{src\_out} va collegato a \texttt{s\_src} a un livello gerarchico superiore, mentre nel testbench seguente \texttt{s\_src} è pilotato direttamente. In assenza di richieste l'\texttt{arbitro} restituisce lo stesso codice \texttt{"11"} del nodo 4.
-\end{osservazione}
+% \begin{osservazione}
+% Nei file sorgente l'\texttt{arbitro} e la rete \texttt{omega\_network\_4} sono componenti separati: \texttt{src\_out} va collegato a \texttt{s\_src} a un livello gerarchico superiore, mentre nel testbench seguente \texttt{s\_src} è pilotato direttamente. In assenza di richieste l'\texttt{arbitro} restituisce lo stesso codice \texttt{"11"} del nodo 4.
+% \end{osservazione}
 
 \simulazione
 
@@ -230,7 +230,7 @@ Il risultato della simulazione è riportato in figura~\ref{fig:esercizio11-1:sim
   \label{fig:esercizio11-1:simulazione}
 \end{figure}
 
-Gli ingressi restano costanti per tutta la durata, mentre \texttt{s\_src} e \texttt{s\_dst} cambiano ogni \SI{10}{\nano\second}. Si legga il secondo intervallo, da \SI{10}{\nano\second} a \SI{20}{\nano\second}: \texttt{s\_src} vale \texttt{"10"} e \texttt{s\_dst} vale \texttt{"01"}, ossia il nodo 3 trasmette al nodo 2. Il dato di \texttt{x3}, \texttt{"10"}, compare su \texttt{y2}, mentre \texttt{y1}, \texttt{y3} e \texttt{y4} restano a \texttt{"00"}. Nello stesso modo, nel primo intervallo \texttt{y4} vale \texttt{"01"}, il valore di \texttt{x1}; nel terzo \texttt{y3} vale \texttt{"11"}, il valore di \texttt{x2}; dal quarto in poi \texttt{y1} vale \texttt{"01"}, il valore di \texttt{x4}.
+% Gli ingressi restano costanti per tutta la durata, mentre \texttt{s\_src} e \texttt{s\_dst} cambiano ogni \SI{10}{\nano\second}. Si legga il secondo intervallo, da \SI{10}{\nano\second} a \SI{20}{\nano\second}: \texttt{s\_src} vale \texttt{"10"} e \texttt{s\_dst} vale \texttt{"01"}, ossia il nodo 3 trasmette al nodo 2. Il dato di \texttt{x3}, \texttt{"10"}, compare su \texttt{y2}, mentre \texttt{y1}, \texttt{y3} e \texttt{y4} restano a \texttt{"00"}. Nello stesso modo, nel primo intervallo \texttt{y4} vale \texttt{"01"}, il valore di \texttt{x1}; nel terzo \texttt{y3} vale \texttt{"11"}, il valore di \texttt{x2}; dal quarto in poi \texttt{y1} vale \texttt{"01"}, il valore di \texttt{x4}.
 
 \begin{risultato}
 I quattro trasferimenti producono \texttt{y4} $=$ \texttt{"01"}, \texttt{y2} $=$ \texttt{"10"}, \texttt{y3} $=$ \texttt{"11"} e \texttt{y1} $=$ \texttt{"01"}, e tutte le altre uscite restano a \texttt{"00"}.

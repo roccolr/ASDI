@@ -35,21 +35,10 @@ Il protocollo è a quattro fasi. A porta \texttt{req} a \texttt{'1'} dopo aver l
 
 Nelle figure le uscite non indicate in uno stato valgono \texttt{'0'}; \texttt{req} e \texttt{ack} sono uscite registrate, aggiornate al fronte di clock in funzione dello stato successivo (segnalate con un asterisco). L'FSM di A ha sei stati (\texttt{IDLE}, \texttt{DATA\_READ}, \texttt{START\_TX}, \texttt{WAIT\_ACK}, \texttt{END\_TX}, \texttt{CHECK\_COUNT}) e quella di B quattro (\texttt{WAIT\_TX}, \texttt{ACK\_TX}, \texttt{WAIT\_END\_REQ}, \texttt{END\_TX}).
 
-\begin{osservazione}
-L'implementazione presenta le seguenti caratteristiche:
-\begin{itemize}
-  \item le unità di controllo sono \texttt{cu\_A} e \texttt{cu\_B}, con porte \texttt{clk}, \texttt{count\_en} e \texttt{count\_rst};
-  \item la FSM di A include \texttt{WAIT\_ACK} e non usa one-hot esplicita;
-  \item le FSM sono descritte con due process distinti (combinatorio e sequenziale);
-  \item la ROM del nodo A è \texttt{rom\_8\_8} con contenuto fisso;
-  \item memoria e contatore sono componenti comuni;
-  \item \texttt{cu\_B} riceve \texttt{start} inutilizzato e l'uscita \texttt{mem\_read} non è collegata.
-\end{itemize}
-\end{osservazione}
 
 \implementazione
 
-Il contatore \texttt{counter\_mod} (listato~\ref{lst:esercizio5-1:counter-mod}) e la memoria \texttt{mem} (listato~\ref{lst:esercizio6-1:mem}) sono già stati presentati e vengono istanziati senza modifiche. Il componente \texttt{rom} (listato~\ref{lst:esercizio6-1:rom}), pur incluso nel progetto Vivado, non è istanziato in questo esercizio: il nodo A usa la ROM dedicata \texttt{rom\_8\_8}. Vediamo ora i componenti propri dell'esercizio, partendo dal nodo B.
+Il contatore \texttt{counter\_mod} (listato~\ref{lst:esercizio5-1:counter-mod}) e la memoria \texttt{mem} (listato~\ref{lst:esercizio6-1:mem}) sono già stati presentati e vengono istanziati senza modifiche. Il nodo A usa la ROM dedicata \texttt{rom\_8\_8}. Vediamo ora i componenti propri dell'esercizio, partendo dal nodo B.
 
 Il registro \texttt{register\_M} ha larghezza $M$ (generic, default 8) e porte \texttt{clk}, \texttt{rst}, \texttt{load}, \texttt{input} e \texttt{output}. Un process sincrono azzera il dato con \texttt{rst} attivo e lo carica al fronte di salita quando \texttt{load} è \texttt{'1'}.
 
@@ -93,8 +82,6 @@ Il risultato della simulazione è riportato in figura~\ref{fig:esercizio8-1:simu
   \caption{Simulazione dell'handshaking}
   \label{fig:esercizio8-1:simulazione}
 \end{figure}
-
-Dopo \texttt{start} si osservano otto impulsi di \texttt{req}, ciascuno seguito da un impulso di \texttt{ack} (di durata maggiore, perché \texttt{ack} scende solo dopo che B ha visto \texttt{req} a \texttt{'0'}). Su \texttt{data} compaiono in sequenza i valori della ROM: $0$, $-1$, $1$, $-128$, $15$, $-16$, $-86$, $85$, ossia \texttt{x"00"}, \texttt{x"FF"}, \texttt{x"01"}, \texttt{x"80"}, \texttt{x"0F"}, \texttt{x"F0"}, \texttt{x"AA"}, \texttt{x"55"}. La memoria \texttt{RAM} del nodo B ha inizialmente valore $-1$ (\texttt{x"FF"}) in ogni locazione e viene aggiornata una locazione per volta al termine di ciascun trasferimento. Ad esempio, per la locazione 3 il dato ricevuto è \texttt{x"80"} ($-128$): la somma $\texttt{x"80"} + \texttt{x"FF"}$ dà \texttt{x"7F"} sugli 8 bit, cioè $127$, valore effettivamente letto in \texttt{RAM[3]}. Al termine il contenuto è $-1, -2, 0, 127, 14, -17, -87, 84$.
 
 \begin{risultato}
 Le otto somme sono memorizzate nella memoria di B come mostrato in figura, con i due nodi su clock a \SI{10}{ns} e \SI{11}{ns}.

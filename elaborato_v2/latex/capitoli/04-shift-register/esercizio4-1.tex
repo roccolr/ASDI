@@ -70,9 +70,3 @@ Il risultato della simulazione è mostrato in figura~\ref{fig:esercizio4-1:simul
   \caption{Simulazione dello shift register}
   \label{fig:esercizio4-1:simulazione}
 \end{figure}
-
-Dopo il reset, con \texttt{load} a \texttt{'1'} e \texttt{d} pari a 0xB3 ($1011\,0011_2$), le due uscite \texttt{q\_beh} e \texttt{q\_str} assumono il valore b3 al fronte di clock successivo. Con \texttt{en} attivo e \texttt{dir} e \texttt{pos} a \texttt{'0'}, il valore diventa 0x59 ($0101\,1001_2$), ossia lo scorrimento a destra di una posizione; con \texttt{pos} a \texttt{'1'} diventa 0x16 ($0001\,0110_2$), a destra di due; con \texttt{dir} a \texttt{'1'} e \texttt{pos} a \texttt{'0'} diventa 0x2C ($0010\,1100_2$), a sinistra di una; infine con \texttt{pos} a \texttt{'1'} diventa 0xB0 ($1011\,0000_2$), a sinistra di due. Il valore 0xB0 resta invariato mentre \texttt{en} è a \texttt{'0'}. Al caricamento simultaneo con \texttt{en} le uscite passano a 0xF0, e all'ultimo impulso di \texttt{rst}, applicato insieme a \texttt{load}, tornano a 0x00. In tutti i passi le due uscite coincidono.
-
-\begin{risultato}
-Le uscite \texttt{q\_beh} e \texttt{q\_str} coincidono lungo tutta la simulazione: b3, 59, 16, 2c, b0, f0 e infine 00.
-\end{risultato}

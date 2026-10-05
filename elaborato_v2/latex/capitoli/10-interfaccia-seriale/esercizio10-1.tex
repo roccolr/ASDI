@@ -234,7 +234,6 @@ Il risultato della simulazione, eseguita per \SI{10}{ms}, è riportato nella con
   \label{fig:esercizio10-1:testbench}
 \end{figure}
 
-La figura mostra il messaggio \texttt{TEST SUPERATO: MEM = ROM}, emesso dal process \texttt{stim} all'istante \SI{8000230}{ns}: tutte le otto locazioni di MEM, lette tramite \texttt{addr} e \texttt{data}, coincidono con i byte attesi. Il tempo è coerente con la sequenza di stimoli: $5T + 2T = \SI{70}{ns}$ di reset, otto trasferimenti da $T + \SI{1}{ms}$ ciascuno e infine otto letture da $T$, per un totale di $\SI{8000230}{ns}$. Nel caso della locazione 1, ad esempio, la ROM contiene x"FF" ($11111111_2$) e la lettura di MEM con \texttt{addr} pari a \texttt{"001"} restituisce lo stesso valore.
 
 \begin{risultato}
 Al termine degli otto trasferimenti la memoria di B coincide con la ROM di A: la console riporta \texttt{TEST SUPERATO: MEM = ROM} a \SI{8000230}{ns}.

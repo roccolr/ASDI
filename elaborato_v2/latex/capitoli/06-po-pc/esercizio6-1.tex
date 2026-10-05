@@ -108,7 +108,6 @@ Il risultato della simulazione è in figura~\ref{fig:esercizio6-1:simulazione}.
   \label{fig:esercizio6-1:simulazione}
 \end{figure}
 
-Dopo il reset iniziale, \texttt{start} sale a '1' intorno a \SI{40}{ns} e la macchina esce da \texttt{S\_IDLE}: \texttt{rd} e \texttt{we} si alternano a ogni ciclo, mentre \texttt{addr} scorre da 0 a 15. Ad esempio, per \texttt{addr} pari a 1 la ROM restituisce 255 (0xFF, $11111111_2$), \texttt{onecount} produce \texttt{m\_data} pari a 8 e la locazione \texttt{ram[1]} passa a 8. Dopo la scrittura dell'ultima locazione lo stato passa a \texttt{S\_DONE} e \texttt{done} sale a '1'; quando \texttt{start} torna a '0' la macchina ritorna in \texttt{S\_IDLE}. Nella fase finale \texttt{raddr} scorre da 0 a 15 e \texttt{dout} riporta il contenuto della MEM: 0, 8, 1, 1, 4, 4, 4, 4, 7, 7, 2, 4, 6, 1, 4, 4, che coincide con \texttt{EXP}.
 
 \begin{risultato}
 Il contenuto finale di \texttt{ram} mostrato in figura coincide con i valori attesi di \texttt{EXP}, e \texttt{done} viene attivato una volta al termine della scansione.

@@ -243,7 +243,7 @@ Il risultato della simulazione è riportato in figura~\ref{fig:esercizio12-1:sim
   \label{fig:esercizio12-1:simulazione}
 \end{figure}
 
-La forma d'onda mostra \texttt{clk\_a}, \texttt{clk\_b}, \texttt{start} e \texttt{data\_out}. Il segnale \texttt{start} sale dopo \SI{30}{ns} e resta alto. L'uscita \texttt{data\_out} parte da 0 e assume in successione i valori 1, 3, 6, 10, 15 e 21, ossia le somme parziali dei valori della ROM (0+1, 1+2, 3+3, 6+4, 10+5, 15+6), fino al valore 28 (\texttt{011100}), che è la somma finale e che rimane stabile; è lo stesso valore atteso dall'\texttt{assert} del testbench. Gli scatti di \texttt{data\_out} avvengono a intervalli irregolari, perché ciascun trasferimento richiede alcuni periodi di \texttt{clk\_a} e di \texttt{clk\_b} per completare lo scambio di \texttt{rts} e \texttt{cts}.
+% La forma d'onda mostra \texttt{clk\_a}, \texttt{clk\_b}, \texttt{start} e \texttt{data\_out}. Il segnale \texttt{start} sale dopo \SI{30}{ns} e resta alto. L'uscita \texttt{data\_out} parte da 0 e assume in successione i valori 1, 3, 6, 10, 15 e 21, ossia le somme parziali dei valori della ROM (0+1, 1+2, 3+3, 6+4, 10+5, 15+6), fino al valore 28 (\texttt{011100}), che è la somma finale e che rimane stabile; è lo stesso valore atteso dall'\texttt{assert} del testbench. Gli scatti di \texttt{data\_out} avvengono a intervalli irregolari, perché ciascun trasferimento richiede alcuni periodi di \texttt{clk\_a} e di \texttt{clk\_b} per completare lo scambio di \texttt{rts} e \texttt{cts}.
 
 \begin{risultato}
 Con \texttt{TA} = \SI{10}{ns} e \texttt{TB} = \SI{14}{ns}, \texttt{data\_out} raggiunge il valore finale 28.

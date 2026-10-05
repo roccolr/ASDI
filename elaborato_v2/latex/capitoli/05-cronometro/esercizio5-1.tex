@@ -55,7 +55,6 @@ Il risultato della simulazione è mostrato in figura~\ref{fig:esercizio5-1:simul
   \label{fig:esercizio5-1:simulazione}
 \end{figure}
 
-Consideriamo il caricamento di 23:59:58. Con \texttt{h\_in} $=$ 0x17 ($10111_2$, ossia $23_{10}$), \texttt{m\_in} $=$ 0x3B ($59_{10}$) e \texttt{s\_in} $=$ 0x3A ($58_{10}$), un impulso di \texttt{set} porta le uscite a \texttt{h} $=$ 17, \texttt{m} $=$ 3b, \texttt{s} $=$ 3a. Dopo un secondo \texttt{s} vale 3b (59), dopo un altro secondo si azzera e il riporto propaga l'azzeramento a \texttt{m} e a \texttt{h}: le uscite tornano a 00:00:00. Nel caricamento precedente (00:59:58) l'ora passa da 00 a 01 e i minuti da 3b a 00. Dopo l'impulso di \texttt{rst} tutte le uscite sono a zero e il conteggio riprende dai secondi, che nell'ultima parte della figura arrivano a 06.
 
 \begin{risultato}
 La simulazione verifica il comportamento alle transizioni critiche (cambio di minuto, ora, giorno), l'arresto quando \texttt{run} è inattivo e l'azzeramento con \texttt{rst}.
